@@ -1,4 +1,13 @@
-import ExampleCard from '@/components/ExampleCard';
-export default function Home() {
-  return <ExampleCard />;
-}
+import Content from '../components/landing/Content';
+
+const Home = () => {
+  return (
+    <>
+      {/* <Header /> */}
+      <Content />
+      {/* <Footer /> */}
+    </>
+  );
+};
+
+export default Home;

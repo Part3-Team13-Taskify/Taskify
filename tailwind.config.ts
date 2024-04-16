@@ -2,7 +2,7 @@
 
 const rem0_10 = { ...Array.from(Array(11)).map((_, i) => `${i / 10}rem`) };
 const rem0_100 = { ...Array.from(Array(101)).map((_, i) => `${i / 10}rem`) };
-const rem0_1200 = { ...Array.from(Array(801)).map((_, i) => `${i / 10}rem`) };
+const rem0_1200 = { ...Array.from(Array(1201)).map((_, i) => `${i / 10}rem`) };
 
 module.exports = {
   content: [
