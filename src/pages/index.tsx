@@ -1,5 +1,4 @@
-import { Card } from '@/components/Card';
-
+import ExampleCard from '@/components/ExampleCard';
 export default function Home() {
-  return <Card />;
+  return <ExampleCard />;
 }
