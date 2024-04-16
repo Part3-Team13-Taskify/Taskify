@@ -2,7 +2,7 @@
 
 const rem0_10 = { ...Array.from(Array(11)).map((_, i) => `${i / 10}rem`) };
 const rem0_100 = { ...Array.from(Array(101)).map((_, i) => `${i / 10}rem`) };
-const rem0_800 = { ...Array.from(Array(801)).map((_, i) => `${i / 10}rem`) };
+const rem0_1200 = { ...Array.from(Array(1201)).map((_, i) => `${i / 10}rem`) };
 
 module.exports = {
   content: [
@@ -16,9 +16,9 @@ module.exports = {
       borderRadius: rem0_100,
       fontSize: rem0_100,
       lineHeight: rem0_100,
-      minWidth: rem0_800,
-      minHeight: rem0_800,
-      spacing: rem0_800,
+      minWidth: rem0_1200,
+      minHeight: rem0_1200,
+      spacing: rem0_1200,
       colors: {
         blue: {
           '3f': '#3F72AF',
