@@ -1,4 +1,4 @@
-import { FormatDate } from '@/util/dateFormat';
+import { FormatDate } from '@/src/util/dateFormat';
 import Image from 'next/image';
 
 /**
