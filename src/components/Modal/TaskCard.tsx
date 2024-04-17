@@ -3,7 +3,7 @@ import Reply from '../Reply';
 
 export const TaskCard = () => {
   const nickname = '정만철';
-  const date = '2022.12.27 14:00';
+  const date = '2024-04-16T06:28:59.964Z';
   const replyContent = '오늘안에 CCC 까지 만들 수 있을까요?';
   const profile = 'assets/chip/ellipseBlueLarge.svg';
 
