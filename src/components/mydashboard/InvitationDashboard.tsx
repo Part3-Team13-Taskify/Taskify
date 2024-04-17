@@ -7,7 +7,7 @@ const InvitationDashboard = () => {
   return (
     <div className="flex flex-col">
       <div className="flex gap-12 mt-40 ml-40">
-        <Button buttonType="dashboardAdd" bgColor="white" textColor="black" type="submit">
+        <Button buttonType="dashboardAdd" bgColor="white" textColor="black" type="button">
           새로운 대시보드
           <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
         </Button>
