@@ -1,6 +1,12 @@
 import Image from 'next/image';
+import Reply from '../Reply';
 
 export const TaskCard = () => {
+  const nickname = '정만철';
+  const date = '2022.12.27 14:00';
+  const replyContent = '오늘안에 CCC 까지 만들 수 있을까요?';
+  const profile = 'assets/chip/ellipseBlueLarge.svg';
+
   return (
     <div className="px-28 py-32 w-full flex-shrink-0">
       <div className="grid text-24 font-bold grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
@@ -24,7 +30,7 @@ export const TaskCard = () => {
               alt="todo"
               className="w-auto"
             />
-            <div className="flex flex-row gap-6 border-l-1 border-gray-9f pl-12">
+            <div className="flex flex-row gap-6 border-l-1 border-gray-d9 pl-12">
               <Image src="assets/card/exampleChip/large1.svg" width={44} height={22} alt="chip" className="w-auto" />
               <Image src="assets/card/exampleChip/large3.svg" width={44} height={22} alt="chip" className="w-auto" />
             </div>
@@ -37,32 +43,18 @@ export const TaskCard = () => {
           <Image src="assets/card/desktop/card_image1.svg" width={450} height={263} alt="Task Image" />
           <div className="gap-24">
             <div className="flex flex-col">
-              <span className="my-10">댓글</span>
-              <input className="p-16 border-1 border-gray-d9 rounded-6 h-78" placeholder="댓글 작성하기"></input>
+              <label htmlFor="reply" className="my-10">
+                댓글
+              </label>
+              <input
+                id="reply"
+                type="text"
+                className="p-16 border-1 border-gray-d9 rounded-6 h-78"
+                placeholder="댓글 작성하기"
+              ></input>
             </div>
           </div>
-          <div className="flex flex-row gap-8">
-            <div>
-              <Image
-                src="assets/chip/ellipseBlueLarge.svg"
-                width={34}
-                height={34}
-                alt="profile rounded-full"
-                className="content-center"
-              />
-            </div>
-            <div>
-              <div className="flex flex-row gap-8">
-                <div className="text-14 font-semibold">정만철</div>
-                <div className="text-12 font-normal text-gray-9f">2022.12.27 14:00</div>
-              </div>
-              <div className="text-14 font-normal">오늘안에 CCC 까지 만들 수 있을까요?</div>
-              <div className="flex flex-row gap-12 text-12 text-gray-9f">
-                <div className="underline">수정</div>
-                <div className="underline">삭제</div>
-              </div>
-            </div>
-          </div>
+          <Reply nickname={nickname} profile={profile} date={date} content={replyContent} />
         </div>
         <div className="flex flex-col gap-6 border-1 border-gray-d9 rounded-8 w-200 max-h-160 p-16 min-w-180 my-16">
           <span className="text-12 font-semibold">담당자</span>
