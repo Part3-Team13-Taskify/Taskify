@@ -6,6 +6,7 @@ import landing4 from '@/public/assets/landing/landing4.png';
 import landing5 from '@/public/assets/landing/landing5.png';
 import landing6 from '@/public/assets/landing/landing6.png';
 import { ReactNode } from 'react';
+import Link from 'next/link';
 
 interface LandingCardProps {
   image: StaticImageData;
@@ -35,13 +36,18 @@ const Content = () => {
           <Image src={landing} alt="taskify" />
         </div>
         <p className="text-white text-76 font-bold text-center tablet:text-56 mobile:text-40">
-          새로운 일정 관리{' '}
-          <span className="text-violet">
-            <br className="mobile:block" />
+          새로운 일정 관리
+          <span className="text-violet ml-20 ">
+            <br className="hidden mobile:block" />
             Taskify
           </span>
         </p>
-        <button className="text-white">로그인하기</button>
+        <Link
+          href="/login"
+          className="text-white w-280 py-14 rounded-8 bg-violet text-center tablet:w-235 tablet:py-12"
+        >
+          로그인하기
+        </Link>
       </div>
 
       <div className="w-full max-w-1200 h-600 flex justify-between pt-103 pl-60 bg-black-17 rounded-8 tablet:w-664 tablet:h-972 tablet:pt-63 tablet:flex-col mobile:w-343 mobile:h-686 mobile:pl-0">
