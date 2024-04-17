@@ -4,9 +4,9 @@ import DashboardEditContent from '@/src/components/dashboardEdit';
 
 const DashboardEdit = () => {
   return (
-    <div className="flex">
+    <div className="flex w-screen">
       <SideBar />
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-grow">
         <Header />
         <DashboardEditContent />
       </div>

@@ -1,12 +1,21 @@
 import arrow from '@/public/assets/icon/arrow.svg';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Dashboard from './Dashboard';
 
 const DashboardEditContent = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
-    <div className="flex">
-      <Image src={arrow} alt="go back" />
-      <p>돌아가기</p>
-    </div>
+    <main className="flex p-20 flex-col bg-gray-fa w-full">
+      <Link href={`/dashboard/${id}`} className="flex gap-8">
+        <Image src={arrow} alt="go back" width={20} />
+        <p className="font-semibold">돌아가기</p>
+      </Link>
+      <Dashboard />
+    </main>
   );
 };
 
