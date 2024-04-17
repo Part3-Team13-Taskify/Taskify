@@ -10,11 +10,8 @@ interface InputForm {
 const ExampleInput = () => {
   const {
     register,
-    handleSubmit,
-    watch,
     formState: { errors },
     clearErrors,
-    setError,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   return (
     <>

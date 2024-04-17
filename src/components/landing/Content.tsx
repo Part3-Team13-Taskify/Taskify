@@ -5,7 +5,6 @@ import landing3 from '@/public/assets/landing/landing3.png';
 import landing4 from '@/public/assets/landing/landing4.png';
 import landing5 from '@/public/assets/landing/landing5.png';
 import landing6 from '@/public/assets/landing/landing6.png';
-import { ReactNode } from 'react';
 import Link from 'next/link';
 
 interface LandingCardProps {

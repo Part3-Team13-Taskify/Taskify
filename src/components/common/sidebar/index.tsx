@@ -8,9 +8,7 @@ import pink from '@/public/assets/chip/ellipsePinkLarge.svg';
 import purple from '@/public/assets/chip/ellipsePurpleLarge.svg';
 import yellow from '@/public/assets/chip/ellipseYellowLarge.svg';
 import crown from '@/public/assets/icon/crown.svg';
-import Link from 'next/link';
 import { useState } from 'react';
-import ReactPaginate from 'react-paginate';
 
 const generateData = (n: number) => {
   const MOCK_DATA = [
@@ -85,7 +83,7 @@ const MOCK_DATA = generateData(1);
 
 const Dashboard = () => {
   const [selectedDashboard, setSelectedDashboard] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
+  // const [itemOffset, setItemOffset] = useState(0);
   // const endOffset = itemOffset + itemsPerPage;
   // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   // const currentItems = items.slice(itemOffset, endOffset);

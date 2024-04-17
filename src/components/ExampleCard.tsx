@@ -7,7 +7,7 @@ const ExampleCard = () => {
   const profile = 'assets/chip/ellipseDefault.svg';
   return (
     <div className="m-20">
-      <Card src={imgSource} title={title} date={date} profile={profile}></Card>
+      <Card src={imgSource} title={title} date={date} profile={profile} />
     </div>
   );
 };

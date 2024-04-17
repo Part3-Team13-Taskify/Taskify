@@ -33,7 +33,7 @@ const EmailInput = ({ register, inputName, inputContent, labelId, error, type, c
         id={labelId}
         onFocus={() => clearError('email')}
       />
-      {error?.message && <div className={'text-red text-14'}>{error.message}</div>}
+      {error?.message && <div className="text-red text-14">{error.message}</div>}
     </div>
   );
 };
