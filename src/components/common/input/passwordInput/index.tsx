@@ -34,19 +34,19 @@ const PasswordInput = ({ register, inputName, inputContent, labelId, error, clea
         className={
           error?.message
             ? 'flex flex-row justify-between w-520 h-50 py-15 px-16 border-1 rounded-lg border-red'
-            : 'flex flex-row  justify-between w-520 h-50 py-15 px-16 border-1 rounded-lg border-gray-9f focus:outline-none  focus:border-violet'
+            : 'flex flex-row  justify-between w-520 h-50 py-15 px-16 border-1 rounded-lg border-gray-9f  focus-within:border-violet'
         }
       >
         <input
           {...register}
           type={openEye ? 'text' : 'password'}
           name={inputName}
-          className={error?.message ? ' text-black-33' : ' text-black-33 '}
+          className=" border-none w-11/12 text-black-33 "
           placeholder={inputContent}
           id={labelId}
           onFocus={() => clearError('password')}
         />
-        <Image className="" onClick={toggleEye} src={openEye ? eyeOn : eyeOff} alt={openEye ? 'eyeOn' : 'eyeOff'} />
+        <Image onClick={toggleEye} src={openEye ? eyeOn : eyeOff} alt={openEye ? 'eyeOn' : 'eyeOff'} />
       </div>
       {error?.message && <div className="text-red text-14">{error.message}</div>}
     </div>
