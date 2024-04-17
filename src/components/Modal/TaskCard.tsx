@@ -4,16 +4,42 @@ import Reply from '../Reply';
 import taskData from '@/public/mock/TaskCard.json';
 import comments from '@/public/mock/Comment.json';
 import { format } from 'date-fns';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 
 export const TaskCard = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const dueDate = format(new Date(taskData.dueDate), 'yyyy.MM.dd');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleDropdownClick: MouseEventHandler<HTMLButtonElement> = () => setIsDropdownOpen(true);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  });
 
   return (
     <div className="px-28 py-32 w-full flex-shrink-0">
       <div className="grid text-24 font-bold grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
         <div className="row-start-2 col-start-1 sm:row-start-1">{taskData.title}</div>
         <div className="flex justify-end gap-24 row-start-1 col-start-2">
-          <button>
+          {isDropdownOpen && (
+            <div
+              className="flex flex-col absolute border-1 rounded-6 p-6 text-14 font-normal bg-white top-65 right-95"
+              ref={dropdownRef}
+            >
+              <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%">수정</button>
+              <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%">삭제</button>
+            </div>
+          )}
+          <button onClick={handleDropdownClick}>
             <Image src="assets/icon/moreVert.svg" width={28} height={28} alt="more" />
           </button>
           <button>
