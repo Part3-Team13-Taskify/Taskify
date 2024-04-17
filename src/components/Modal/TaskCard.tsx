@@ -4,15 +4,20 @@ import Reply from '../Reply';
 import taskData from '@/public/mock/TaskCard.json';
 import comments from '@/public/mock/Comment.json';
 import { format } from 'date-fns';
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 
 export const TaskCard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+  const [replyValue, setReplyValue] = useState('');
+
   const dueDate = format(new Date(taskData.dueDate), 'yyyy.MM.dd');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleDropdownClick: MouseEventHandler<HTMLButtonElement> = () => setIsDropdownOpen(true);
 
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setReplyValue(e.target.value);
+  };
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -65,16 +70,25 @@ export const TaskCard = () => {
           <p className="text-14 font-normal ">{taskData.description}</p>
           <Image src="assets/card/desktop/card_image1.svg" width={450} height={263} alt="Task Image" />
           <div className="gap-24">
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
               <label htmlFor="reply" className="my-10">
                 댓글
               </label>
               <input
                 id="reply"
                 type="text"
-                className="p-16 border-1 border-gray-d9 rounded-6 h-78"
+                className="p-16 border-1 border-gray-d9 rounded-6 h-78 text-14"
                 placeholder="댓글 작성하기"
+                onChange={handleInputChange}
               ></input>
+              <button
+                className={`absolute bottom-12 right-12 border rounded-6 border-gray-df px-31 py-6 ${
+                  replyValue ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
+                }`}
+                disabled={!replyValue}
+              >
+                입력
+              </button>
             </div>
           </div>
           <div className="flex flex-col gap-20">
