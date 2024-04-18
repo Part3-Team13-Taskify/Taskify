@@ -36,8 +36,8 @@ interface TableProps {
 
 const Table = ({ label, children }: TableProps) => {
   return (
-    <div className="flex flex-col">
-      <p className="px-28 mb-16 text-gray-9f">{label}</p>
+    <div className="flex flex-col px-28 mobile:px-20">
+      <p className=" mb-16 text-gray-9f">{label}</p>
       {children}
     </div>
   );
