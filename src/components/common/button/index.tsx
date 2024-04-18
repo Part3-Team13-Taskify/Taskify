@@ -1,8 +1,5 @@
 import { ReactNode } from 'react';
-/**
- * Button 컴포넌트
- * @param {{size: string, type: string}} size height: large(56px), medium(40px), small(32px), extraSmall(28px)
- */
+
 interface ButtonProps {
   children: ReactNode;
   type?: 'button' | 'submit';
