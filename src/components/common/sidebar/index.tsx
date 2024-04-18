@@ -103,7 +103,13 @@ const Dashboard = () => {
     <div className="w-full h-45 flex my-16 flex-col mobile:gap-30 mobile:translate-x-4">
       {MOCK_DATA.map((data: any) => (
         // <Link href={`/dashboard/${data.id}`} key={data.id}>
-        <div key={data.id} className="flex my-6 rounded-4" onClick={() => handleClick(data.id)}>
+        <div
+          key={data.id}
+          className="flex my-6 rounded-4"
+          role="button"
+          tabIndex={0}
+          onClick={() => handleClick(data.id)}
+        >
           <Image src={data.color} alt={data.color} width={8} height={8} />
           <p
             className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
@@ -141,7 +147,7 @@ const SideBar = () => {
       </div>
       <div className="flex justify-between">
         <p className="text-12 font-bold text-gray-78 mobile:hidden">Dash Boards</p>
-        {/* <div className="w-20 mobile:mt-39 mobile:mb-22" onClick={handleOpenModal}> 대시보드 생성하기 모달 핸들러 추가*/}
+        {/* <div className="w-20 mobile:mt-39 mobile:mb-22" onClick={handleOpenModal}> 대시보드 생성하기 모달 핸들러 추가 */}
         <div className="w-20 mobile:mt-39 mobile:mb-22">
           <Image src={add} alt="add dash board" />
         </div>
