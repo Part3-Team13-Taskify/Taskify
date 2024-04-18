@@ -1,5 +1,5 @@
-import Button from '../common/button';
-import Modal from '../common/modal';
+import Button from '../../common/button';
+import Modal from '../../common/modal';
 
 interface AddColumnModalProps {
   openModal: boolean;
@@ -13,11 +13,12 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
 
   return (
     <Modal
+      className="w-540 mobile:w-327"
       openModal={openModal}
       handleModalClose={handleModalClose}
       upperChildren={
         <>
-          <div className="mb-32">새 컬럼 생성</div>
+          <div className="mb-32 text-24 font-bold">새 컬럼 생성</div>
           <form className="flex flex-col">
             <label className="mb-10 text-18 font-medium" htmlFor="columnName">
               이름
