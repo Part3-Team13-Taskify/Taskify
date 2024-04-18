@@ -15,8 +15,8 @@ export const TaskCard = () => {
 
   const handleDropdownClick: MouseEventHandler<HTMLButtonElement> = () => setIsDropdownOpen(true);
 
-  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setReplyValue(e.target.value);
+  const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setReplyValue(e.target.value.trim());
   };
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -32,8 +32,8 @@ export const TaskCard = () => {
 
   return (
     <div className="px-28 py-32 w-full flex-shrink-0">
-      <div className="grid text-24 font-bold grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
-        <div className="row-start-2 col-start-1 sm:row-start-1">{taskData.title}</div>
+      <div className="grid grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
+        <div className="row-start-2 col-start-1 sm:row-start-1 text-24 font-semibold">{taskData.title}</div>
         <div className="flex justify-end gap-24 row-start-1 col-start-2">
           {isDropdownOpen && (
             <div
@@ -53,7 +53,7 @@ export const TaskCard = () => {
         </div>
       </div>
       <div className="flex flex-row gap-32">
-        <div className="flex flex-col gap-16 max-w-450">
+        <div className="flex flex-col gap-16 max-w-450 mt-12">
           <div className="flex flex-row gap-12">
             <Image
               src="assets/card/exampleChip/chip/todoLarge.svg"
@@ -74,13 +74,12 @@ export const TaskCard = () => {
               <label htmlFor="reply" className="my-10">
                 댓글
               </label>
-              <input
+              <textarea
                 id="reply"
-                type="text"
-                className="p-16 border-1 border-gray-d9 rounded-6 h-78 text-14"
+                className="p-16 border-1 border-gray-d9 rounded-6 h-110 text-14 resize-none"
                 placeholder="댓글 작성하기"
-                onChange={handleInputChange}
-              ></input>
+                onChange={handleTextChange}
+              ></textarea>
               <button
                 className={`absolute bottom-12 right-12 border rounded-6 border-gray-df px-31 py-6 ${
                   replyValue ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
