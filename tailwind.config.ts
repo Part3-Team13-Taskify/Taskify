@@ -21,9 +21,8 @@ module.exports = {
       spacing: rem0_1200,
       colors: {
         blue: {
-          '3f': '#3F72AF',
-          76: '#76A5EA',
-          db: '#DBE2EF',
+          DEFAULT: '#4981D5',
+          bg: '#DBE6F7',
         },
         gray: {
           78: '#787486',
@@ -40,10 +39,19 @@ module.exports = {
           overlay: 'rgba(0, 0, 0, 0.70)', // 모달창 뒷 배경
         },
         red: '#D6173A',
-        green: '#7AC555',
+        green: {
+          DEFAULT: '#86D549',
+          bg: '#E7F7DB',
+        },
         purple: '#760DDE',
-        orange: '#FFA500',
-        pink: '#E876EA',
+        orange: {
+          DEFAULT: '#FFA500',
+          bg: '#F9EEE3',
+        },
+        pink: {
+          DEFAULT: '#D549B6',
+          bg: '#F7DBF0',
+        },
         violet: {
           DEFAULT: '#5534DA',
           '8%': '#F1EFFD',
