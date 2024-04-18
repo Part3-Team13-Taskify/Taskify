@@ -8,7 +8,7 @@ interface DashboardCardProps {
 
 const DashboardCard = ({ children, className }: DashboardCardProps) => {
   const mergedClasses = twMerge(
-    'w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 tablet:w-544 mobile:w-284',
+    'w-620 rounded-8 bg-white px-28 py-32  flex flex-col gap-37 mobile:gap-24 tablet:w-544 mobile:w-284',
     className,
   );
   return <div className={mergedClasses}>{children}</div>;
