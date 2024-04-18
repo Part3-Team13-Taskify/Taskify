@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-import { twMerge } from 'tailwind-merge';
 import Image from 'next/image';
 import add from '@/public/assets/icon/addBox.svg';
 import ellipse from '@/public/assets/chip/ellipseGreenLarge.svg';
@@ -9,16 +7,7 @@ import Button from '../common/button';
 import Table from './table';
 import TableHeader from './table/TableHeader';
 import TableList from './table/TableList';
-
-interface DashboardCardProps {
-  children: ReactNode;
-  className?: string;
-}
-
-const DashboardCard = ({ children, className }: DashboardCardProps) => {
-  const mergedClasses = twMerge('w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37', className);
-  return <div className={mergedClasses}>{children}</div>;
-};
+import DashboardCard from './DashboardCard';
 
 const Dashboard = () => {
   return (
