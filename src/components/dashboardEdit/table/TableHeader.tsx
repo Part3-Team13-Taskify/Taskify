@@ -11,7 +11,7 @@ interface TableHeaderProps {
 const TableHeader = ({ title, children }: TableHeaderProps) => {
   return (
     <div className="flex justify-between items-center px-28">
-      <p className="font-bold text-24">{title}</p>
+      <p className="font-bold text-24 ">{title}</p>
       <div className="flex gap-16 items-center">
         <p>1 페이지 중 1</p>
         <div className="flex">

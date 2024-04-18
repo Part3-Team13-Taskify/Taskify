@@ -1,8 +1,5 @@
 // import { faker } from '@faker-js/faker';
-import Image from 'next/image';
-
-import ellipse from '@/public/assets/chip/ellipseGreenLarge.svg';
-import Button from '../../common/button';
+import { ReactNode } from 'react';
 // [teamId]/memebers
 //   "members": [
 //     {
@@ -32,60 +29,18 @@ import Button from '../../common/button';
 //   count: 5,
 // });
 
-const TableContent = () => {
+interface TableProps {
+  label: string;
+  children: ReactNode;
+}
+
+const Table = ({ label, children }: TableProps) => {
   return (
     <div className="flex flex-col">
-      <p className="px-28 mb-16">이름</p>
-      <div className="flex items-center justify-between border-b-1 py-16">
-        <div className="flex gap-12 items-center px-28">
-          <Image src={ellipse} alt="last name initial" />
-          정만철
-        </div>
-        <div className="px-28">
-          <Button buttonType="delete" textColor="violet" bgColor="white">
-            삭제
-          </Button>
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-b-1 py-16">
-        <div className="flex gap-12 items-center px-28">
-          <Image src={ellipse} alt="last name initial" />
-          정만철
-        </div>
-        <div className="px-28">
-          <Button buttonType="delete" textColor="violet" bgColor="white">
-            삭제
-          </Button>
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-b-1 py-16">
-        <div className="flex gap-12 items-center px-28">
-          <Image src={ellipse} alt="last name initial" />
-          정만철
-        </div>
-        <div className="px-28">
-          <Button buttonType="delete" textColor="violet" bgColor="white">
-            삭제
-          </Button>
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-b-1 py-16">
-        <div className="flex gap-12 items-center px-28">
-          <Image src={ellipse} alt="last name initial" />
-          정만철
-        </div>
-        <div className="px-28">
-          <Button buttonType="delete" textColor="violet" bgColor="white">
-            삭제
-          </Button>
-        </div>
-      </div>
+      <p className="px-28 mb-16 text-gray-9f">{label}</p>
+      {children}
     </div>
   );
-};
-
-const Table = () => {
-  return <TableContent />;
 };
 
 export default Table;

@@ -1,11 +1,14 @@
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-
+import Image from 'next/image';
+import add from '@/public/assets/icon/addBox.svg';
+import ellipse from '@/public/assets/chip/ellipseGreenLarge.svg';
 import ColorPicker from '../common/colorpicker';
 import ExampleInput from '../common/input/exampleInput';
 import Button from '../common/button';
 import Table from './table';
 import TableHeader from './table/TableHeader';
+import TableList from './table/TableList';
 
 interface DashboardCardProps {
   children: ReactNode;
@@ -36,15 +39,91 @@ const Dashboard = () => {
 
       <DashboardCard className="px-0 pb-0">
         <TableHeader title="구성원" />
-        <Table />
+        <Table label="이름">
+          <TableList
+            src={ellipse}
+            text="정만철"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                삭제
+              </Button>
+            }
+          />
+          <TableList
+            src={ellipse}
+            text="정만철"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                삭제
+              </Button>
+            }
+          />
+          <TableList
+            src={ellipse}
+            text="정만철"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                삭제
+              </Button>
+            }
+          />
+          <TableList
+            src={ellipse}
+            text="정만철"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                삭제
+              </Button>
+            }
+          />
+        </Table>
       </DashboardCard>
 
       <DashboardCard className="px-0 pb-0">
         <TableHeader title="초대 내역">
-          <Button buttonType="columnAdd">초대하기</Button>
+          <Button buttonType="modal2" bgColor="violet" textColor="white">
+            <Image src={add} alt="add" />
+            초대하기
+          </Button>
         </TableHeader>
-        <Table />
+        <Table label="이메일">
+          <TableList
+            text="codeitA@codeit.com"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                취소
+              </Button>
+            }
+          />
+          <TableList
+            text="codeitA@codeit.com"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                취소
+              </Button>
+            }
+          />
+          <TableList
+            text="codeitA@codeit.com"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                취소
+              </Button>
+            }
+          />
+          <TableList
+            text="codeitA@codeit.com"
+            button={
+              <Button buttonType="delete" textColor="violet" bgColor="white">
+                취소
+              </Button>
+            }
+          />
+        </Table>
       </DashboardCard>
+      <Button buttonType="dashboardDelete" bgColor="white">
+        대시보드 삭제하기
+      </Button>
     </>
   );
 };
