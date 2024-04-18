@@ -9,6 +9,7 @@ import purple from '@/public/assets/chip/ellipsePurpleLarge.svg';
 import yellow from '@/public/assets/chip/ellipseYellowLarge.svg';
 import crown from '@/public/assets/icon/crown.svg';
 import { useState } from 'react';
+import Chip from '../chip';
 
 const generateData = (n: number) => {
   const MOCK_DATA = [
@@ -81,7 +82,7 @@ const MOCK_DATA = generateData(1);
 //   );
 // }
 
-const Dashboard = () => {
+const DashboardList = () => {
   const [selectedDashboard, setSelectedDashboard] = useState(0);
   // const [itemOffset, setItemOffset] = useState(0);
   // const endOffset = itemOffset + itemsPerPage;
@@ -152,7 +153,7 @@ const SideBar = () => {
           <Image src={add} alt="add dash board" />
         </div>
       </div>
-      <Dashboard />
+      <DashboardList />
     </div>
   );
 };
