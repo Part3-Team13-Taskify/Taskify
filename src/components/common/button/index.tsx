@@ -4,9 +4,10 @@ interface ButtonProps {
   children: ReactNode;
   type?: 'button' | 'submit';
   buttonType: ButtonType;
-  bgColor?: bgColor;
-  textColor?: textColor;
+  bgColor?: BgColor;
+  textColor?: TextColor;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
 type ButtonType =
@@ -22,9 +23,9 @@ type ButtonType =
   | 'modal1'
   | 'modal2';
 
-type bgColor = 'violet' | 'white';
+type BgColor = 'violet' | 'white';
 
-type textColor = 'white' | 'black' | 'violet' | 'gray';
+type TextColor = 'white' | 'black' | 'violet' | 'gray';
 
 const buttonClasses = {
   // 로그인 버튼 : width-520px
@@ -55,19 +56,27 @@ const buttonClasses = {
   modal2: 'w-120 h-48 rounded-8 text-16 font-medium mobile:w-138 mobile:h-42',
 };
 
-const bgColorClasses: Record<bgColor, string> = {
+const bgColorClasses: Record<BgColor, string> = {
   violet: 'bg-violet disabled:bg-gray-9f',
-  white: 'bg-white border-1 border-gray-d9  ',
+  white: 'bg-white border-1 border-gray-d9',
 };
 
-const textColorClasses: Record<textColor, string> = {
+const textColorClasses: Record<TextColor, string> = {
   white: 'text-white',
   black: 'text-black-33',
   violet: 'text-violet',
   gray: 'text-gray-78',
 };
 
-const Button: React.FC<ButtonProps> = ({ children, type, buttonType, bgColor, textColor, disabled }) => {
+const Button: React.FC<ButtonProps> = ({
+  children,
+  type = 'button',
+  buttonType,
+  bgColor,
+  textColor,
+  disabled,
+  onClick,
+}) => {
   const bgColorClass = bgColor ? bgColorClasses[bgColor] : '';
   const textColorClass = textColor ? textColorClasses[textColor] : '';
 
@@ -76,6 +85,7 @@ const Button: React.FC<ButtonProps> = ({ children, type, buttonType, bgColor, te
       className={`${buttonClasses[buttonType]} ${bgColorClass} ${textColorClass}`}
       type={type}
       disabled={disabled}
+      onClick={onClick}
     >
       {children}
     </button>
