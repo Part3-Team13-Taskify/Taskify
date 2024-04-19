@@ -8,7 +8,7 @@ const MyDashboard = () => {
       <SideBar />
       <div className="flex flex-col flex-grow">
         <Navigation name="내 대시보드" icon={false} member="멤버" user="유저" />
-        <div className="bg-gray-fa">
+        <div className="h-full bg-gray-fa">
           <InvitationDashboard />
         </div>
       </div>
