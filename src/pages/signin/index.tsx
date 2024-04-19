@@ -8,6 +8,7 @@ import { FieldError, useForm } from 'react-hook-form';
 interface InputForm {
   email: string;
   password: string;
+  passwordcheck?: string;
 }
 
 const Signin = () => {
@@ -55,7 +56,6 @@ const Signin = () => {
               />
             </form>
             <form onSubmit={handleSubmit(onSubmit)}>
-              {' '}
               {/* handleSubmit 함수를 onSubmit 이벤트 핸들러로 설정 */}
               <PasswordInput
                 register={register('password', {
@@ -74,6 +74,7 @@ const Signin = () => {
                 inputName="password"
                 inputContent="비밀번호를 입력해 주세요"
                 labelId="password"
+                labelName="비밀번호"
               />
             </form>
           </div>
@@ -89,10 +90,9 @@ const Signin = () => {
         </main>
         <footer>
           <p>
-            회원이 아니신가요?{' '}
-            <a className="underline text-violet" href="/signup">
-              회원가입하기
-            </a>
+            회원이 아니신가요?
+            {/* prettier-ignore */}
+            <a className="underline text-violet" href="/signup">  회원가입하기</a>
           </p>
         </footer>
       </div>

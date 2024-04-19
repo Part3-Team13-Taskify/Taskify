@@ -1,6 +1,6 @@
 import { FieldError, UseFormClearErrors, UseFormRegisterReturn } from 'react-hook-form';
 
-interface InputForm {
+interface EmailInputForm {
   email: string;
   password: string;
 }
@@ -11,7 +11,7 @@ interface InputProps {
   type: 'email' | 'password';
   register: UseFormRegisterReturn;
   error: FieldError;
-  clearError: UseFormClearErrors<InputForm>;
+  clearError: UseFormClearErrors<EmailInputForm>;
 }
 
 const EmailInput = ({ register, inputName, inputContent, labelId, error, clearError }: InputProps) => {
