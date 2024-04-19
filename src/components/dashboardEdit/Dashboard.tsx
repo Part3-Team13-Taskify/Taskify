@@ -11,7 +11,7 @@ import DashboardCard from './DashboardCard';
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-col gap-25 tablet:mx-auto tablet:gap-12">
+    <div className="flex flex-col gap-25 tablet:gap-12">
       <DashboardCard>
         <div className="flex justify-between">
           <p className="font-bold text-20">비브리지</p>

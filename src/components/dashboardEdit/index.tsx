@@ -9,7 +9,7 @@ const DashboardEditContent = () => {
   const { id } = router.query;
 
   return (
-    <main className="flex p-20 flex-col bg-gray-fa w-full gap-25 pb-56">
+    <main className="flex p-20 flex-col bg-gray-fa gap-25 pb-56 tablet:px-40">
       <Link href={`/dashboard/${id}`} className="flex gap-8">
         <Image src={arrow} alt="go back" width={20} />
         <p className="font-semibold">돌아가기</p>
