@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import TaskLabel from '../TaskLabel';
+import Button from '../common/button';
 
 const CreateTask = () => {
   return (
@@ -7,7 +8,7 @@ const CreateTask = () => {
       <div className="text-24 font-bold">할 일 생성</div>
       <form className="flex flex-col gap-32">
         <TaskLabel htmlFor="assignee" label="담당자">
-          <select id="assignee" className="w-217 border-1 border-gray-9f rounded-6 focus-within:border-violet p-15">
+          <select id="assignee" className="w-217 border-1 border-gray-9f rounded-6 focus:border-violet p-15">
             <option value="" className="text-gray">
               이름을 입력해 주세요
             </option>
@@ -19,7 +20,7 @@ const CreateTask = () => {
         <TaskLabel htmlFor="title" label="제목" isRequired={true}>
           <input
             id="title"
-            className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
+            className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
             placeholder="제목을 입력해 주세요"
             required
           ></input>
@@ -53,6 +54,14 @@ const CreateTask = () => {
             <Image src="assets/chip/addSmall.svg" width={28} height={28} alt="add image"></Image>
           </button>
         </TaskLabel>
+        <div className="flex flex-row justify-end gap-12">
+          <Button buttonType="modal2" bgColor="white">
+            취소
+          </Button>
+          <Button buttonType="modal2" bgColor="violet" textColor="white">
+            생성
+          </Button>
+        </div>
       </form>
     </div>
   );
