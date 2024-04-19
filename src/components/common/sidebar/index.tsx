@@ -2,72 +2,43 @@ import Image from 'next/image';
 import logo from '@/public/assets/logo/violetHeaderLogo.svg';
 import add from '@/public/assets/icon/addBox.svg';
 import mobileLogo from '@/public/assets/logo/violetHeaderMobileLogo.svg';
-import green from '@/public/assets/chip/ellipseGreenLarge.svg';
 import blue from '@/public/assets/chip/ellipseBlueLarge.svg';
+import green from '@/public/assets/chip/ellipseGreenLarge.svg';
 import pink from '@/public/assets/chip/ellipsePinkLarge.svg';
 import purple from '@/public/assets/chip/ellipsePurpleLarge.svg';
 import yellow from '@/public/assets/chip/ellipseYellowLarge.svg';
 import crown from '@/public/assets/icon/crown.svg';
 import { useState } from 'react';
-import Chip from '../chip';
+import { DASHBOARDS } from '@/faker';
+import Link from 'next/link';
+// import ReactPaginate from 'react-paginate';
 
-const generateData = (n: number) => {
-  const MOCK_DATA = [
-    {
-      id: 0,
-      title: '수박바',
-      color: green,
-      createdAt: '2024-04-16T07:59:49.721Z',
-      updatedAt: '2024-04-16T07:59:49.721Z',
-      createdByMe: true,
-      userId: 0,
-    },
-    {
-      id: 1,
-      title: '죠스바',
-      color: blue,
-      createdAt: '2024-04-16T07:59:49.721Z',
-      updatedAt: '2024-04-16T07:59:49.721Z',
-      createdByMe: false,
-      userId: 0,
-    },
-    {
-      id: 2,
-      title: '스크류바',
-      color: pink,
-      createdAt: '2024-04-16T07:59:49.721Z',
-      updatedAt: '2024-04-16T07:59:49.721Z',
-      createdByMe: true,
-      userId: 0,
-    },
-    {
-      id: 3,
-      title: '마이구미',
-      color: purple,
-      createdAt: '2024-04-16T07:59:49.721Z',
-      updatedAt: '2024-04-16T07:59:49.721Z',
-      createdByMe: false,
-      userId: 0,
-    },
-    {
-      id: 4,
-      title: '차돌강된장',
-      color: yellow,
-      createdAt: '2024-04-16T07:59:49.721Z',
-      updatedAt: '2024-04-16T07:59:49.721Z',
-      createdByMe: true,
-      userId: 0,
-    },
-  ];
-
-  let result: any = [];
-  for (let i = 0; i < n; i++) {
-    result = result.concat(MOCK_DATA.map((item) => ({ ...item, id: item.id + i * MOCK_DATA.length })));
-  }
-  return result;
+type Dashboard = {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdByMe: boolean;
+  userId: number;
 };
 
-const MOCK_DATA = generateData(1);
+interface ColorSources {
+  [key: string]: string;
+  green: string;
+  blue: string;
+  pink: string;
+  purple: string;
+  orange: string;
+}
+
+const colorSources: ColorSources = {
+  green,
+  blue,
+  pink,
+  purple,
+  orange: yellow,
+};
 
 // function Items({ currentItems }) {
 //   return (
@@ -102,33 +73,33 @@ const DashboardList = () => {
 
   return (
     <div className="w-full h-45 flex my-16 flex-col mobile:gap-30 mobile:translate-x-4">
-      {MOCK_DATA.map((data: any) => (
-        // <Link href={`/dashboard/${data.id}`} key={data.id}>
-        <div
-          key={data.id}
-          className="flex my-6 rounded-4"
-          role="button"
-          tabIndex={0}
-          onClick={() => handleClick(data.id)}
-        >
-          <Image src={data.color} alt={data.color} width={8} height={8} />
-          <p
-            className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
-              data.id === selectedDashboard && ' text-violet'
-            }`}
+      {DASHBOARDS.map((data: Dashboard) => (
+        <Link href={`/dashboard/${data.id}`} key={data.id}>
+          <div
+            key={data.id}
+            className="flex my-6 rounded-4"
+            role="button"
+            tabIndex={0}
+            onClick={() => handleClick(data.id)}
           >
-            {data.title}
-          </p>
-          {data.createdByMe && <Image src={crown} alt="crown" width={18} className="-translate-y-1 mobile:hidden" />}
-        </div>
-        // </Link>
+            <Image src={colorSources[data.color]} alt={data.color} width={8} height={8} />
+            <p
+              className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
+                data.id === selectedDashboard && ' text-violet'
+              }`}
+            >
+              {data.title}
+            </p>
+            {data.createdByMe && <Image src={crown} alt="crown" width={18} className="-translate-y-1 mobile:hidden" />}
+          </div>
+        </Link>
       ))}
       {/* <ReactPaginate
         breakLabel="..."
         nextLabel=">"
         onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
-        pageCount={5}
+        pageRangeDisplayed={1}
+        pageCount={10}
         previousLabel="<"
         renderOnZeroPageCount={null}
         className="flex"
