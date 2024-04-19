@@ -42,7 +42,7 @@ const Content = () => {
           </span>
         </p>
         <Link
-          href="/login"
+          href="/signin"
           className="text-white w-280 py-14 rounded-8 bg-violet text-center tablet:w-235 tablet:py-12"
         >
           로그인하기

@@ -26,15 +26,15 @@ const PasswordInput = ({ register, inputName, inputContent, labelId, error, clea
   };
 
   return (
-    <div className="flex flex-col items-start gap-8 text-gray-9f text-16">
+    <div className="flex flex-col items-start py-8 text-gray-9f text-16">
       <label className="text-black-33" htmlFor="password">
         비밀번호
       </label>
       <div
         className={
           error?.message
-            ? 'flex flex-row justify-between w-520 h-50 py-15 px-16 border-1 rounded-lg border-red'
-            : 'flex flex-row  justify-between w-520 h-50 py-15 px-16 border-1 rounded-lg border-gray-9f focus:outline-none  focus:border-violet'
+            ? 'flex flex-row justify-between w-full h-50 py-15 px-16 border-1 rounded-lg border-red'
+            : 'flex flex-row  justify-between w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f focus:outline-none  focus:border-violet'
         }
       >
         <input
