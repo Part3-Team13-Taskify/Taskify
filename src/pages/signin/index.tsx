@@ -24,7 +24,7 @@ const Signin = () => {
   };
 
   return (
-    <div className="">
+    <div>
       <div className="h-screen flex flex-col justify-center items-center gap-24">
         <header className="flex flex-col items-center gap-10">
           <Image className="modile:w-120" src={mainLogo} alt="mainLogo" />
