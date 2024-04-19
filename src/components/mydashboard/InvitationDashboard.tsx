@@ -33,7 +33,7 @@ const InvitationDashboard = () => {
       {isAddDashboardModalVisible && (
         <AddDashboardModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
       )}
-      <div className="w-1022 h-400 mt-40 mx-40 rounded-lg  bg-white tablet:w-screen tablet:h-400 mobile:screen mobile:h-400 mobile:mx-24 ">
+      <div className="w-1022 h-400 mt-40 mx-40 rounded-lg  bg-white tablet:w-504 tablet:h-400 mobile:260-full mobile-h:400 mobile:mx-24 ">
         <h1 className="self-start pt-32 pl-28 text-24 font-bold mobile:text-20">초대받은 대시보드</h1>
         <div className="flex flex-col items-center mt-66">
           <Image src={unsubscribeEmail} alt="unsubscribeEmail " className="mb-24" />
