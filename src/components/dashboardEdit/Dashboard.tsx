@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import add from '@/public/assets/icon/addBox.svg';
+import add from '@/public/assets/icon/addWhite.svg';
 import ellipse from '@/public/assets/chip/ellipseGreenLarge.svg';
 import ColorPicker from '../common/colorpicker';
 // import ExampleInput from '../common/input/exampleInput';
@@ -11,7 +11,7 @@ import DashboardCard from './DashboardCard';
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-col gap-25 tablet:mx-auto tablet:gap-12">
+    <div className="flex flex-col gap-25 tablet:gap-12">
       <DashboardCard>
         <div className="flex justify-between">
           <p className="font-bold text-20">비브리지</p>
@@ -70,12 +70,17 @@ const Dashboard = () => {
 
       <DashboardCard className="px-0 pb-0 relative">
         <TableHeader title="초대 내역">
-          <div className="mobile:absolute mobile:right-20 mobile:top-90">
-            <Button buttonType="modal1" bgColor="violet" textColor="white">
-              <Image src={add} alt="add" className="absolute" />
+          <Button
+            buttonType="modal1"
+            bgColor="violet"
+            textColor="white"
+            className="mobile:absolute mobile:right-20 mobile:top-90 w-105"
+          >
+            <div className="flex gap-6 items-center justify-center ">
+              <Image src={add} alt="add" />
               초대하기
-            </Button>
-          </div>
+            </div>
+          </Button>
         </TableHeader>
         <Table label="이메일">
           <TableList
@@ -112,11 +117,9 @@ const Dashboard = () => {
           />
         </Table>
       </DashboardCard>
-      <div className="mt-25">
-        <Button buttonType="dashboardDelete" bgColor="white">
-          대시보드 삭제하기
-        </Button>
-      </div>
+      <Button buttonType="dashboardDelete" bgColor="white" className="mt-25">
+        대시보드 삭제하기
+      </Button>
     </div>
   );
 };

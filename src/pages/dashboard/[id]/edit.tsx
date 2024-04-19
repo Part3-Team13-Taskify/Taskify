@@ -1,17 +1,20 @@
 import Navigation from '@/src/components/common/navigation';
-import SideBar from '@/src/components/common/sidebar';
 import DashboardEditContent from '@/src/components/dashboardEdit';
+import Layout from '@/src/components/common/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/src/pages/_app';
 
-const DashboardEdit = () => {
+const DashboardEdit: NextPageWithLayout = () => {
   return (
-    <div className="flex w-screen">
-      <SideBar />
-      <div className="flex flex-col flex-grow">
-        <Navigation name="비브리지" icon member="멤버" user="유저" />
-        <DashboardEditContent />
-      </div>
-    </div>
+    <>
+      <Navigation name="비브리지" icon member="멤버" user="유저" />
+      <DashboardEditContent />
+    </>
   );
+};
+
+DashboardEdit.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default DashboardEdit;
