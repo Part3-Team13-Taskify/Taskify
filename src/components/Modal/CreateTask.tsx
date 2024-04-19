@@ -1,8 +1,20 @@
 import Image from 'next/image';
 import TaskLabel from '../TaskLabel';
 import Button from '../common/button';
+import { ChangeEventHandler, useState } from 'react';
 
 const CreateTask = () => {
+  const [titleValue, setTitleValue] = useState<string>('');
+  const [desrciptionValue, setDesrciptionValue] = useState<string>('');
+  const isRequiredFilled = desrciptionValue && titleValue;
+
+  const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setTitleValue(e.target.value.trim());
+  };
+  const handleDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setDesrciptionValue(e.target.value.trim());
+  };
+
   return (
     <div className="flex flex-col max-w-500 w-full rounded-6 gap-32 px-32 py-28">
       <div className="text-24 font-bold">할 일 생성</div>
@@ -23,6 +35,7 @@ const CreateTask = () => {
             className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
             placeholder="제목을 입력해 주세요"
             required
+            onChange={handleTitleChange}
           ></input>
         </TaskLabel>
         <TaskLabel htmlFor="description" label="설명" isRequired={true}>
@@ -31,6 +44,7 @@ const CreateTask = () => {
             className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             placeholder="설명을 입력해 주세요"
             required
+            onChange={handleDescriptionChange}
           ></textarea>
         </TaskLabel>
         <TaskLabel htmlFor="due-date" label="마감일">
@@ -58,7 +72,7 @@ const CreateTask = () => {
           <Button buttonType="modal2" bgColor="white">
             취소
           </Button>
-          <Button buttonType="modal2" bgColor="violet" textColor="white">
+          <Button buttonType="modal2" bgColor="violet" textColor="white" disabled={!isRequiredFilled}>
             생성
           </Button>
         </div>
