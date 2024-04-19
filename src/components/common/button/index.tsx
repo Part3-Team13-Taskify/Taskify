@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
   children: ReactNode;
@@ -8,6 +9,7 @@ interface ButtonProps {
   textColor?: TextColor;
   disabled?: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
 type ButtonType =
@@ -76,13 +78,15 @@ const Button: React.FC<ButtonProps> = ({
   textColor,
   disabled,
   onClick,
+  className,
 }) => {
+  const buttonClass = twMerge(buttonClasses[buttonType], className);
   const bgColorClass = bgColor ? bgColorClasses[bgColor] : '';
   const textColorClass = textColor ? textColorClasses[textColor] : '';
 
   return (
     <button
-      className={`${buttonClasses[buttonType]} ${bgColorClass} ${textColorClass}`}
+      className={`${buttonClass} ${bgColorClass} ${textColorClass}`}
       type={type}
       disabled={disabled}
       onClick={onClick}
