@@ -18,7 +18,7 @@ const Navigation = ({ name, icon, member, user }: NavProps) => {
     setDropDown(!dropDown);
   };
   return (
-    <header className="w-1920 h-70 pl-340 flex flex-row  gap-32 font-sans items-center text-16 tablet:w-744 tablet:gap-24 tablet:pl-228 mobile:w-350 mobile:h-60 mobile:gap-12 mobile:pl-79 mobile:text-14">
+    <header className="w-1920 h-70 border-b-1 pl-34 flex flex-row  gap-32 font-sans items-center text-16 tablet:w-744 tablet:gap-24 tablet:pl-228 mobile:w-350 mobile:h-60 mobile:gap-12 mobile:pl-79 mobile:text-14">
       <div className="w-4/5 flex flex-row justify-between text-black-33 font-medium tablet:w-fit mobile:w-fit">
         {/* 대시보드이름(따로 이름 없다면 내 대쉬보드) + crown icon이 있으면 적용 */}
         <div className=" flex flex-row items-center text-20 font-bold gap-4 tablet:hidden mobile:hidden">
