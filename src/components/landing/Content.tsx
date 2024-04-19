@@ -63,7 +63,7 @@ const Content = () => {
       </div>
 
       <div className="w-full max-w-1200 h-600 flex space-x-100 tablet:space-x-0 pt-103 pl-60 tablet:pl-0 bg-black-17 rounded-8 tablet:w-664 tablet:h-972 mobile:w-343 mobile:h-686 tablet:pt-63 tablet:flex-col-reverse tablet:justify-between ">
-        <div className="w-436 tablet:w-360 mobile:w-217 tablet:mx-auto">
+        <div className="w-436 tablet:w-360 mobile:w-217 tablet:mx-auto relative bottom-6 tablet:bottom-0">
           <Image src={landing3} alt="set tasks" className="rounded-t-8" />
         </div>
         <div className="flex flex-col space-y-100 pt-25 tablet:pt-0 tablet:pl-60 mobile:pt-0 mobile:text-center mobile:pl-0 mobile:space-y-61">
