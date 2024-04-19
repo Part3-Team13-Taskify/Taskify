@@ -1,16 +1,26 @@
 import Image from 'next/image';
-import Reply from '../Reply';
+import Reply from './Reply';
 
 import taskData from '@/public/mock/TaskCard.json';
 import comments from '@/public/mock/Comment.json';
 import { format } from 'date-fns';
-import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import Modal from '../common/modal';
 
-export const TaskCard = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+interface TaskModalProps {
+  openModal: boolean;
+  handleModalClose: () => void;
+}
+
+export const TaskCard = ({openModal, handleModalClose}:TaskModalProps) => {
+  if (!openModal) {
+    return null;
+  }
+  
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [replyValue, setReplyValue] = useState('');
 
-  const dueDate = format(new Date(taskData.dueDate), 'yyyy.MM.dd');
+  const dueDate = format(new Date(taskData.dueDate).toLocaleString('en-US'), 'yyyy.MM.dd');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleDropdownClick: MouseEventHandler<HTMLButtonElement> = () => setIsDropdownOpen(true);
@@ -28,10 +38,11 @@ export const TaskCard = () => {
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  });
+  },[]);
 
   return (
-    <div className="px-28 py-32 w-full flex-shrink-0">
+    <Modal className='flex-shrink-0' openModal={openModal} handleModalClose={handleModalClose} upperChildren={
+    <>
       <div className="grid grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
         <div className="row-start-2 col-start-1 sm:row-start-1 text-24 font-semibold">{taskData.title}</div>
         <div className="flex justify-end gap-24 row-start-1 col-start-2">
@@ -47,7 +58,7 @@ export const TaskCard = () => {
           <button onClick={handleDropdownClick}>
             <Image src="assets/icon/moreVert.svg" width={28} height={28} alt="more" />
           </button>
-          <button>
+          <button onClick={handleModalClose}>
             <Image src="assets/icon/close.svg" width={28} height={28} alt="exit" />
           </button>
         </div>
@@ -118,6 +129,7 @@ export const TaskCard = () => {
           <span className="text-14 font-normal">{dueDate}</span>
         </div>
       </div>
-    </div>
+    </>
+  } lowerChildren={<></>}/>
   );
 };
