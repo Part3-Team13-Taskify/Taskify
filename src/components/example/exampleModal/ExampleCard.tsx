@@ -1,4 +1,4 @@
-import Card from './common/Card';
+import Card from '../../common/card';
 
 const ExampleCard = () => {
   const imgSource = 'assets/card/desktop/card_image1.svg';

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import TaskLabel from '../TaskLabel';
+import TaskLabel from './TaskLabel';
 import Button from '../common/button';
 import { ChangeEventHandler, useState } from 'react';
 import Modal from '../common/modal';

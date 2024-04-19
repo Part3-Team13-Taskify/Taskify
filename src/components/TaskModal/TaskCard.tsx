@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Reply from '../Reply';
+import Reply from './Reply';
 
 import taskData from '@/public/mock/TaskCard.json';
 import comments from '@/public/mock/Comment.json';
