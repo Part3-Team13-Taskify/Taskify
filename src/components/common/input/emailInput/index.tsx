@@ -14,7 +14,7 @@ interface InputProps {
   clearError: UseFormClearErrors<InputForm>;
 }
 
-const EmailInput = ({ register, inputName, inputContent, labelId, error, type, clearError }: InputProps) => {
+const EmailInput = ({ register, inputName, inputContent, labelId, error, clearError }: InputProps) => {
   return (
     <div className="flex flex-col items-start gap-8 text-gray-9f text-16">
       <label className="text-black-33" htmlFor="email">
