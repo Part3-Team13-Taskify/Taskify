@@ -16,7 +16,7 @@ interface InputProps {
 
 const EmailInput = ({ register, inputName, inputContent, labelId, error, clearError }: InputProps) => {
   return (
-    <div className="flex flex-col items-start gap-8 text-gray-9f text-16">
+    <div className="flex flex-col items-start py-8 text-gray-9f text-16">
       <label className="text-black-33" htmlFor="email">
         이메일
       </label>
@@ -26,8 +26,8 @@ const EmailInput = ({ register, inputName, inputContent, labelId, error, clearEr
         name={inputName}
         className={
           error?.message
-            ? 'w-520 h-50 py-15 px-16 border-1 rounded-lg border-red text-black-33'
-            : 'w-520 h-50 py-15 px-16 border-1 rounded-lg border-gray-9f text-black-33 focus:outline-none  focus:border-violet'
+            ? 'w-full h-50 py-15 px-16 border-1 rounded-lg border-red text-black-33'
+            : 'w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f text-black-33 focus:outline-none  focus:border-violet'
         }
         placeholder={inputContent}
         id={labelId}
