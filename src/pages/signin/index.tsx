@@ -27,10 +27,10 @@ const Signin = () => {
     <div className="">
       <div className="h-screen flex flex-col justify-center items-center gap-24">
         <header className="flex flex-col items-center gap-10">
-          <Image src={mainLogo} alt="mainLogo" />
+          <Image className="modile:w-120" src={mainLogo} alt="mainLogo" />
           <h1 className="text-20 mb-6 font-medium">오늘도 만나서 반가워요!</h1>
         </header>
-        <main className="w-520">
+        <main className="w-520 mobile:w-351">
           <div className="pb-16">
             <form onSubmit={handleSubmit(onSubmit)}>
               {' '}
