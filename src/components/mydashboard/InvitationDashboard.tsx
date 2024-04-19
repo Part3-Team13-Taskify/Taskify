@@ -19,6 +19,7 @@ const InvitationDashboard = () => {
   return (
     <div className="flex flex-col">
       <div className="flex gap-12 mt-40 ml-40 mobile:mx-24">
+<<<<<<< HEAD
         <Button
           buttonType="dashboardAdd"
           bgColor="white"
@@ -26,13 +27,20 @@ const InvitationDashboard = () => {
           type="button"
           onClick={showAddDashboardModal}
         >
+=======
+        <Button buttonType="dashboardAdd" bgColor="white" textColor="black" type="button">
+>>>>>>> d0924e1 (🐛 Fix: mydashboard페이지 반응형 수정)
           새로운 대시보드
           <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
         </Button>
       </div>
+<<<<<<< HEAD
       {isAddDashboardModalVisible && (
         <AddDashboardModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
       )}
+=======
+
+>>>>>>> d0924e1 (🐛 Fix: mydashboard페이지 반응형 수정)
       <div className="w-1022 h-400 mt-40 mx-40 rounded-lg  bg-white tablet:w-504 tablet:h-400 mobile:260-full mobile-h:400 mobile:mx-24 ">
         <h1 className="self-start pt-32 pl-28 text-24 font-bold mobile:text-20">초대받은 대시보드</h1>
         <div className="flex flex-col items-center mt-66">
