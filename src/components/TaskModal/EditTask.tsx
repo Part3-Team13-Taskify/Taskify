@@ -3,17 +3,41 @@ import TaskLabel from '../TaskLabel';
 import Button from '../common/button';
 import { ChangeEventHandler, useState } from 'react';
 import Modal from '../common/modal';
+import { faker } from '@faker-js/faker';
+import { getRandomColor } from '@/faker';
 
 interface EditTaskModalProps {
   openModal: boolean;
   handleModalClose: () => void;
 }
 
+type TaskData = {
+  title: string;
+  description: string;
+  assignee: string[];
+  dueDate: string;
+  tag?: string[];
+};
+
 const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose }) => {
   if (!openModal) return null;
 
-  const [titleValue, setTitleValue] = useState<string>('');
-  const [desrciptionValue, setDesrciptionValue] = useState<string>('');
+  function createRandomTaskData(): TaskData {
+    return {
+      title: faker.internet.userName(),
+      description: faker.string.sample(),
+      assignee: [faker.internet.userName(), faker.internet.userName(), faker.internet.userName()],
+      dueDate: faker.date.future().toDateString(),
+    };
+  }
+
+  const TASK_DATA = createRandomTaskData();
+
+  const [titleValue, setTitleValue] = useState<string>(TASK_DATA.title);
+  const [desrciptionValue, setDesrciptionValue] = useState<string>(TASK_DATA.description);
+  const [status, setStatus] = useState<string>('')
+  const [due, setDue] = useState<string>(TASK_DATA.dueDate)
+  const [tag, setTag] = useState<string>('')
   const isRequiredFilled = desrciptionValue && titleValue;
 
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -22,6 +46,15 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
   const handleDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setDesrciptionValue(e.target.value.trim());
   };
+  const handleDateChange: ChangeEventHandler<HTMLInputElement> =(e) =>{
+    setDue(e.target.value.trim());
+  }
+  const handleStatusChange: ChangeEventHandler<HTMLSelectElement> =(e)=>{
+    setStatus(e.target.value);
+  }
+  const handleTagChange: ChangeEventHandler<HTMLInputElement> =(e)=>{
+    setTag(e.target.value.trim())
+  }
 
   return (
     <Modal
@@ -36,6 +69,8 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
             <TaskLabel htmlFor="status" label="상태">
               <select
                 id="status"
+                value={status}
+                onSelect={handleStatusChange}
                 className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15 mobile:max-w-none"
               >
                 <option value="to-do">To Do</option>
@@ -51,9 +86,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
                 <option value="" className="text-gray">
                   이름을 입력해 주세요
                 </option>
-                <option value="1">1번</option>
-                <option value="2">2번</option>
-                <option value="3">3번</option>
+                <option value="1">{TASK_DATA.assignee[0]}</option>
+                <option value="2">{TASK_DATA.assignee[1]}</option>
+                <option value="3">{TASK_DATA.assignee[2]}</option>
               </select>
             </TaskLabel>
             
@@ -63,6 +98,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
                 id="title"
                 className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
                 placeholder="제목을 입력해 주세요"
+                value={titleValue}
                 required
                 onChange={handleTitleChange}
               ></input>
@@ -73,14 +109,17 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
                 className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
                 placeholder="설명을 입력해 주세요"
                 required
+                value={desrciptionValue}
                 onChange={handleDescriptionChange}
               ></textarea>
             </TaskLabel>
             <TaskLabel htmlFor="due-date" label="마감일">
               <input
                 id="due-date"
-                type="date"
+                type="text"
                 placeholder="날짜를 입력해 주세요"
+                value={due}
+                onChange={handleDateChange}
                 className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
               ></input>
             </TaskLabel>
@@ -89,6 +128,8 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
                 id="tag"
                 type="text"
                 placeholder="입력 후 Enter"
+                onChange={handleTagChange}
+                value={tag}
                 className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
               ></input>
             </TaskLabel>
