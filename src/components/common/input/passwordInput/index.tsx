@@ -4,21 +4,23 @@ import eyeOn from '@/public/assets/icon/eyeOn.svg';
 import { FieldError, UseFormClearErrors, UseFormRegisterReturn } from 'react-hook-form';
 import { useState } from 'react';
 
-interface InputForm {
-  email: string;
-  password: string;
+interface PasswordInputForm {
+  email?: string;
+  password?: string;
+  passwordcheck?: string;
 }
 interface InputProps {
   inputName: string;
+  labelName: string;
   inputContent: string;
   labelId: string;
   type: 'email' | 'password';
   register: UseFormRegisterReturn;
   error: FieldError;
-  clearError: UseFormClearErrors<InputForm>;
+  clearError: UseFormClearErrors<PasswordInputForm>;
 }
 
-const PasswordInput = ({ register, inputName, inputContent, labelId, error, clearError }: InputProps) => {
+const PasswordInput = ({ register, inputName, inputContent, labelId, labelName, error, clearError }: InputProps) => {
   const [openEye, setOpenEye] = useState(false);
 
   const toggleEye = () => {
@@ -28,7 +30,7 @@ const PasswordInput = ({ register, inputName, inputContent, labelId, error, clea
   return (
     <div className="flex flex-col items-start py-8 text-gray-9f text-16">
       <label className="text-black-33" htmlFor="password">
-        비밀번호
+        {labelName}
       </label>
       <div
         className={
@@ -44,7 +46,7 @@ const PasswordInput = ({ register, inputName, inputContent, labelId, error, clea
           className={error?.message ? ' text-black-33' : ' text-black-33 '}
           placeholder={inputContent}
           id={labelId}
-          onFocus={() => clearError('password')}
+          onFocus={() => clearError(['password', 'passwordcheck'])}
         />
         <Image className="" onClick={toggleEye} src={openEye ? eyeOn : eyeOff} alt={openEye ? 'eyeOn' : 'eyeOff'} />
       </div>
