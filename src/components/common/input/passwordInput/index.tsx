@@ -7,6 +7,7 @@ import { useState } from 'react';
 interface PasswordInputForm {
   email?: string;
   password?: string;
+  newpassword?: string;
   passwordcheck?: string;
 }
 interface InputProps {
@@ -15,12 +16,22 @@ interface InputProps {
   inputContent: string;
   labelId: string;
   type: 'email' | 'password';
+  focusType?: string;
   register: UseFormRegisterReturn;
   error: FieldError;
   clearError: UseFormClearErrors<PasswordInputForm>;
 }
 
-const PasswordInput = ({ register, inputName, inputContent, labelId, labelName, error, clearError }: InputProps) => {
+const PasswordInput = ({
+  register,
+  inputName,
+  focusType,
+  inputContent,
+  labelId,
+  labelName,
+  error,
+  clearError,
+}: InputProps) => {
   const [openEye, setOpenEye] = useState(false);
 
   const toggleEye = () => {
@@ -46,7 +57,18 @@ const PasswordInput = ({ register, inputName, inputContent, labelId, labelName, 
           className={error?.message ? ' text-black-33' : ' text-black-33 '}
           placeholder={inputContent}
           id={labelId}
-          onFocus={() => clearError(['password', 'passwordcheck'])}
+          onFocus={() => {
+            switch (focusType) {
+              case 'password':
+                return clearError ? clearError('password') : '';
+              case 'newpassword':
+                return clearError ? clearError('newpassword') : '';
+              case 'passwordcheck':
+                return clearError ? clearError('passwordcheck') : '';
+              default:
+                return clearError ? clearError('password') : '';
+            }
+          }}
         />
         <Image className="" onClick={toggleEye} src={openEye ? eyeOn : eyeOff} alt={openEye ? 'eyeOn' : 'eyeOff'} />
       </div>
