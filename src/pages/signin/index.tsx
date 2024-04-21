@@ -1,14 +1,17 @@
 import Image from 'next/image';
 import mainLogo from '@/public/assets/logo/mainLogo.svg';
-import EmailInput from '@/src/components/common/input/emailInput';
 import PasswordInput from '@/src/components/common/input/passwordInput';
 import Button from '@/src/components/common/button';
 import { FieldError, useForm } from 'react-hook-form';
+import Input from '@/src/components/common/input';
 
 interface InputForm {
+  text?: string;
   email: string;
   password: string;
+  newpassword?: string;
   passwordcheck?: string;
+  file?: string;
 }
 
 const Signin = () => {
@@ -36,7 +39,7 @@ const Signin = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               {' '}
               {/* handleSubmit 함수를 onSubmit 이벤트 핸들러로 설정 */}
-              <EmailInput
+              <Input
                 register={register('email', {
                   required: {
                     value: true,
@@ -53,6 +56,8 @@ const Signin = () => {
                 inputName="email"
                 inputContent="이메일을 입력해 주세요"
                 labelId="email"
+                labelText="이메일"
+                focusType="email"
               />
             </form>
             <form onSubmit={handleSubmit(onSubmit)}>

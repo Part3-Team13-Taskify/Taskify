@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import mainLogo from '@/public/assets/logo/mainLogo.svg';
-import EmailInput from '@/src/components/common/input/emailInput';
 import PasswordInput from '@/src/components/common/input/passwordInput';
 import Button from '@/src/components/common/button';
 import { FieldError, useForm } from 'react-hook-form';
@@ -10,8 +9,10 @@ interface InputForm {
   text: string;
   email: string;
   password: string;
+  newpassword?: string;
   passwordcheck: string;
   checkbox: boolean;
+  file?: string;
 }
 
 const Signup = () => {
@@ -21,12 +22,14 @@ const Signup = () => {
     formState: { errors },
     clearErrors,
     getValues,
+    watch,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
   const onSubmit = (data: InputForm) => {
     // 폼 제출 시 실행되는 함수
     console.log(data); // 입력된 데이터 확인용
   };
+  const isChecked = watch('checkbox');
 
   return (
     <div>
@@ -38,7 +41,7 @@ const Signup = () => {
         <main className="w-520 mobile:w-351">
           <div className="pb-16">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <EmailInput
+              <Input
                 register={register('email', {
                   required: {
                     value: true,
@@ -55,6 +58,8 @@ const Signup = () => {
                 inputName="email"
                 inputContent="이메일을 입력해 주세요"
                 labelId="email"
+                labelText="이메일"
+                focusType="email"
               />
               <Input
                 register={register('text', {
@@ -63,7 +68,7 @@ const Signup = () => {
                     message: '열 자 이하로 작성해주세요.',
                   },
                   pattern: {
-                    value: /^. {1,10}$/,
+                    value: /^.{1,10}$/,
                     message: '열 자 이하로 작성해주세요.',
                   },
                 })}
@@ -74,6 +79,7 @@ const Signup = () => {
                 inputContent="닉네임을 입력해 주세요"
                 labelId="text"
                 labelText="닉네임"
+                focusType="text"
               />
               <PasswordInput
                 register={register('password', {
@@ -93,6 +99,7 @@ const Signup = () => {
                 inputContent="8자 이상 입력해 주세요"
                 labelId="password"
                 labelName="비밀번호"
+                focusType="password"
               />
               <PasswordInput
                 register={register('passwordcheck', {
@@ -116,6 +123,7 @@ const Signup = () => {
                 inputContent="비밀번호를 한번 더 입력해 주세요"
                 labelId="passwordcheck"
                 labelName="비밀번호 확인"
+                focusType="passwordcheck"
               />
               <Input
                 register={register('checkbox', {})}
@@ -124,7 +132,7 @@ const Signup = () => {
                 inputContent=""
                 labelId="checkbox"
                 labelText="이용약관에 동의합니다."
-                divCheckStyly="flex-row-reverse justify-end items-center h-20 gap-8 py-20"
+                divCheckStyle="flex-row-reverse justify-end items-center h-20 gap-8 py-20"
                 inputCheckStyle="w-20 h-20"
               />
             </form>
@@ -134,7 +142,7 @@ const Signup = () => {
             buttonType="login"
             bgColor="violet"
             textColor="white"
-            disabled={Object.keys(errors).length !== 0} // errors 객체가 비어있지 않으면 disabled로 설정
+            disabled={Object.keys(errors).length !== 0 && !isChecked} // errors 객체가 비어있지 않으면 disabled로 설정, isChecked가 true면 회색이 보이는거니깐 !로 지정해줘야 원하는대로 나옴
           >
             가입하기
           </Button>
