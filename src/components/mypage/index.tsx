@@ -7,15 +7,16 @@ import add from '@/public/assets/icon/addViolet.svg';
 import DashboardCard from '../dashboardEdit/DashboardCard';
 import Button from '../common/button';
 import Input from '../common/input';
-import EmailInput from '../common/input/emailInput';
 import PasswordInput from '../common/input/passwordInput';
 
 interface InputForm {
   text: string;
   email: string;
   password: string;
+  newpassword: string;
   passwordcheck: string;
   checkbox: boolean;
+  file: string;
 }
 
 const MyPageContent = () => {
@@ -44,11 +45,22 @@ const MyPageContent = () => {
       <DashboardCard>
         <p className="font-bold text-20">프로필</p>
         <div className="flex">
-          <div className="w-182 h-182 bg-gray-fa flex items-center justify-center rounded-6">
+          <Input
+            register={register('file', {})}
+            type="file"
+            clearError={clearErrors}
+            error={errors.email as FieldError}
+            inputName="file"
+            labelId="file"
+            focusType="file"
+            divCheckStyle="flex items-center justify-center w-full"
+            inputCheckStyle="hidden"
+            labelDropStyle="flex flex-col items-center justify-center w-182 pt-5 pb-6 h-182 border-2 bg-gray-fa border-dashed rounded-6 cursor-pointerdark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
             <Image src={add} alt="add profile image" />
-          </div>
+          </Input>
           <form className="w-366 tablet:w-290 mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
-            <EmailInput
+            <Input
               register={register('email', {
                 required: {
                   value: true,
@@ -65,6 +77,8 @@ const MyPageContent = () => {
               inputName="email"
               inputContent="이메일을 입력해 주세요"
               labelId="email"
+              labelText="이메일"
+              focusType="email"
             />
             <Input
               register={register('text', {
@@ -73,7 +87,7 @@ const MyPageContent = () => {
                   message: '열 자 이하로 작성해주세요.',
                 },
                 pattern: {
-                  value: /^. {1,10}$/,
+                  value: /^.{1,10}$/,
                   message: '열 자 이하로 작성해주세요.',
                 },
               })}
@@ -88,7 +102,13 @@ const MyPageContent = () => {
           </form>
         </div>
         <div className="flex justify-end">
-          <Button buttonType="decision" bgColor="violet" textColor="white">
+          <Button
+            type="submit"
+            buttonType="decision"
+            bgColor="violet"
+            textColor="white"
+            disabled={Object.keys(errors).length !== 0}
+          >
             저장
           </Button>
         </div>
@@ -117,7 +137,7 @@ const MyPageContent = () => {
               labelName="현재 비밀번호"
             />
             <PasswordInput
-              register={register('password', {
+              register={register('newpassword', {
                 required: {
                   value: true,
                   message: '8자 이상 입력해 주세요.',
@@ -129,10 +149,10 @@ const MyPageContent = () => {
               })}
               type="password"
               clearError={clearErrors}
-              error={errors.password as FieldError}
-              inputName="password"
+              error={errors.newpassword as FieldError}
+              inputName="newpassword"
               inputContent="8자 이상 입력해 주세요"
-              labelId="password"
+              labelId="newpassword"
               labelName="새 비밀번호"
             />
             <PasswordInput
@@ -143,7 +163,7 @@ const MyPageContent = () => {
                 },
                 validate: {
                   check: (val) => {
-                    if (getValues('password') !== val) {
+                    if (getValues('newpassword') !== val) {
                       return '비밀번호가 일치하지 않습니다.';
                     }
                     return undefined;
@@ -161,7 +181,13 @@ const MyPageContent = () => {
           </form>
         </div>
         <div className="flex justify-end">
-          <Button buttonType="decision" bgColor="violet" textColor="white">
+          <Button
+            type="submit"
+            buttonType="decision"
+            bgColor="violet"
+            textColor="white"
+            disabled={Object.keys(errors).length !== 0}
+          >
             변경
           </Button>
         </div>
