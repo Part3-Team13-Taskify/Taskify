@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import add from '@/public/assets/icon/addWhite.svg';
-// import ellipse from '@/public/assets/chip/ellipseGreenLarge.svg';
 import instance from '@/src/util/axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -44,7 +43,7 @@ const Dashboard = () => {
   });
   const [invitees, setInvitees] = useState<Invitees>({ email: '' });
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
-  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>(dashboardData.color);
 
   const router = useRouter();
   const { id } = router.query;
@@ -119,7 +118,7 @@ const Dashboard = () => {
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
-      const data = { title: dashboardTitle, color: '#FFFFFF' };
+      const data = { title: dashboardTitle, color: selectedColor };
       await instance.put(`/dashboards/${id}`, data);
       getDashboard();
     } catch (error) {
