@@ -6,6 +6,7 @@ import comments from '@/public/mock/Comment.json';
 import { format } from 'date-fns';
 import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import Modal from '../common/modal';
+import { axiosInstance } from '@/src/util/axiosInstance';
 
 interface TaskModalProps {
   openModal: boolean;
@@ -19,6 +20,17 @@ export const TaskCard = ({openModal, handleModalClose}:TaskModalProps) => {
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [replyValue, setReplyValue] = useState('');
+
+const getCard = async () => await axiosInstance('cards/5070');
+
+useEffect(()=>{
+  try {
+    const result = getCard();
+    console.log(result);
+  } catch{
+    throw new Error
+  }
+}, [])
 
   const dueDate = format(new Date(taskData.dueDate).toLocaleString('en-US'), 'yyyy.MM.dd');
   const dropdownRef = useRef<HTMLDivElement>(null);
