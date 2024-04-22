@@ -5,7 +5,6 @@ interface InputForm {
   text?: string;
   email?: string;
   password?: string;
-  newpassword?: string;
   passwordcheck?: string;
   file?: string;
 }
@@ -70,8 +69,6 @@ const Input = ({
                 return clearError ? clearError('text') : '';
               case 'email':
                 return clearError ? clearError('email') : '';
-              case 'newpassword':
-                return clearError ? clearError('newpassword') : '';
               case 'password':
                 return clearError ? clearError('password') : '';
               default:

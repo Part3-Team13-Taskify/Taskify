@@ -7,6 +7,7 @@ import add from '@/public/assets/icon/addViolet.svg';
 import DashboardCard from '../dashboardEdit/DashboardCard';
 import Button from '../common/button';
 import Input from '../common/input';
+import PasswordInput from '../common/input/passwordInput';
 
 interface InputForm {
   text: string;
@@ -110,7 +111,7 @@ const MyPageContent = () => {
             buttonType="decision"
             bgColor="violet"
             textColor="white"
-            disabled={Object.keys(errors).length !== 0}
+            disabled={!!errors.email || !!errors.text}
           >
             저장
           </Button>
@@ -120,7 +121,7 @@ const MyPageContent = () => {
         <p className="font-bold text-20">비밀번호 변경</p>
         <div className="flex m-auto">
           <form className="w-564 tablet:w-488 mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
-            <Input
+            <PasswordInput
               register={register('password', {
                 required: {
                   value: true,
@@ -138,10 +139,10 @@ const MyPageContent = () => {
               inputContent="8자 이상 입력해 주세요"
               labelId="password"
               labelText="현재 비밀번호"
-              inputCheckStyle="w-564 tablet:w-488 mobile:w-244"
-              inputErrorFixStyle="w-564 tablet:w-488 mobile:w-244"
+              divCheckStyle="w-564 tablet:w-488 mobile:w-244"
+              divErrorFixStyle="w-564 tablet:w-488 mobile:w-244"
             />
-            <Input
+            <PasswordInput
               register={register('newpassword', {
                 required: {
                   value: true,
@@ -159,10 +160,10 @@ const MyPageContent = () => {
               inputContent="8자 이상 입력해 주세요"
               labelId="newpassword"
               labelText="새 비밀번호"
-              inputCheckStyle="w-564 tablet:w-488 mobile:w-244"
-              inputErrorFixStyle="w-564 tablet:w-488 mobile:w-244"
+              divCheckStyle="w-564 tablet:w-488 mobile:w-244"
+              divErrorFixStyle="w-564 tablet:w-488 mobile:w-244"
             />
-            <Input
+            <PasswordInput
               register={register('passwordcheck', {
                 required: {
                   value: true,
@@ -184,8 +185,8 @@ const MyPageContent = () => {
               inputContent="비밀번호를 한번 더 입력해 주세요"
               labelId="passwordcheck"
               labelText="새 비밀번호 확인"
-              inputCheckStyle="w-564 tablet:w-488 mobile:w-244"
-              inputErrorFixStyle="w-564 tablet:w-488 mobile:w-244"
+              divCheckStyle="w-564 tablet:w-488 mobile:w-244"
+              divErrorFixStyle="w-564 tablet:w-488 mobile:w-244"
             />
           </form>
         </div>
@@ -195,7 +196,7 @@ const MyPageContent = () => {
             buttonType="decision"
             bgColor="violet"
             textColor="white"
-            disabled={Object.keys(errors).length !== 0}
+            disabled={!!errors.password || !!errors.newpassword || !!errors.passwordcheck}
           >
             변경
           </Button>
