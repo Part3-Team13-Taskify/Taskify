@@ -4,14 +4,14 @@ import add from '@/public/assets/icon/addWhite.svg';
 import instance from '@/src/util/axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import ColorPicker from '../common/colorpicker';
-// import ExampleInput from '../common/input/exampleInput';
 import Button from '../common/button';
 import Table from './table';
 import TableHeader from './table/TableHeader';
 import TableList from './table/TableList';
 import DashboardCard from './DashboardCard';
-// import Input from '../common/input';
+import Input, { InputForm } from '../common/input';
 
 type DashboardData = {
   title: string;
@@ -43,6 +43,8 @@ const Dashboard = () => {
     userId: 0,
   });
   const [invitees, setInvitees] = useState<Invitees>({ email: '' });
+  const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
+  const [selectedColor, setSelectedColor] = useState<string>('');
 
   const router = useRouter();
   const { id } = router.query;
@@ -87,7 +89,7 @@ const Dashboard = () => {
     getDashboard();
     getMembers();
     getInvitees();
-  }, []);
+  }, [id]);
 
   const handleDeleteDashboard = async () => {
     try {
@@ -114,27 +116,52 @@ const Dashboard = () => {
     }
   };
 
+  const handleEditDashboard = async () => {
+    const dashboardTitle = getValues('text') || '';
+    try {
+      const data = { title: dashboardTitle, color: '#FFFFFF' };
+      await instance.put(`/dashboards/${id}`, data);
+      getDashboard();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex flex-col gap-25 tablet:gap-12">
       <DashboardCard>
         <div className="flex justify-between">
           <p className="font-bold text-20">{dashboardData.title}</p>
           {/* <ColorPicker color={dashboardData.color} /> */}
-          <ColorPicker />
+          <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
         </div>
-        {/* 인풋 컴포넌트로 대체 */}
-        {/* <Input
-          inputName="대시보드 이름"
-          inputContent={dashboardData.title}
-          labelId="dashboard"
-          labelText="대시보드 이름"
-          type="text"
-        /> */}
-        <div className="flex justify-end">
-          <Button buttonType="modal1" bgColor="violet" textColor="white">
-            변경
-          </Button>
-        </div>
+        <form onSubmit={handleSubmit(handleEditDashboard)}>
+          <Input
+            inputName="text"
+            inputContent={dashboardData.title}
+            labelId="text"
+            labelText="대시보드 이름"
+            type="text"
+            register={register('text', {
+              required: {
+                value: true,
+                message: '대시보드 이름을 입력해주세요',
+              },
+            })}
+            inputCheckStyle="flex my-10"
+            labelDropStyle="w-full"
+          />
+          <div className="flex justify-end">
+            <Button
+              buttonType="modal1"
+              type="submit"
+              bgColor="violet"
+              textColor="white"
+              onClick={handleSubmit(handleEditDashboard)}
+            >
+              변경
+            </Button>
+          </div>
+        </form>
       </DashboardCard>
 
       <DashboardCard className="px-0 pb-0">

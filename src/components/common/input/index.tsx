@@ -1,7 +1,7 @@
 import { FieldError, UseFormClearErrors, UseFormRegisterReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-interface InputForm {
+export interface InputForm {
   text?: string;
   email?: string;
   password?: string;

@@ -9,9 +9,12 @@ import { useState } from 'react';
 
 const COLORS = [green, blue, pink, purple, yellow];
 
-const ColorPicker = () => {
-  const [selectedColor, setSelectedColor] = useState(green);
+type ColorPickerProps = {
+  selectedColor: string;
+  setSelectedColor: (color: string) => void;
+};
 
+const ColorPicker = ({ selectedColor, setSelectedColor }: ColorPickerProps) => {
   const handleSelectColor = (e: React.MouseEvent<HTMLDivElement>, color: string) => {
     setSelectedColor(color);
   };
