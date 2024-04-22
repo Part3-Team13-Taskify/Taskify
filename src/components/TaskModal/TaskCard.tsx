@@ -13,24 +13,24 @@ interface TaskModalProps {
   handleModalClose: () => void;
 }
 
-export const TaskCard = ({openModal, handleModalClose}:TaskModalProps) => {
+export const TaskCard = ({ openModal, handleModalClose }: TaskModalProps) => {
   if (!openModal) {
     return null;
   }
-  
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [replyValue, setReplyValue] = useState('');
 
-const getCard = async () => await axiosInstance('cards/5070');
+  const getCard = async () => await axiosInstance('cards/5070');
 
-useEffect(()=>{
-  try {
-    const result = getCard();
-    console.log(result);
-  } catch{
-    throw new Error
-  }
-}, [])
+  useEffect(() => {
+    try {
+      const result = getCard();
+      console.log(result);
+    } catch {
+      throw new Error();
+    }
+  }, []);
 
   const dueDate = format(new Date(taskData.dueDate).toLocaleString('en-US'), 'yyyy.MM.dd');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,11 +50,11 @@ useEffect(()=>{
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  },[]);
+  }, []);
 
   return (
-    <Modal className='flex-shrink-0' openModal={openModal} handleModalClose={handleModalClose} upperChildren={
-    <>
+    <Modal className="flex-shrink-0" openModal={openModal} handleModalClose={handleModalClose}>
+      {' '}
       <div className="grid grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
         <div className="row-start-2 col-start-1 sm:row-start-1 text-24 font-semibold">{taskData.title}</div>
         <div className="flex justify-end gap-24 row-start-1 col-start-2">
@@ -141,7 +141,6 @@ useEffect(()=>{
           <span className="text-14 font-normal">{dueDate}</span>
         </div>
       </div>
-    </>
-  } lowerChildren={<></>}/>
+    </Modal>
   );
 };
