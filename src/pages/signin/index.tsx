@@ -26,6 +26,7 @@ const Signin = () => {
     handleSubmit,
     formState: { errors },
     clearErrors,
+    getValues,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
   const router = useRouter();
@@ -51,6 +52,9 @@ const Signin = () => {
       handleModal(); // 오픈일때 오류가 보이게
     }
   };
+
+  const newEmailValue = getValues('email');
+  console.log(newEmailValue);
 
   return (
     <div>
