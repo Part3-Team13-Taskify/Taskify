@@ -5,6 +5,7 @@ interface InputForm {
   text?: string;
   email?: string;
   password?: string;
+  newpassword?: string;
   passwordcheck?: string;
   file?: string;
 }
@@ -19,6 +20,7 @@ interface InputProps {
   clearError?: UseFormClearErrors<InputForm>;
   divCheckStyle?: string;
   inputCheckStyle?: string;
+  inputErrorFixStyle?: string;
   labelDropStyle?: string;
   focusType?: string;
   children?: React.ReactNode;
@@ -36,6 +38,7 @@ const Input = ({
   focusType,
   divCheckStyle,
   inputCheckStyle,
+  inputErrorFixStyle,
   labelDropStyle,
   children,
 }: InputProps) => {
@@ -44,20 +47,21 @@ const Input = ({
     'w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f text-black-33 focus:outline-none  focus:border-violet',
     inputCheckStyle,
   );
+  const inputErrorStyle = twMerge(
+    `w-full h-50 py-15 px-16 border-1 rounded-lg border-red text-black-33`,
+    inputErrorFixStyle,
+  );
   const labelStyle = twMerge(`text-black-33`, labelDropStyle);
   return (
     <div className={divStyle}>
       <label className={labelStyle} htmlFor={labelId}>
         {labelText}
-
         {children}
         <input
           {...register}
           type={type}
           name={inputName}
-          className={
-            error?.message ? 'w-full h-50 py-15 px-16 border-1 rounded-lg border-red text-black-33' : inputStyle
-          }
+          className={error?.message ? inputErrorStyle : inputStyle}
           placeholder={inputContent}
           id={labelId}
           onFocus={() => {
@@ -66,6 +70,8 @@ const Input = ({
                 return clearError ? clearError('text') : '';
               case 'email':
                 return clearError ? clearError('email') : '';
+              case 'newpassword':
+                return clearError ? clearError('newpassword') : '';
               case 'password':
                 return clearError ? clearError('password') : '';
               default:

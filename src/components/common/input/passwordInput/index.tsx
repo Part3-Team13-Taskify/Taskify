@@ -7,12 +7,11 @@ import { useState } from 'react';
 interface PasswordInputForm {
   email?: string;
   password?: string;
-  newpassword?: string;
   passwordcheck?: string;
 }
 interface InputProps {
   inputName: string;
-  labelName: string;
+  labelText: string;
   inputContent: string;
   labelId: string;
   type: 'email' | 'password';
@@ -28,7 +27,7 @@ const PasswordInput = ({
   focusType,
   inputContent,
   labelId,
-  labelName,
+  labelText,
   error,
   clearError,
 }: InputProps) => {
@@ -41,7 +40,7 @@ const PasswordInput = ({
   return (
     <div className="flex flex-col items-start py-8 text-gray-9f text-16">
       <label className="text-black-33" htmlFor="password">
-        {labelName}
+        {labelText}
       </label>
       <div
         className={
@@ -61,8 +60,6 @@ const PasswordInput = ({
             switch (focusType) {
               case 'password':
                 return clearError ? clearError('password') : '';
-              case 'newpassword':
-                return clearError ? clearError('newpassword') : '';
               case 'passwordcheck':
                 return clearError ? clearError('passwordcheck') : '';
               default:
