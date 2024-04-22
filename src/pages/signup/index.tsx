@@ -4,6 +4,7 @@ import PasswordInput from '@/src/components/common/input/passwordInput';
 import Button from '@/src/components/common/button';
 import { FieldError, useForm } from 'react-hook-form';
 import Input from '@/src/components/common/input';
+import Link from 'next/link';
 
 interface InputForm {
   text: string;
@@ -35,7 +36,7 @@ const Signup = () => {
     <div>
       <div className="h-screen flex flex-col justify-center items-center gap-24">
         <header className="flex flex-col items-center gap-10">
-          <Image className="modile:w-120" src={mainLogo} alt="mainLogo" />
+          <Image className="mobile:w-120" src={mainLogo} alt="mainLogo" /> {/* 모바일 사이즈 클래스 이름 수정 */}
           <h1 className="text-20 mb-6 font-medium">오늘도 만나서 반가워요!</h1>
         </header>
         <main className="w-520 mobile:w-351">
@@ -98,7 +99,7 @@ const Signup = () => {
                 inputName="password"
                 inputContent="8자 이상 입력해 주세요"
                 labelId="password"
-                labelName="비밀번호"
+                labelText="비밀번호"
                 focusType="password"
               />
               <PasswordInput
@@ -122,7 +123,7 @@ const Signup = () => {
                 inputName="passwordcheck"
                 inputContent="비밀번호를 한번 더 입력해 주세요"
                 labelId="passwordcheck"
-                labelName="비밀번호 확인"
+                labelText="비밀번호 확인"
                 focusType="passwordcheck"
               />
               <Input
@@ -135,23 +136,24 @@ const Signup = () => {
                 divCheckStyle="flex-row-reverse justify-end items-center h-20 gap-8 py-20"
                 inputCheckStyle="w-20 h-20"
               />
+              <Button
+                type="submit"
+                buttonType="login"
+                bgColor="violet"
+                textColor="white"
+                disabled={Object.keys(errors).length !== 0 || !isChecked}
+              >
+                가입하기
+              </Button>
             </form>
           </div>
-          <Button
-            type="submit"
-            buttonType="login"
-            bgColor="violet"
-            textColor="white"
-            disabled={Object.keys(errors).length !== 0 && !isChecked} // errors 객체가 비어있지 않으면 disabled로 설정, isChecked가 true면 회색이 보이는거니깐 !로 지정해줘야 원하는대로 나옴
-          >
-            가입하기
-          </Button>
         </main>
         <footer>
           <p>
             이미 가입하셨나요?
-            {/* prettier-ignore */}
-            <a className="underline text-violet" href="/signin">  로그인하기</a>
+            <Link className="underline text-violet pl-10" href="/signin">
+              로그인하기
+            </Link>
           </p>
         </footer>
       </div>
