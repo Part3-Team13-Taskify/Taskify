@@ -7,6 +7,9 @@ import purple from '@/public/assets/chip/ellipsePurpleLarge.svg';
 import yellow from '@/public/assets/chip/ellipseYellowLarge.svg';
 import addLarge from '@/public/assets/chip/addLarge.svg';
 import Button from '@/src/components/common/button';
+import useModal from '@/src/hooks/useModal';
+import ModalPortal from '../common/modalPortal';
+import AddColumnModal from '../ColumnModal/addColumnModal';
 
 const MOCK_DATA = [
   {
@@ -87,6 +90,11 @@ const MOCK_DATA = [
 ];
 
 const ColumnsList = () => {
+  const {
+    openModal: addColumnModal,
+    handleModalClose: addColumnModalClose,
+    handleModalOpen: addColumnModalOpen,
+  } = useModal();
   return (
     <div className="flex-1 w-screen h-screen ">
       <div className="flex w-full h-full overflow-scroll tablet:flex-col mobile:flex-col">
@@ -123,7 +131,10 @@ const ColumnsList = () => {
           )),
         )}
         <div className="flex gap-12 pt-68 px-20 tablet:p-20 mobile:p-20">
-          <Button buttonType="columnAdd" bgColor="white" textColor="black" type="button">
+          <ModalPortal>
+            <AddColumnModal openModal={addColumnModal} handleModalClose={addColumnModalClose} />
+          </ModalPortal>
+          <Button buttonType="columnAdd" bgColor="white" textColor="black" type="button" onClick={addColumnModalOpen}>
             새로운 컬럼추가
             <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
           </Button>
