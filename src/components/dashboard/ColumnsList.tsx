@@ -88,8 +88,8 @@ const MOCK_DATA = [
 
 const ColumnsList = () => {
   return (
-    <div className="flex-1 overflow-scroll">
-      <div className="flex w-full h-full tablet:flex-col mobile:flex-col">
+    <div className="flex-1 w-screen h-screen ">
+      <div className="flex w-full h-full overflow-scroll tablet:flex-col mobile:flex-col">
         {MOCK_DATA.map((dataGroup) =>
           dataGroup.dashboards.map((dashboard) => (
             <div
@@ -109,7 +109,13 @@ const ColumnsList = () => {
                 </button>
               </div>
               <div>
-                <Button buttonType="add" bgColor="white" textColor="black" type="button">
+                <Button
+                  className="tablet:w-full mobile:w-full"
+                  buttonType="add"
+                  bgColor="white"
+                  textColor="black"
+                  type="button"
+                >
                   <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
                 </Button>
               </div>
