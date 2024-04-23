@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import Modal from '../common/modal';
 import instance from '@/src/util/axios';
+import Chip from '../common/chip';
 
 interface ModalProps {
   openModal: boolean;
@@ -15,6 +16,7 @@ interface ModalProps {
 
 interface TaskModalProps extends ModalProps {
   cardId: number;
+  columnName: string;
 }
 
 interface TaskData {
@@ -36,7 +38,7 @@ interface TaskData {
   updatedAt: string;
 }
 
-export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps) => {
+export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: TaskModalProps) => {
   if (!openModal) {
     return null;
   }
@@ -79,6 +81,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, []);
+  console.log(cardData);
 
   if (!isPending)
     return (
@@ -106,16 +109,10 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
         <div className="flex flex-row gap-32">
           <div className="flex flex-col gap-16 max-w-450 mt-12">
             <div className="flex flex-row gap-12">
-              <Image
-                src="assets/card/exampleChip/chip/todoLarge.svg"
-                width={39}
-                height={12}
-                alt="todo"
-                className="w-auto"
-              />
+              <Chip dot={true}>{columnName}</Chip>
               <div className="flex flex-row gap-6 border-l-1 border-gray-d9 pl-12">
-                <Image src="assets/card/exampleChip/large1.svg" width={44} height={22} alt="chip" className="w-auto" />
-                <Image src="assets/card/exampleChip/large3.svg" width={44} height={22} alt="chip" className="w-auto" />
+                <Chip color="orange">프로젝트</Chip>
+                <Chip color="pink">백엔드</Chip>
               </div>
             </div>
             <p className="text-14 font-normal ">{cardData?.description}</p>
