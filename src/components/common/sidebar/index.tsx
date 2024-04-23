@@ -98,7 +98,7 @@ const DashboardList = () => {
 
 const SideBar = () => {
   return (
-    <div className="top-0 left-0 z-40 w-300 h-screen border-1 bg-white pt-20 px-24 tablet:w-160 mobile:w-67">
+    <div className="top-0 left-0 w-300 h-screen border-1 bg-white pt-20 px-24 tablet:w-160 mobile:w-67">
       <div className="w-109 mb-60 mobile:hidden">
         <Image src={logo} alt="logo" />
       </div>

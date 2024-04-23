@@ -5,6 +5,8 @@ import addBox from '@/public/assets/icon/addBox.svg';
 import setting from '@/public/assets/icon/setting.svg';
 import vector from '@/public/assets/icon/vector.svg';
 import { useState } from 'react';
+import instance from '@/src/util/axios';
+import { useRouter } from 'next/router';
 
 interface NavProps {
   name: string;
@@ -13,6 +15,13 @@ interface NavProps {
   user: any;
 }
 const Navigation = ({ name, icon, member, user }: NavProps) => {
+  const [dashboardData, setDashboardData] = useState<DashboardData>({ title: '', color: '', createdByMe: false });
+  const router = useRouter();
+  const { id } = router.query;
+  const getDashboard = async () => {
+    const response = await instance.get(`/dashboards/${id}`);
+  };
+
   const [dropDown, setDropDown] = useState(false);
   const toggle = () => {
     setDropDown(!dropDown);
