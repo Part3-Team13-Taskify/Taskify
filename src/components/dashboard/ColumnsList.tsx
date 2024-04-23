@@ -9,7 +9,7 @@ import addLarge from '@/public/assets/chip/addLarge.svg';
 import Button from '@/src/components/common/button';
 import useModal from '@/src/hooks/useModal';
 import ModalPortal from '../common/modalPortal';
-import AddColumnModal from '../ColumnModal/addColumnModal';
+import AddColumnModal from '../columnModal/addColumnModal';
 
 const MOCK_DATA = [
   {

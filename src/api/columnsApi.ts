@@ -20,4 +20,12 @@ export const postColumns = async (columnData: ColumnData) => {
   }
 };
 
-export const getColumns = () => {};
+export const getColumns = async () => {
+  try {
+    const response = await axios.get('columns');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching columns', error);
+    return [];
+  }
+};
