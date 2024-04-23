@@ -1,26 +1,61 @@
 import Image from 'next/image';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
 import Modal from '../common/modal';
 
 interface CreateTaskModalProps {
   openModal: boolean;
   handleModalClose: () => void;
+  dashboardId: number;
+  columnId: number;
 }
 
-const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClose }) => {
+const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClose, dashboardId, columnId }) => {
   if (!openModal) return null;
 
-  const [titleValue, setTitleValue] = useState<string>('');
-  const [desrciptionValue, setDesrciptionValue] = useState<string>('');
-  const isRequiredFilled = desrciptionValue && titleValue;
+  const [createData, setCreateData] = useState({
+    assigneeUserId: 0,
+    dashboardId: dashboardId,
+    columnId: columnId,
+    title: '',
+    description: '',
+    dueDate: '',
+    tags: [],
+    imageUrl: '',
+  });
+
+  const isRequiredFilled = createData.description && createData.title;
 
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setTitleValue(e.target.value.trim());
+    setCreateData((prev) => {
+      return { ...prev, title: e.target.value.trim() };
+    });
   };
   const handleDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    setDesrciptionValue(e.target.value.trim());
+    setCreateData((prev) => {
+      return { ...prev, description: e.target.value.trim() };
+    });
+  };
+  const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    setCreateData((prev) => {
+      return { ...prev, assigneeUserId: Number(e.target.value) };
+    });
+  };
+  const handleDateChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCreateData((prev) => {
+      return { ...prev, dueDate: e.target.value };
+    });
+  };
+  const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const tags = e.target.value.trim();
+    setCreateData((prev) => {
+      return { ...prev, tag: tags.split(' ') };
+    });
+  };
+
+  const handleCreateClick = () => {
+    console.log(createData);
   };
 
   return (
@@ -28,13 +63,17 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       <div className="text-24 font-bold">할 일 생성</div>
       <form className="flex flex-col gap-32 overflow-y-auto">
         <TaskLabel htmlFor="assignee" label="담당자">
-          <select id="assignee" className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15">
-            <option value="" className="text-gray">
+          <select
+            id="assignee"
+            className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15"
+            onChange={handleAssigneeSelect}
+          >
+            <option value={0} className="text-gray">
               이름을 입력해 주세요
             </option>
-            <option value="1">1번</option>
-            <option value="2">2번</option>
-            <option value="3">3번</option>
+            <option value={1}>1번</option>
+            <option value={2}>2번</option>
+            <option value={3}>3번</option>
           </select>
         </TaskLabel>
         <TaskLabel htmlFor="title" label="제목" isRequired={true}>
@@ -61,6 +100,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             type="date"
             placeholder="날짜를 입력해 주세요"
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
+            onChange={handleDateChange}
           ></input>
         </TaskLabel>
         <TaskLabel htmlFor="tag" label="태그">
@@ -69,6 +109,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             type="text"
             placeholder="입력 후 Enter"
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
+            onChange={handleTagChange}
           ></input>
         </TaskLabel>
         <TaskLabel htmlFor="image" label="이미지">
@@ -78,7 +119,13 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         </TaskLabel>
       </form>
       <div className="flex flex-row-reverse gap-12">
-        <Button buttonType="modal2" bgColor="violet" textColor="white" disabled={!isRequiredFilled}>
+        <Button
+          buttonType="modal2"
+          bgColor="violet"
+          textColor="white"
+          disabled={!isRequiredFilled}
+          onClick={handleCreateClick}
+        >
           생성
         </Button>
         <Button buttonType="modal2" bgColor="white" textColor="gray" onClick={handleModalClose}>
