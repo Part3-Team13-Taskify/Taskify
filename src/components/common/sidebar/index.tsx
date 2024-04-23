@@ -2,15 +2,10 @@ import Image from 'next/image';
 import logo from '@/public/assets/logo/violetHeaderLogo.svg';
 import add from '@/public/assets/icon/addBox.svg';
 import mobileLogo from '@/public/assets/logo/violetHeaderMobileLogo.svg';
-import blue from '@/public/assets/chip/ellipseBlueLarge.svg';
-import green from '@/public/assets/chip/ellipseGreenLarge.svg';
-import pink from '@/public/assets/chip/ellipsePinkLarge.svg';
-import purple from '@/public/assets/chip/ellipsePurpleLarge.svg';
-import yellow from '@/public/assets/chip/ellipseYellowLarge.svg';
 import crown from '@/public/assets/icon/crown.svg';
-import { useState } from 'react';
-import { DASHBOARDS } from '@/faker';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import instance from '@/src/util/axios';
 // import ReactPaginate from 'react-paginate';
 
 type Dashboard = {
@@ -21,23 +16,6 @@ type Dashboard = {
   updatedAt: Date;
   createdByMe: boolean;
   userId: number;
-};
-
-interface ColorSources {
-  [key: string]: string;
-  green: string;
-  blue: string;
-  pink: string;
-  purple: string;
-  orange: string;
-}
-
-const colorSources: ColorSources = {
-  green,
-  blue,
-  pink,
-  purple,
-  orange: yellow,
 };
 
 // function Items({ currentItems }) {
@@ -55,6 +33,7 @@ const colorSources: ColorSources = {
 
 const DashboardList = () => {
   const [selectedDashboard, setSelectedDashboard] = useState(0);
+  const [dashboardList, setDashboardList] = useState<Dashboard[]>([]);
   // const [itemOffset, setItemOffset] = useState(0);
   // const endOffset = itemOffset + itemsPerPage;
   // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
@@ -71,18 +50,27 @@ const DashboardList = () => {
   //   setItemOffset(newOffset);
   // };
 
+  const getDashboardList = async () => {
+    const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
+    setDashboardList(response.data.dashboards);
+  };
+
+  useEffect(() => {
+    getDashboardList();
+  }, []);
+
   return (
     <div className="w-full h-45 flex my-16 flex-col mobile:gap-30 mobile:translate-x-4">
-      {DASHBOARDS.map((data: Dashboard) => (
+      {dashboardList.map((data: Dashboard) => (
         <Link href={`/dashboard/${data.id}`} key={data.id}>
           <div
             key={data.id}
-            className="flex my-6 rounded-4"
+            className="flex my-6 rounded-4 items-center"
             role="button"
             tabIndex={0}
             onClick={() => handleClick(data.id)}
           >
-            <Image src={colorSources[data.color]} alt={data.color} width={8} height={8} />
+            <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99" />
             <p
               className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
                 data.id === selectedDashboard && ' text-violet'
