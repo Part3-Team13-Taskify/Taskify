@@ -1,8 +1,8 @@
 import useModal from '@/src/hooks/useModal';
-import AddColumnModal from '../../ColumnModal/addColumnModal';
+import AddColumnModal from '../../columnModal/addColumnModal';
 import Button from '../../common/button';
 import ModalPortal from '../../common/modalPortal';
-import EditColumnModal from '../../ColumnModal/editColumnModal';
+import EditColumnModal from '../../columnModal/editColumnModal';
 
 // 모달창을 띄울 예시 페이지
 const ExampleModalPage = () => {
