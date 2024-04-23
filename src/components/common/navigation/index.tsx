@@ -11,7 +11,7 @@ import { useDashboardStore } from '@/src/util/zustand';
 import MyProfile from './MyProfile';
 import Members from './Members';
 
-const Navigation = () => {
+const Navigation = ({ title }: { title: string }) => {
   const dashboardData = useDashboardStore((state) => state.dashboardData);
   const setDashboardData = useDashboardStore((state) => state.setDashboardData);
   const [myProfile, setMyProfile] = useState({ nickname: '', profileImageUrl: '' });
@@ -32,7 +32,7 @@ const Navigation = () => {
     <header className="w-full justify-between h-70 border-b-1 px-34 mobile:px-12 flex gap-32 items-center text-16 tablet:gap-24 mobile:h-60 mobile:gap-12 mobile:text-14">
       <div className=" flex text-black-33 font-medium tablet:hidden mobile:hidden">
         <div className=" flex items-center text-20 font-bold gap-4">
-          {dashboardData ? <h2>{dashboardData.title}</h2> : <h2>내 대쉬보드</h2>}
+          {dashboardData.title ? <h2>{dashboardData.title}</h2> : <h2>{title}</h2>}
           {dashboardData.createdByMe ? <Image src={crown} alt="crown" /> : ''}
         </div>
       </div>

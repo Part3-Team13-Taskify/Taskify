@@ -108,9 +108,7 @@ const SideBar = () => {
       <div className="flex justify-between">
         <p className="text-12 font-bold text-gray-78 mobile:hidden">Dash Boards</p>
         {/* <div className="w-20 mobile:mt-39 mobile:mb-22" onClick={handleOpenModal}> 대시보드 생성하기 모달 핸들러 추가 */}
-        <div className="w-20 mobile:mt-39 mobile:mb-22">
-          <Image src={add} alt="add dash board" />
-        </div>
+        <Image src={add} alt="add dash board" className="w-20 mobile:mt-39 mobile:mb-22 cursor-pointer" />
       </div>
       <DashboardList />
     </div>

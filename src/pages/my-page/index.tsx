@@ -7,7 +7,7 @@ const MyPage = () => {
     <div className="flex w-screen">
       <SideBar />
       <div className="flex flex-col flex-grow">
-        <Navigation name="계정관리" icon={false} member="" user="유저" />
+        <Navigation title="계정관리" />
         <MyPageContent />
       </div>
     </div>
