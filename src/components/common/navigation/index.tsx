@@ -4,23 +4,27 @@ import crown from '@/public/assets/icon/crown.svg';
 import addBox from '@/public/assets/icon/addBox.svg';
 import setting from '@/public/assets/icon/setting.svg';
 import vector from '@/public/assets/icon/vector.svg';
-import { useState } from 'react';
-import instance from '@/src/util/axios';
+import { useEffect, useState } from 'react';
+// import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
+import { getDashboard } from '@/src/pages/api/dashboardEditApi';
 
-interface NavProps {
-  name: string;
-  icon: boolean;
-  member: any;
-  user: any;
-}
-const Navigation = ({ name, icon, member, user }: NavProps) => {
-  const [dashboardData, setDashboardData] = useState<DashboardData>({ title: '', color: '', createdByMe: false });
+// interface NavProps {
+//   name: string;
+//   icon: boolean;
+//   member: any;
+//   user: any;
+// }
+const Navigation = ({ member, user }: any) => {
+  const [dashboardData, setDashboardData] = useState<any>({ title: '', color: '', createdByMe: false });
   const router = useRouter();
   const { id } = router.query;
-  const getDashboard = async () => {
-    const response = await instance.get(`/dashboards/${id}`);
-  };
+  const idNumber = Number(id);
+  console.log(idNumber);
+
+  useEffect(() => {
+    if (idNumber) getDashboard(idNumber).then((res) => setDashboardData(res));
+  }, []);
 
   const [dropDown, setDropDown] = useState(false);
   const toggle = () => {
@@ -31,16 +35,19 @@ const Navigation = ({ name, icon, member, user }: NavProps) => {
       <div className="w-4/5 flex flex-row justify-between text-black-33 font-medium tablet:w-fit mobile:w-fit">
         {/* 대시보드이름(따로 이름 없다면 내 대쉬보드) + crown icon이 있으면 적용 */}
         <div className=" flex flex-row items-center text-20 font-bold gap-4 tablet:hidden mobile:hidden">
-          {name ? <h2>{name}</h2> : <h2>내 대쉬보드</h2>}
-          {icon ? <Image src={crown} alt="crown" /> : ''}
+          {dashboardData ? <h2>{dashboardData.title}</h2> : <h2>내 대쉬보드</h2>}
+          {dashboardData.createdByMe ? <Image src={crown} alt="crown" /> : ''}
         </div>
         <div className=" flex flex-row items-center gap-40 tablet:gap-32 mobile:gap-16">
-          {icon ? (
+          {dashboardData.createdByMe ? (
             <div className=" flex flex-row gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
-              <div className=" flex flex-row gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7  mobile:text-14">
+              <Link
+                href={`/dashboard/${id}/edit`}
+                className=" flex flex-row gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7  mobile:text-14"
+              >
                 <Image className="mobile:hidden" src={setting} alt="setting" />
                 <p>관리</p>
-              </div>
+              </Link>
               <div className=" flex flex-row gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7  mobile:text-14">
                 <Image className="mobile:hidden" src={addBox} alt="addBox" />
                 <p>초대하기</p>
