@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Reply from './Reply';
 
-import taskData from '@/public/mock/TaskCard.json';
 import comments from '@/public/mock/Comment.json';
 import { format } from 'date-fns';
 import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
@@ -81,7 +80,6 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, []);
-  console.log(cardData);
 
   if (!isPending)
     return (

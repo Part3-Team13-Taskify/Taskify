@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
-import { ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 import Modal from '../common/modal';
 
 interface CreateTaskModalProps {
