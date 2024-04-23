@@ -37,3 +37,8 @@ export const handleCancelInvitation = async (id: number, invitationId: number) =
     console.error(error);
   }
 };
+
+export const getMyProfile = async () => {
+  const response = await instance.get(`/users/me`);
+  return response.data;
+};

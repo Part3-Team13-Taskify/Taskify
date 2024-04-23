@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
-  getDashboard,
   getInvitees,
   getMembers,
   handleCancelInvitation,
   handleDeleteDashboard,
   handleDeleteMember,
 } from '@/src/pages/api/dashboardEditApi';
+import { useDashboardStore, useMembersStore } from '@/src/util/zustand';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -20,39 +20,42 @@ import TableList from './table/TableList';
 import DashboardCard from './DashboardCard';
 import Input, { InputForm } from '../common/input';
 
-type DashboardData = {
-  title: string;
-  color: string;
-  createdByMe: boolean;
-};
+// type DashboardData = {
+//   title: string;
+//   color: string;
+//   createdByMe: boolean;
+// };
 
-type Members = {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  isOwner: boolean;
-  userId: number;
-};
+// type Members = {
+//   id: number;
+//   email: string;
+//   nickname: string;
+//   profileImageUrl: string;
+//   isOwner: boolean;
+//   userId: number;
+// };
 
 type Invitees = {
   email: string;
 };
 
 const Dashboard = () => {
-  const [dashboard, setDashboard] = useState<DashboardData>({ title: '', color: '', createdByMe: false });
-  const [members, setMembers] = useState<Members>({
-    id: 0,
-    email: '',
-    nickname: '',
-    profileImageUrl: '',
-    isOwner: false,
-    userId: 0,
-  });
+  // const [dashboard, setDashboard] = useState<DashboardData>({ title: '', color: '', createdByMe: false });
+  const dashboard = useDashboardStore((state) => state.dashboardData);
+  const setDashboard = useDashboardStore((state) => state.setDashboardData);
+  const members = useMembersStore((state) => state.membersData);
+  const setMembers = useMembersStore((state) => state.setMembersData);
+  // const [members, setMembers] = useState<Members>({
+  //   id: 0,
+  //   email: '',
+  //   nickname: '',
+  //   profileImageUrl: '',
+  //   isOwner: false,
+  //   userId: 0,
+  // });
   const [invitees, setInvitees] = useState<Invitees>({ email: '' });
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const [selectedColor, setSelectedColor] = useState<string>(dashboard.color);
-
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
@@ -61,10 +64,10 @@ const Dashboard = () => {
     if (id) {
       const membersData = await getMembers(idNumber);
       const inviteesData = await getInvitees(idNumber);
-      const dashboardData = await getDashboard(idNumber);
+      // const dashboardData = await getDashboard(idNumber);
       setMembers(membersData);
       setInvitees(inviteesData);
-      setDashboard(dashboardData);
+      // setDashboard(dashboardData);
     }
   };
 
@@ -76,7 +79,7 @@ const Dashboard = () => {
     const dashboardTitle = getValues('text') || '';
     try {
       const data = { title: dashboardTitle, color: selectedColor };
-      await instance.put(`/dashboards/${idNumber}`, data).then(() => fetchData());
+      await instance.put(`/dashboards/${idNumber}`, data).then((res) => setDashboard(res.data));
     } catch (error) {
       console.error(error);
     }
@@ -127,12 +130,13 @@ const Dashboard = () => {
               <TableList
                 src={member.profileImageUrl}
                 text={member.nickname}
+                isOwner={member.isOwner}
                 button={
                   <Button
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleDeleteMember(member.userId)}
+                    onClick={() => handleDeleteMember({ userId: member.userId })}
                   >
                     삭제
                   </Button>

@@ -7,7 +7,10 @@ import vector from '@/public/assets/icon/vector.svg';
 import { useEffect, useState } from 'react';
 // import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
-import { getDashboard } from '@/src/pages/api/dashboardEditApi';
+import { getDashboard, getMyProfile } from '@/src/pages/api/dashboardEditApi';
+import { useDashboardStore } from '@/src/util/zustand';
+import MyProfile from './myProfile';
+import Members from './Members';
 
 // interface NavProps {
 //   name: string;
@@ -15,16 +18,23 @@ import { getDashboard } from '@/src/pages/api/dashboardEditApi';
 //   member: any;
 //   user: any;
 // }
-const Navigation = ({ member, user }: any) => {
-  const [dashboardData, setDashboardData] = useState<any>({ title: '', color: '', createdByMe: false });
+const Navigation = () => {
+  // const [dashboardData, setDashboardData] = useState<any>({ title: '', color: '', createdByMe: false });
+  // const router = useRouter();
+  // const { id } = router.query;
+  // const idNumber = Number(id);
+  // console.log(idNumber);
+  const dashboardData = useDashboardStore((state) => state.dashboardData);
+  const setDashboardData = useDashboardStore((state) => state.setDashboardData);
+  const [myProfile, setMyProfile] = useState({ nickname: '', profileImageUrl: '' });
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
-  console.log(idNumber);
 
   useEffect(() => {
     if (idNumber) getDashboard(idNumber).then((res) => setDashboardData(res));
-  }, []);
+    getMyProfile().then((res) => setMyProfile(res));
+  }, [idNumber, setDashboardData]);
 
   const [dropDown, setDropDown] = useState(false);
   const toggle = () => {
@@ -57,7 +67,7 @@ const Navigation = ({ member, user }: any) => {
             ''
           )}
           {/* 초대받은사람들 프로필 */}
-          <div>{member}</div>
+          <Members />
         </div>
       </div>
       <div>
@@ -66,7 +76,7 @@ const Navigation = ({ member, user }: any) => {
       <div>
         {/* 사용자 프로필(사진+이름) */}
         <div role="none" onClick={toggle} onKeyDown={toggle} className="relative">
-          {user}
+          <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />
         </div>
 
         {dropDown ? (
