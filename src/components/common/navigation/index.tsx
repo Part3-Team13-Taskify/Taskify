@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getDashboard, getMyProfile } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore } from '@/src/util/zustand';
-import MyProfile from './myProfile';
+import MyProfile from './MyProfile';
 import Members from './Members';
 
 const Navigation = () => {
