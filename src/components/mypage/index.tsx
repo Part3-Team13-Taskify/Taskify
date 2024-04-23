@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import add from '@/public/assets/icon/addViolet.svg';
-import DashboardCard from '../dashboardEdit/DashboardCard';
 import Button from '../common/button';
 import Input from '../common/input';
 import PasswordInput from '../common/input/passwordInput';
@@ -42,7 +41,7 @@ const MyPageContent = () => {
         <Image src={arrow} alt="go back" width={20} />
         <p className="font-semibold">돌아가기</p>
       </Link>
-      <DashboardCard>
+      <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-full">
         <p className="font-bold text-20">프로필</p>
         <div className="flex items-center justify-center mobile:flex-col">
           <form>
@@ -116,8 +115,8 @@ const MyPageContent = () => {
             저장
           </Button>
         </div>
-      </DashboardCard>
-      <DashboardCard>
+      </div>
+      <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-full">
         <p className="font-bold text-20">비밀번호 변경</p>
         <div className="flex m-auto">
           <form className="w-564 tablet:w-488 mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
@@ -201,7 +200,7 @@ const MyPageContent = () => {
             변경
           </Button>
         </div>
-      </DashboardCard>
+      </div>
     </main>
   );
 };
