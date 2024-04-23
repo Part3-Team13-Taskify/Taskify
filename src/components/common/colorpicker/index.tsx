@@ -19,7 +19,7 @@ const ColorPicker = ({ selectedColor, setSelectedColor }: ColorPickerProps) => {
         {COLORCODES.map((color) => (
           <div
             key={color}
-            className=" relative w-30 rounded-99"
+            className="relative w-30 rounded-99 cursor-pointer"
             style={{ backgroundColor: color }}
             onClick={(e) => handleSelectColor(e, color)}
           >

@@ -7,7 +7,7 @@ import type { NextPageWithLayout } from '@/src/pages/_app';
 const DashboardEdit: NextPageWithLayout = () => {
   return (
     <>
-      <Navigation name="비브리지" icon member="멤버" user="유저" />
+      <Navigation />
       <DashboardEditContent />
     </>
   );
