@@ -1,31 +1,42 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { postColumns } from '@/src/api/columnsApi';
+import { useForm } from 'react-hook-form';
 
 import Button from '../../common/button';
 import Modal from '../../common/modal';
+import Input from '../../common/input';
 
 interface AddColumnModalProps {
   openModal: boolean;
   handleModalClose: () => void;
 }
 
+interface InputForm {
+  text: string;
+}
+
 const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalClose }) => {
+  const {
+    register,
+    handleSubmit, // handleSubmit 추가
+    formState: { errors },
+    watch,
+    reset,
+    // setError,
+    // clearErrors,
+  } = useForm<InputForm>({ mode: 'onChange', reValidateMode: 'onChange' });
+
   const router = useRouter();
   const { id } = router.query;
   const dashboardId = Number(id);
 
-  const [columnName, setColumnName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setColumnName(value);
-  };
+  // watch를 사용하여 입력 필드의 값을 실시간으로 확인
+  const textValue = watch('text');
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: InputForm) => {
     // 이미 요청 중인 경우 무시
     if (isSubmitting) {
       return;
@@ -34,12 +45,9 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
     try {
       setIsSubmitting(true);
 
-      await postColumns({
-        title: columnName,
-        dashboardId: dashboardId,
-      });
+      const columnData = { title: data.text, dashboardId: dashboardId };
+      await postColumns(columnData);
 
-      setColumnName('');
       handleModalClose();
     } catch (error) {
       console.error('Failed to post columns data:', error);
@@ -49,11 +57,9 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
   };
 
   const handleCloseModal = () => {
-    setColumnName('');
+    reset();
     handleModalClose();
   };
-
-  const isInputEmpty = columnName.trim() === '';
 
   if (!openModal) {
     return null;
@@ -61,20 +67,34 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
 
   return (
     <Modal className="w-540 mobile:w-327" openModal={openModal} handleModalClose={handleCloseModal}>
-      <div className="mb-32 text-24 font-bold">새 컬럼 생성</div>
-      <form className="flex flex-col" onSubmit={handleSubmit}>
-        <label className="mb-10 text-18 font-medium" htmlFor="columnName">
-          이름
-        </label>
-        <input
-          className="w-full h-48 px-16 mb-28 border-1 border-gray-d9 rounded-6"
+      <div className="mb-32 text-24 font-bold mobile:mb-24">새 컬럼 생성</div>
+      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          divCheckStyle="py-0"
+          labelDropStyle="w-full text-18"
+          inputCheckStyle="mb-28 mt-10 text-16 mobile:mb-24"
+          inputName="text"
+          inputContent="새로운 프로젝트"
+          labelId="text"
+          labelText="이름"
           type="text"
-          placeholder="새로운 프로젝트"
-          value={columnName}
-          onChange={handleInputChange}
+          // clearError={clearErrors}
+          // error={errors.text}
+          register={register('text', {
+            required: {
+              value: true,
+              message: '컬럼 이름을 입력해주세요',
+            },
+          })}
         />
         <div className="flex flex-row-reverse gap-12 mobile:gap-11">
-          <Button type="submit" buttonType="modal2" bgColor="violet" textColor="white" disabled={isInputEmpty}>
+          <Button
+            type="submit"
+            buttonType="modal2"
+            bgColor="violet"
+            textColor="white"
+            disabled={!textValue || !!errors.text || isSubmitting}
+          >
             생성
           </Button>
           <Button buttonType="modal2" bgColor="white" textColor="gray" onClick={handleCloseModal}>
