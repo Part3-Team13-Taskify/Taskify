@@ -5,7 +5,7 @@ import useWindowSize from '@/src/hooks/useWindowSize';
 const Members = () => {
   const { width } = useWindowSize();
   const members = useMembersStore((state) => state.membersData);
-  const visibleCount = width <= 1199 ? 3 : 4; // Change this line
+  const visibleCount = width <= 1199 ? 2 : 4; // Change this line
   const visibleMembers = members.slice(0, visibleCount);
   const remainingCount = members.length - visibleMembers.length;
   return (
