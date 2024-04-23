@@ -1,17 +1,9 @@
-import green from '@/public/assets/chip/ellipseGreenLarge.svg';
-import blue from '@/public/assets/chip/ellipseBlueLarge.svg';
-import pink from '@/public/assets/chip/ellipsePinkLarge.svg';
-import purple from '@/public/assets/chip/ellipsePurpleLarge.svg';
-import yellow from '@/public/assets/chip/ellipseYellowLarge.svg';
 import Image from 'next/image';
 import check from '@/public/assets/chip/doneLarge.svg';
 import { useState } from 'react';
+import { COLORCODES } from '../colorpicker';
 
-const COLORS = [green, blue, pink, purple, yellow];
-
-const ColorPicker = () => {
-  const [selectedColor, setSelectedColor] = useState(green);
-
+const ModalColorPicker = ({ selectedColor, setSelectedColor }: ColorPickerProps) => {
   const handleSelectColor = (e: React.MouseEvent<HTMLDivElement>, color: string) => {
     setSelectedColor(color);
   };
@@ -19,7 +11,7 @@ const ColorPicker = () => {
   return (
     <>
       <div className="flex gap-10 mobile:hidden">
-        {COLORS.map((color) => (
+        {COLORCODES.map((color) => (
           <div key={color} className={`bg-${color} relative`}>
             <Image src={color} alt="color" width={30} onClick={(e) => handleSelectColor(e, color)} />
             {selectedColor === color && (
@@ -52,4 +44,4 @@ const ColorPicker = () => {
   );
 };
 
-export default ColorPicker;
+export default ModalColorPicker;

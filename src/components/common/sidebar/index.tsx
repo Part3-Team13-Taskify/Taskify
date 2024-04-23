@@ -72,7 +72,7 @@ const DashboardList = () => {
             tabIndex={0}
             onClick={() => handleClick(data.id)}
           >
-            <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99" />
+            <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99 flex-shrink-0" />
             <p
               className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
                 data.id === selectedDashboard && ' text-violet'
