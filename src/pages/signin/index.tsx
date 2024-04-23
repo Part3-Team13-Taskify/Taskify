@@ -5,6 +5,10 @@ import Button from '@/src/components/common/button';
 import { FieldError, useForm } from 'react-hook-form';
 import Input from '@/src/components/common/input';
 import Link from 'next/link';
+import postUser from '@/src/api/userApi';
+import { useRouter } from 'next/router';
+import SignModal from '@/src/components/common/signModal';
+import { useState } from 'react';
 
 interface InputForm {
   text?: string;
@@ -22,15 +26,31 @@ const Signin = () => {
     handleSubmit,
     formState: { errors },
     clearErrors,
-    getValues,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
-  const onSubmit = (data: InputForm) => {
-    console.log(data);
+  const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleModal = () => {
+    // open이 true일때 모달이 열림
+    setOpen(!open);
   };
 
-  const newEmailValue = getValues('email');
-  console.log(newEmailValue);
+  const onSubmit = async (data: InputForm) => {
+    const body = { email: data.email, password: data.password };
+    const response = await postUser('auth/login', body);
+    if (response && response.status === 201) {
+      // 로그인 성공, mydashboard 이동 + 토큰
+      window.localStorage.setItem('accessToken', response.data.accessToken);
+      router.push('/my-dashboard');
+    } else {
+      // 로그인 실패, 오류메세지를 품은 모달창
+      setError(response ? response.data.message : '');
+      handleModal(); // 오픈일때 오류가 보이게
+    }
+  };
 
   return (
     <div>
@@ -102,6 +122,7 @@ const Signin = () => {
           </p>
         </footer>
       </div>
+      <SignModal errorText={error} openModal={open} handleModalClose={handleModal} />
     </div>
   );
 };
