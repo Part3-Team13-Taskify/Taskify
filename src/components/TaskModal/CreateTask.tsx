@@ -5,6 +5,7 @@ import { ChangeEventHandler, useEffect, useState } from 'react';
 import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
+import { format } from 'date-fns';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -86,6 +87,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       handleModalClose();
     }
   };
+  console.log(createData.dueDate);
 
   return (
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
@@ -133,7 +135,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             className="w-full h-55"
             onChange={(date) => {
               setCreateData((prev) => {
-                return { ...prev, dueDate: date ? date?.toDateString() : undefined };
+                return { ...prev, dueDate: date ? format(date, 'yyyy-MM-dd HH:mm') : undefined };
               });
             }}
           />
