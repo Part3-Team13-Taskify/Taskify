@@ -15,7 +15,7 @@ const getToken = () => {
 
 instance.interceptors.request.use((config) => {
   const modifiedConfig = { ...config };
-  modifiedConfig.headers.Authorization = `Bearer ${getToken}`;
+  modifiedConfig.headers.Authorization = `Bearer ${getToken()}`;
   return modifiedConfig;
 });
 

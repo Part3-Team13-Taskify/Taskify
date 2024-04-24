@@ -5,7 +5,7 @@ import Button from '@/src/components/common/button';
 import { FieldError, useForm } from 'react-hook-form';
 import Input from '@/src/components/common/input';
 import Link from 'next/link';
-import postUser from '@/src/api/userApi';
+import postUser from '@/src/pages/api/userApi';
 import { useRouter } from 'next/router';
 import SignModal from '@/src/components/common/signModal';
 import { useEffect, useState } from 'react';
