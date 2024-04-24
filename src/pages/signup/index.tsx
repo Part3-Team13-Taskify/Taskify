@@ -5,6 +5,10 @@ import Button from '@/src/components/common/button';
 import { FieldError, useForm } from 'react-hook-form';
 import Input from '@/src/components/common/input';
 import Link from 'next/link';
+import postUser from '@/src/api/userApi';
+import { useRouter } from 'next/router';
+import SignModal from '@/src/components/common/signModal';
+import { useEffect, useState } from 'react';
 
 interface InputForm {
   text: string;
@@ -26,9 +30,39 @@ const Signup = () => {
     watch,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
-  const onSubmit = (data: InputForm) => {
-    // 폼 제출 시 실행되는 함수
-    console.log(data); // 입력된 데이터 확인용
+  const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handleModal = () => {
+    // open이 true일때 모달이 열림
+    setOpen(!open);
+    if (success === true) {
+      router.push('/signin');
+    }
+  };
+
+  useEffect(() => {
+    if (window.localStorage.getItem('accessToken')) {
+      router.push('/my-dashboard');
+    }
+  });
+
+  const onSubmit = async (data: InputForm) => {
+    const body = { email: data.email, nickname: data.text, password: data.password };
+    const response = await postUser('users', body);
+    if (response && response.status === 201) {
+      // 회원가입 성공, 성공한 모달창 + signin 이동
+      setError('가입이 완료되었습니다!');
+      handleModal();
+      setSuccess(true);
+    } else {
+      // 회원가입 실패, 오류메세지를 품은 모달창
+      setError(response ? response.data.message : '');
+      handleModal(); // 오픈일때 오류가 보이게
+    }
   };
   const isChecked = watch('checkbox');
 
@@ -39,7 +73,7 @@ const Signup = () => {
           <Image className="mobile:w-120" src={mainLogo} alt="mainLogo" /> {/* 모바일 사이즈 클래스 이름 수정 */}
           <h1 className="text-20 mb-6 font-medium">오늘도 만나서 반가워요!</h1>
         </header>
-        <main className="w-520 mobile:w-351">
+        <main>
           <div className="pb-16">
             <form onSubmit={handleSubmit(onSubmit)}>
               <Input
@@ -61,6 +95,7 @@ const Signup = () => {
                 labelId="email"
                 labelText="이메일"
                 focusType="email"
+                labelDropStyle="w-520 mobile:w-351"
               />
               <Input
                 register={register('text', {
@@ -81,6 +116,7 @@ const Signup = () => {
                 labelId="text"
                 labelText="닉네임"
                 focusType="text"
+                labelDropStyle="w-520 mobile:w-351"
               />
               <PasswordInput
                 register={register('password', {
@@ -133,7 +169,8 @@ const Signup = () => {
                 inputContent=""
                 labelId="checkbox"
                 labelText="이용약관에 동의합니다."
-                divCheckStyle="flex-row-reverse justify-end items-center h-20 gap-8 py-20"
+                divCheckStyle="flex flex-row-reverse justify-end items-center h-20 gap-8 py-20"
+                labelDropStyle="flex flex-row-reverse items-center gap-8"
                 inputCheckStyle="w-20 h-20"
               />
               <Button
@@ -157,6 +194,7 @@ const Signup = () => {
           </p>
         </footer>
       </div>
+      <SignModal errorText={error} openModal={open} handleModalClose={handleModal} />
     </div>
   );
 };

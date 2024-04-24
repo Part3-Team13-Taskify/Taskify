@@ -44,7 +44,7 @@ const PasswordInput = ({
   };
 
   const divStyle = twMerge(
-    `flex flex-row  justify-between w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f focus:outline-none  focus:border-violet`,
+    `flex flex-row  justify-between w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f focus:outline-none  focus-within:border-violet`,
     divCheckStyle,
   );
   const divErrorStyle = twMerge(
@@ -61,7 +61,7 @@ const PasswordInput = ({
           {...register}
           type={openEye ? 'text' : 'password'}
           name={inputName}
-          className={error?.message ? ' text-black-33' : ' text-black-33 '}
+          className="w-full text-black-33"
           placeholder={inputContent}
           id={labelId}
           onFocus={() => {

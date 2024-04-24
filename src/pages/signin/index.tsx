@@ -8,7 +8,7 @@ import Link from 'next/link';
 import postUser from '@/src/api/userApi';
 import { useRouter } from 'next/router';
 import SignModal from '@/src/components/common/signModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface InputForm {
   text?: string;
@@ -26,7 +26,6 @@ const Signin = () => {
     handleSubmit,
     formState: { errors },
     clearErrors,
-    getValues,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
   const router = useRouter();
@@ -53,8 +52,11 @@ const Signin = () => {
     }
   };
 
-  const newEmailValue = getValues('email');
-  console.log(newEmailValue);
+  useEffect(() => {
+    if (window.localStorage.getItem('accessToken')) {
+      router.push('/my-dashboard');
+    }
+  });
 
   return (
     <div>
@@ -63,7 +65,7 @@ const Signin = () => {
           <Image className="modile:w-120" src={mainLogo} alt="mainLogo" />
           <h1 className="text-20 mb-6 font-medium">오늘도 만나서 반가워요!</h1>
         </header>
-        <main className="w-520 mobile:w-351">
+        <main>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="pb-16">
               <Input
@@ -85,6 +87,7 @@ const Signin = () => {
                 labelId="email"
                 labelText="이메일"
                 focusType="email"
+                labelDropStyle="w-520 mobile:w-351"
               />
               <PasswordInput
                 register={register('password', {
