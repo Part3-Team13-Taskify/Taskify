@@ -114,7 +114,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         </TaskLabel>
         <TaskLabel htmlFor="image" label="이미지">
           <button className="p-24 bg-gray-9f w-fit rounded-6">
-            <Image src="assets/chip/addSmall.svg" width={28} height={28} alt="add image"></Image>
+            <Image src="/assets/icon/addViolet.svg" width={28} height={28} alt="add image"></Image>
           </button>
         </TaskLabel>
       </form>

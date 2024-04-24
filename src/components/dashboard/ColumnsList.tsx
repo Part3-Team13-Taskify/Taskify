@@ -10,7 +10,8 @@ import arrow from '@/public/assets/icon/arrow.svg';
 import arrowReverse from '@/public/assets/icon/arrowReverse.svg';
 import Violet from '@/public/assets/chip/ellipseVioletSmall.svg';
 import ModalPortal from '../common/modalPortal';
-import AddColumnModal from '../columnModal/addColumnModal';
+import AddColumnModal from '../ColumnModal/addColumnModal';
+import CreateTask from '../TaskModal/CreateTask';
 
 type Columns = {
   id: number;
@@ -25,6 +26,11 @@ const ColumnsList = () => {
     openModal: addColumnModal,
     handleModalClose: addColumnModalClose,
     handleModalOpen: addColumnModalOpen,
+  } = useModal();
+  const {
+    openModal: createTaskModal,
+    handleModalClose: createTaskModalClose,
+    handleModalOpen: createTaskModalOpen,
   } = useModal();
 
   const router = useRouter();
@@ -95,12 +101,21 @@ const ColumnsList = () => {
               </button>
             </div>
             <div>
+              <ModalPortal>
+                <CreateTask
+                  openModal={createTaskModal}
+                  handleModalClose={createTaskModalClose}
+                  dashboardId={dashboardId}
+                  columnId={dashboard.id}
+                />
+              </ModalPortal>
               <Button
                 className="tablet:w-full mobile:w-full"
                 buttonType="add"
                 bgColor="white"
                 textColor="black"
                 type="button"
+                onClick={createTaskModalOpen}
               >
                 <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
               </Button>
