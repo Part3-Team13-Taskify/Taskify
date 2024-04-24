@@ -1,13 +1,28 @@
-import { useMembersStore } from '@/src/util/zustand';
+import { useTotalMembersStore } from '@/src/util/zustand';
 import Image from 'next/image';
 import useWindowSize from '@/src/hooks/useWindowSize';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { getTotalMembers } from '@/src/pages/api/dashboardEditApi';
 
 const Members = () => {
   const { width } = useWindowSize();
-  const members = useMembersStore((state) => state.membersData);
+  const router = useRouter();
+  const { id } = router.query;
+  const idNumber = Number(id);
+  const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+  const setTotalMembersData = useTotalMembersStore((state) => state.setTotalMembersData);
   const visibleCount = width <= 1199 ? 2 : 4;
-  const visibleMembers = members.slice(0, visibleCount);
-  const remainingCount = members.length - visibleMembers.length;
+  const visibleMembers = totalMembers.slice(0, visibleCount);
+  const remainingCount = totalMembers.length - visibleMembers.length;
+
+  useEffect(() => {
+    if (!idNumber) return;
+    getTotalMembers(idNumber).then((res) => {
+      setTotalMembersData(res.members);
+    });
+  }, [idNumber]);
+
   return (
     <div className="flex gap-0">
       {visibleMembers.map((member) => (

@@ -35,6 +35,16 @@ export const useMembersStore = create<MembersStore>((set) => ({
   setMembersData: (data) => set(() => ({ membersData: data })),
 }));
 
+type TotalMembersStore = {
+  totalMembersData: MembersData[];
+  setTotalMembersData: (data: MembersData[]) => void;
+};
+
+export const useTotalMembersStore = create<TotalMembersStore>((set) => ({
+  totalMembersData: [],
+  setTotalMembersData: (data) => set(() => ({ totalMembersData: data })),
+}));
+
 type NestedInvitee = {
   id: number;
   email: string;

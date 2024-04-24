@@ -10,6 +10,16 @@ export const getMembers = async (id: number, offset: number = 1) => {
   return null;
 };
 
+export const getTotalMembers = async (id: number) => {
+  try {
+    const response = await instance.get(`/members?page=1&size=20&dashboardId=${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
+};
+
 export const getInvitees = async (id: number, offset: number = 1) => {
   try {
     const response = await instance.get(`/dashboards/${id}/invitations?page=${offset}&size=4`);

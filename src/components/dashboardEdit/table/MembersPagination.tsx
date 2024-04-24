@@ -33,7 +33,6 @@ const MembersPagination = () => {
     if (!id) return;
     getMembers(idNumber, offset).then((res) => {
       setMembersData(res.members);
-      console.log(res);
       setTotalCount(res.totalCount);
     });
   }, [idNumber, offset]);
