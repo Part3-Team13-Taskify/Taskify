@@ -20,9 +20,9 @@ export const postColumns = async (columnData: ColumnData) => {
   }
 };
 
-export const getColumns = async () => {
+export const getColumns = async (dashboardId: number) => {
   try {
-    const response = await axios.get('columns');
+    const response = await axios.get(`columns?dashboardId=${dashboardId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching columns', error);
