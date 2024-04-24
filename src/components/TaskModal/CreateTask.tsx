@@ -3,6 +3,8 @@ import TaskLabel from './TaskLabel';
 import Button from '../common/button';
 import { ChangeEventHandler, useState } from 'react';
 import Modal from '../common/modal';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -42,11 +44,12 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       return { ...prev, assigneeUserId: Number(e.target.value) };
     });
   };
-  const handleDateChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setCreateData((prev) => {
-      return { ...prev, dueDate: e.target.value };
-    });
-  };
+  // const handleDateChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  //   const dateString = e.target.value;
+  //   setCreateData((prev) => {
+  //     return { ...prev, dueDate: e.target.value };
+  //   });
+  // };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setCreateData((prev) => {
@@ -68,7 +71,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15"
             onChange={handleAssigneeSelect}
           >
-            <option value={0} className="text-gray">
+            <option value={undefined} className="text-gray">
               이름을 입력해 주세요
             </option>
             <option value={1}>1번</option>
@@ -95,13 +98,24 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           ></textarea>
         </TaskLabel>
         <TaskLabel htmlFor="due-date" label="마감일">
-          <input
+          {/* <ThemeProvider theme={theme}> */}
+          <DateTimePicker
+            label="날짜를 입력해 주세요"
+            className="w-full h-55"
+            onChange={(date) => {
+              setCreateData((prev) => {
+                return { ...prev, dueDate: date ? date?.toDateString() : '0' };
+              });
+            }}
+          />
+          {/* </ThemeProvider> */}
+          {/* <input
             id="due-date"
             type="date"
             placeholder="날짜를 입력해 주세요"
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             onChange={handleDateChange}
-          ></input>
+          ></input> */}
         </TaskLabel>
         <TaskLabel htmlFor="tag" label="태그">
           <input
