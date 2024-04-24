@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, useEffect, useState } from 'react';
 import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import instance from '@/src/util/axios';
+import { AxiosResponse } from 'axios';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -12,12 +14,32 @@ interface CreateTaskModalProps {
   dashboardId: number;
   columnId: number;
 }
+interface CreateData {
+  assigneeUserId?: number;
+  dashboardId: number;
+  columnId: number;
+  title: string;
+  description: string;
+  dueDate?: string;
+  tags?: string[] | [];
+  imageUrl?: '';
+}
+
+type Member =
+  | {
+      nickname: string;
+      profileImageUrl?: string;
+      userId: number;
+    }
+  | undefined;
 
 const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClose, dashboardId, columnId }) => {
   if (!openModal) return null;
 
-  const [createData, setCreateData] = useState({
-    assigneeUserId: 0,
+  const [isPending, setIsPending] = useState(true);
+  const [memberData, setMemberData] = useState<Member[]>([]);
+  const [createData, setCreateData] = useState<CreateData>({
+    assigneeUserId: undefined,
     dashboardId: dashboardId,
     columnId: columnId,
     title: '',
@@ -26,6 +48,21 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     tags: [],
     imageUrl: '',
   });
+
+  useEffect(() => {
+    const getMemberData = async (dashboardId: number) => {
+      try {
+        const res = await instance.get(`members?dashboardId=${dashboardId}`);
+        setMemberData(res.data.members);
+      } catch {
+        console.log('error');
+      } finally {
+        setIsPending(false);
+      }
+    };
+    getMemberData(dashboardId);
+  }, []);
+  console.log(memberData);
 
   const isRequiredFilled = createData.description && createData.title;
 
@@ -44,12 +81,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       return { ...prev, assigneeUserId: Number(e.target.value) };
     });
   };
-  // const handleDateChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-  //   const dateString = e.target.value;
-  //   setCreateData((prev) => {
-  //     return { ...prev, dueDate: e.target.value };
-  //   });
-  // };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setCreateData((prev) => {
@@ -74,9 +105,9 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             <option value={undefined} className="text-gray">
               이름을 입력해 주세요
             </option>
-            <option value={1}>1번</option>
-            <option value={2}>2번</option>
-            <option value={3}>3번</option>
+            {memberData.map((member) => {
+              return <option value={member?.userId}>{member?.nickname}</option>;
+            })}
           </select>
         </TaskLabel>
         <TaskLabel htmlFor="title" label="제목" isRequired={true}>
