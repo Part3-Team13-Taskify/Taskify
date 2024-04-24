@@ -30,20 +30,20 @@ const Navigation = ({ title }: { title: string }) => {
   };
   return (
     <header className="w-full justify-between h-70 border-b-1 px-34 mobile:px-12 flex gap-32 items-center text-16 tablet:gap-24 mobile:h-60 mobile:gap-12 mobile:text-14">
-      <div className=" flex text-black-33 font-medium tablet:hidden mobile:hidden">
+      <div className="flex text-black-33 font-medium ">
         <div className="text-20 font-bold">
           {title ? (
             <h2>{title}</h2>
           ) : (
-            <div className="flex gap-4 items-center ">
+            <div className="flex gap-4 items-center tablet:hidden mobile:hidden">
               <h2>{dashboardData.title}</h2> {dashboardData.createdByMe && <Image src={crown} alt="crown" />}
             </div>
           )}
         </div>
       </div>
-      <div className="flex tablet:flex-grow tablet:justify-around gap-32 mobile:gap-12">
+      <div className="flex gap-32 mobile:gap-12 tablet:flex-grow tablet:justify-between">
         {!title && dashboardData.createdByMe && (
-          <div className=" flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
+          <div className="flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
               href={`/dashboard/${id}/edit`}
               className=" flex gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7  mobile:text-14"
