@@ -2,9 +2,8 @@
 import { useDashboardListStore } from '@/src/util/zustand';
 import React, { useCallback, useEffect, useState } from 'react';
 import { getDashboardList } from '@/src/pages/api/dashboardEditApi';
-
 import type { Dashboard } from '@/src/util/zustand';
-import Pagination from './Pagination';
+import DashboardListPagination from './DashboardListPagination';
 import DashboardListItem from './DashboardListItem';
 
 const DashboardList = () => {
@@ -34,7 +33,7 @@ const DashboardList = () => {
             selectedDashboard={selectedDashboard}
           />
         ))}
-      <Pagination />
+      <DashboardListPagination />
     </div>
   );
 };
