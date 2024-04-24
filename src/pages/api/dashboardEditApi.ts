@@ -55,3 +55,13 @@ export const getMyProfile = async () => {
   }
   return null;
 };
+
+export const getDashboardList = async () => {
+  try {
+    const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
+    return response.data.dashboards;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
+};
