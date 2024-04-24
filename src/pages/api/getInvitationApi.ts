@@ -33,11 +33,7 @@ interface InvitationsResponse {
   invitations: Invitation[];
 }
 
-<<<<<<< HEAD
 export const fetchInvitations = async (size: number): Promise<InvitationsResponse> => {
-=======
-const fetchInvitations = async (size: number): Promise<InvitationsResponse> => {
->>>>>>> d521ddc (✨ Feat: 초대목록 조회 API)
   try {
     const response = await axios.get<InvitationsResponse>(`invitations?size=${size}`);
     return response.data;
