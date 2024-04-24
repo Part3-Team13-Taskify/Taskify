@@ -11,7 +11,7 @@ const Members = () => {
   return (
     <div className="flex gap-0">
       {visibleMembers.map((member) => (
-        <div className="border-2 rounded-99 -ml-8" key={member.profileImageUrl}>
+        <div className="border-2 rounded-99 -ml-8" key={member.id}>
           <Image src={member.profileImageUrl} alt="profile" width={30} height={30} className="rounded-99 " />
         </div>
       ))}

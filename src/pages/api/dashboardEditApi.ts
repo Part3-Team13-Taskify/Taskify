@@ -56,10 +56,10 @@ export const getMyProfile = async () => {
   return null;
 };
 
-export const getDashboardList = async () => {
+export const getDashboardList = async (offset: number = 1) => {
   try {
-    const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
-    return response.data.dashboards;
+    const response = await instance.get(`/dashboards?navigationMethod=pagination&page=${offset}&size=10`);
+    return response.data;
   } catch (error) {
     console.error(error);
   }

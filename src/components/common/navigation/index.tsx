@@ -32,6 +32,7 @@ const Navigation = ({ title }: NavigationProps) => {
   const toggle = () => {
     setDropDown(!dropDown);
   };
+
   return (
     <header className="w-full justify-between h-70 border-b-1 px-34 mobile:px-12 flex gap-32 items-center text-16 tablet:gap-24 mobile:h-60 mobile:gap-12 mobile:text-14">
       <div className="flex text-black-33 font-medium ">
@@ -69,7 +70,7 @@ const Navigation = ({ title }: NavigationProps) => {
             </>
           )}
           <div role="none" onClick={toggle} onKeyDown={toggle} className="relative cursor-pointer">
-            <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />
+            {myProfile && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
             {dropDown && (
               <nav className="absolute z-10 w-100 bg-white divide-y divide-gray-d9 rounded-lg shadow  dark:bg-black-4b dark:divide-gray-78 ">
                 <ul className="py-2 text-16 text-black-4b dark:text-gray-200">
