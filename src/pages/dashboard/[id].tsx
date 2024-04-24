@@ -4,20 +4,21 @@ import Navigation from '@/src/components/common/navigation';
 
 const Dashboard = () => {
   return (
-    <div className="flex ">
-      <SideBar />
-      <div className="flex flex-col flex-grow">
-        <Navigation name="비브리지" icon member="멤버" user="유저" />
-        <ColumnsList />
+    <div className="grid grid-cols-[300px,minmax(auto,1fr)] grid-rows-[60px,1fr] tablet:grid-rows-[70px,1fr] tablet:grid-cols-[160px,minmax(auto,1fr)] mobile:grid-cols-[67px,minmax(auto,1fr)]">
+      <div className="row-span-1">
+        <SideBar />
+      </div>
+      <div className="col-span-1 row-span-1 tablet:col-span-1 tablet:row-span-1 pc:col-span-2">
+        <div className="grid grid-rows-1">
+          <div className="row-span-1">
+            <Navigation />
+          </div>
+          <div className="row-span-1 overflow-x-auto">
+            <ColumnsList />
+          </div>
+        </div>
       </div>
     </div>
-    //    <div className="flex w-screen">
-    //    <SideBar />
-    //    <div className="flex flex-col flex-grow">
-    //      <Navigation name="비브리지" icon member="멤버" user="유저" />
-    //      <DashboardEditContent />
-    //    </div>
-    //  </div>
   );
 };
 

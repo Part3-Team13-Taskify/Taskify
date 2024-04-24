@@ -55,6 +55,7 @@ module.exports = {
         violet: {
           DEFAULT: '#5534DA',
           '8%': '#F1EFFD',
+          dark: '#2b1193',
         },
         white: '#FFF',
         'beige-f9': '#F9F7F7',
