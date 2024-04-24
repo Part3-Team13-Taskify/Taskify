@@ -34,3 +34,23 @@ export const useMembersStore = create<MembersStore>((set) => ({
   membersData: [],
   setMembersData: (data) => set(() => ({ membersData: data })),
 }));
+
+export interface Dashboard {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdByMe: boolean;
+  userId: number;
+}
+
+type DashboardListStore = {
+  dashboardList: Dashboard[];
+  setDashboardList: (dashboards: Dashboard[]) => void;
+};
+
+export const useDashboardListStore = create<DashboardListStore>((set) => ({
+  dashboardList: [],
+  setDashboardList: (dashboards) => set({ dashboardList: dashboards }),
+}));

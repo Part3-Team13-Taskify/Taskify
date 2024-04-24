@@ -16,7 +16,7 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
   if (!openModal) {
     return null;
   }
-  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('#7AC555');
   const {
     register,
     getValues,

@@ -11,7 +11,11 @@ import { useDashboardStore } from '@/src/util/zustand';
 import MyProfile from './MyProfile';
 import Members from './Members';
 
-const Navigation = ({ title }: { title: string }) => {
+type NavigationProps = {
+  title?: string;
+};
+
+const Navigation = ({ title }: NavigationProps) => {
   const dashboardData = useDashboardStore((state) => state.dashboardData);
   const setDashboardData = useDashboardStore((state) => state.setDashboardData);
   const [myProfile, setMyProfile] = useState({ nickname: '', profileImageUrl: '' });
@@ -28,6 +32,7 @@ const Navigation = ({ title }: { title: string }) => {
   const toggle = () => {
     setDropDown(!dropDown);
   };
+
   return (
     <header className="w-full justify-between h-70 border-b-1 px-34 mobile:px-12 flex gap-32 items-center text-16 tablet:gap-24 mobile:h-60 mobile:gap-12 mobile:text-14">
       <div className="flex text-black-33 font-medium ">
@@ -41,7 +46,7 @@ const Navigation = ({ title }: { title: string }) => {
           )}
         </div>
       </div>
-      <div className="flex gap-32 mobile:gap-12 tablet:flex-grow tablet:justify-between">
+      <div className={`flex gap-32 mobile:gap-12 ${!title && 'tablet:flex-grow tablet:justify-between'} `}>
         {!title && dashboardData.createdByMe && (
           <div className="flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
@@ -65,7 +70,7 @@ const Navigation = ({ title }: { title: string }) => {
             </>
           )}
           <div role="none" onClick={toggle} onKeyDown={toggle} className="relative cursor-pointer">
-            <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />
+            {myProfile && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
             {dropDown && (
               <nav className="absolute z-10 w-100 bg-white divide-y divide-gray-d9 rounded-lg shadow  dark:bg-black-4b dark:divide-gray-78 ">
                 <ul className="py-2 text-16 text-black-4b dark:text-gray-200">

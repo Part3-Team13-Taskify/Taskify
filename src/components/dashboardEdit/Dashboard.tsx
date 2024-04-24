@@ -126,6 +126,7 @@ const Dashboard = () => {
                 src={member.profileImageUrl}
                 text={member.nickname}
                 isOwner={member.isOwner}
+                key={member.userId}
                 button={
                   <Button
                     buttonType="delete"
