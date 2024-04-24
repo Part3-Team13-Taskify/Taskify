@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { postColumns } from '@/src/api/columnsApi';
 import { useForm } from 'react-hook-form';
 
@@ -10,13 +9,14 @@ import Input from '../../common/input';
 interface AddColumnModalProps {
   openModal: boolean;
   handleModalClose: () => void;
+  dashboardId: number;
 }
 
 interface InputForm {
   text: string;
 }
 
-const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalClose }) => {
+const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalClose, dashboardId }) => {
   const {
     register,
     handleSubmit, // handleSubmit 추가
@@ -26,10 +26,6 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
     // setError,
     // clearErrors,
   } = useForm<InputForm>({ mode: 'onChange', reValidateMode: 'onChange' });
-
-  const router = useRouter();
-  const { id } = router.query;
-  const dashboardId = Number(id);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
