@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Button from '@/src/components/common/button';
 import addLarge from '@/public/assets/chip/addLarge.svg';
-import unsubscribeEmail from '@/public/assets/icon/unsubscribeEmail.svg';
 import AddDashboardModal from '@/src/components/dashboardModal/addDashboardModal';
 import InvitationTable from '@/src/components/mydashboard/table/';
 import InvitationSearch from '@/src/components/mydashboard/table/InvitationSearch';
@@ -35,7 +34,7 @@ const InvitationDashboard = () => {
       {isAddDashboardModalVisible && (
         <AddDashboardModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
       )}
-      <div className="w-1022 h-auto mx-40 my-40 py-32 rounded-lg  bg-white tablet:w-screen tablet:h-400 mobile:screen mobile:mx-24 mobile:h-screen">
+      <div className="w-1022 h-auto mx-40 my-40 py-32 rounded-lg bg-white tablet:w-screen tablet:h-400 mobile:mx-24 mobile:h-screen">
         <h1 className="self-start pl-28 text-24 font-bold mobile:text-20">초대받은 대시보드</h1>
         {/* <div className="flex flex-col items-center mt-66">
           <Image src={unsubscribeEmail} alt="unsubscribeEmail " className="mb-24" />
