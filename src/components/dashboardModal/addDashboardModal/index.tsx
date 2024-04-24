@@ -25,6 +25,7 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
     clearErrors,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
+
   const handleCreateDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {

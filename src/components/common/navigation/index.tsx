@@ -31,13 +31,18 @@ const Navigation = ({ title }: { title: string }) => {
   return (
     <header className="w-full justify-between h-70 border-b-1 px-34 mobile:px-12 flex gap-32 items-center text-16 tablet:gap-24 mobile:h-60 mobile:gap-12 mobile:text-14">
       <div className=" flex text-black-33 font-medium tablet:hidden mobile:hidden">
-        <div className=" flex items-center text-20 font-bold gap-4">
-          {dashboardData.title ? <h2>{dashboardData.title}</h2> : <h2>{title}</h2>}
-          {dashboardData.createdByMe ? <Image src={crown} alt="crown" /> : ''}
+        <div className="text-20 font-bold">
+          {title ? (
+            <h2>{title}</h2>
+          ) : (
+            <div className="flex gap-4 items-center ">
+              <h2>{dashboardData.title}</h2> {dashboardData.createdByMe && <Image src={crown} alt="crown" />}
+            </div>
+          )}
         </div>
       </div>
       <div className="flex tablet:flex-grow tablet:justify-around gap-32 mobile:gap-12">
-        {dashboardData.createdByMe && (
+        {!title && dashboardData.createdByMe && (
           <div className=" flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
               href={`/dashboard/${id}/edit`}
@@ -53,8 +58,12 @@ const Navigation = ({ title }: { title: string }) => {
           </div>
         )}
         <div className="flex items-center gap-32 tablet:gap-24 mobile:gap-12">
-          <Members />
-          <Image src={vector} alt="vector" />
+          {!title && (
+            <>
+              <Members />
+              <Image src={vector} alt="vector" />
+            </>
+          )}
           <div role="none" onClick={toggle} onKeyDown={toggle} className="relative cursor-pointer">
             <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />
             {dropDown && (

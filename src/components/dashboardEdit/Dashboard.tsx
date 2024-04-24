@@ -55,7 +55,7 @@ const Dashboard = () => {
   const idNumber = Number(id);
 
   const fetchData = async () => {
-    if (id) {
+    if (idNumber) {
       const membersData = await getMembers(idNumber);
       const inviteesData = await getInvitees(idNumber);
       // const dashboardData = await getDashboard(idNumber);
@@ -68,7 +68,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id, router]);
 
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
