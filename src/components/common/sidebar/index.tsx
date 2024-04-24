@@ -53,8 +53,12 @@ const DashboardList = () => {
   // };
 
   const getDashboardList = async () => {
-    const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
-    setDashboardList(response.data.dashboards);
+    try {
+      const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
+      setDashboardList(response.data.dashboards);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
