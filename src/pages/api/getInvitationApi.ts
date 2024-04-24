@@ -33,7 +33,7 @@ interface InvitationsResponse {
   invitations: Invitation[];
 }
 
-const fetchInvitations = async (size: number): Promise<InvitationsResponse> => {
+export const fetchInvitations = async (size: number): Promise<InvitationsResponse> => {
   try {
     const response = await axios.get<InvitationsResponse>(`invitations?size=${size}`);
     return response.data;
