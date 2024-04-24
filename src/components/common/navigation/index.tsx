@@ -11,7 +11,11 @@ import { useDashboardStore } from '@/src/util/zustand';
 import MyProfile from './MyProfile';
 import Members from './Members';
 
-const Navigation = ({ title }: { title: string }) => {
+type NavigationProps = {
+  title?: string;
+};
+
+const Navigation = ({ title }: NavigationProps) => {
   const dashboardData = useDashboardStore((state) => state.dashboardData);
   const setDashboardData = useDashboardStore((state) => state.setDashboardData);
   const [myProfile, setMyProfile] = useState({ nickname: '', profileImageUrl: '' });
@@ -41,7 +45,7 @@ const Navigation = ({ title }: { title: string }) => {
           )}
         </div>
       </div>
-      <div className="flex gap-32 mobile:gap-12 tablet:flex-grow tablet:justify-between">
+      <div className={`flex gap-32 mobile:gap-12 ${!title && 'tablet:flex-grow tablet:justify-between'} `}>
         {!title && dashboardData.createdByMe && (
           <div className="flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
