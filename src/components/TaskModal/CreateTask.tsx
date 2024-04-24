@@ -4,7 +4,6 @@ import Button from '../common/button';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import instance from '@/src/util/axios';
 
 interface CreateTaskModalProps {
@@ -35,7 +34,6 @@ type Member =
 const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClose, dashboardId, columnId }) => {
   if (!openModal) return null;
 
-  const [isPending, setIsPending] = useState(true);
   const [memberData, setMemberData] = useState<Member[]>([]);
   const [createData, setCreateData] = useState<CreateData>({
     dashboardId: dashboardId,
@@ -52,8 +50,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         setMemberData(res.data.members);
       } catch {
         console.log('error');
-      } finally {
-        setIsPending(false);
       }
     };
     getMemberData(dashboardId);
@@ -130,7 +126,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           ></textarea>
         </TaskLabel>
         <TaskLabel htmlFor="due-date" label="마감일">
-          {/* <ThemeProvider theme={theme}> */}
           {/* TODO
           라이브러리 폰트 크기 및 디자인 조정 */}
           <DateTimePicker
@@ -142,14 +137,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
               });
             }}
           />
-          {/* </ThemeProvider> */}
-          {/* <input
-            id="due-date"
-            type="date"
-            placeholder="날짜를 입력해 주세요"
-            className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
-            onChange={handleDateChange}
-          ></input> */}
         </TaskLabel>
         {/* TODO
         Enter로 태그 구분 기능 고려 */}
