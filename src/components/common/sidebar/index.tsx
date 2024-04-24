@@ -6,6 +6,8 @@ import crown from '@/public/assets/icon/crown.svg';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import instance from '@/src/util/axios';
+import AddDashboardModal from '@/src/components/dashboardModal/addDashboardModal';
+
 // import ReactPaginate from 'react-paginate';
 
 type Dashboard = {
@@ -51,8 +53,12 @@ const DashboardList = () => {
   // };
 
   const getDashboardList = async () => {
-    const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
-    setDashboardList(response.data.dashboards);
+    try {
+      const response = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=10');
+      setDashboardList(response.data.dashboards);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -70,7 +76,7 @@ const DashboardList = () => {
             tabIndex={0}
             onClick={() => handleClick(data.id)}
           >
-            <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99" />
+            <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99 flex-shrink-0" />
             <p
               className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
                 data.id === selectedDashboard && ' text-violet'
@@ -97,6 +103,13 @@ const DashboardList = () => {
 };
 
 const SideBar = () => {
+  const [isAddDashboardModalVisible, setIsAddDashboardModalVisible] = useState(false);
+  const showAddDashboardModal = () => {
+    setIsAddDashboardModalVisible(true);
+  };
+  const hideAddDashboardModal = () => {
+    setIsAddDashboardModalVisible(false);
+  };
   return (
     <div className="top-0 left-0 w-300 h-screen border-1 bg-white pt-20 px-24 tablet:w-160 mobile:w-67">
       <div className="w-109 mb-60 mobile:hidden">
@@ -108,11 +121,17 @@ const SideBar = () => {
       <div className="flex justify-between">
         <p className="text-12 font-bold text-gray-78 mobile:hidden">Dash Boards</p>
         {/* <div className="w-20 mobile:mt-39 mobile:mb-22" onClick={handleOpenModal}> 대시보드 생성하기 모달 핸들러 추가 */}
-        <div className="w-20 mobile:mt-39 mobile:mb-22">
-          <Image src={add} alt="add dash board" />
-        </div>
+        <Image
+          src={add}
+          alt="add dash board"
+          className="w-20 mobile:mt-39 mobile:mb-22 cursor-pointer"
+          onClick={showAddDashboardModal}
+        />
       </div>
       <DashboardList />
+      {isAddDashboardModalVisible && (
+        <AddDashboardModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
+      )}
     </div>
   );
 };

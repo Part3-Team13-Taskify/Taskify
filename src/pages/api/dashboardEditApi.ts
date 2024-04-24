@@ -1,25 +1,33 @@
 import instance from '@/src/util/axios';
-import { useRouter } from 'next/router';
 
 export const getMembers = async (id: number) => {
-  const response = await instance.get(`/members?page=1&size=20&dashboardId=${id}`);
-  return response.data.members;
+  try {
+    const response = await instance.get(`/members?page=1&size=20&dashboardId=${id}`);
+    return response.data.members;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
 };
 
 export const getInvitees = async (id: number) => {
-  const response = await instance.get(`/dashboards/${id}/invitations?page=1&size=10`);
-  return response.data.invitations;
+  try {
+    const response = await instance.get(`/dashboards/${id}/invitations?page=1&size=10`);
+    return response.data.invitations;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
 };
 
 export const getDashboard = async (id: number) => {
-  const response = await instance.get(`/dashboards/${id}`);
-  return response.data;
-};
-
-export const handleDeleteDashboard = async (id: number) => {
-  const router = useRouter();
-  await instance.delete(`/dashboards/${id}`);
-  router.push('/my-dashboard');
+  try {
+    const response = await instance.get(`/dashboards/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
 };
 
 export const handleDeleteMember = async ({ userId }: { userId: number }) => {
@@ -39,6 +47,11 @@ export const handleCancelInvitation = async (id: number, invitationId: number) =
 };
 
 export const getMyProfile = async () => {
-  const response = await instance.get(`/users/me`);
-  return response.data;
+  try {
+    const response = await instance.get(`/users/me`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
 };

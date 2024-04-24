@@ -4,13 +4,7 @@ import instance from '@/src/util/axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import {
-  getInvitees,
-  getMembers,
-  handleCancelInvitation,
-  handleDeleteDashboard,
-  handleDeleteMember,
-} from '@/src/pages/api/dashboardEditApi';
+import { getInvitees, getMembers, handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore, useMembersStore } from '@/src/util/zustand';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
@@ -55,25 +49,26 @@ const Dashboard = () => {
   // });
   const [invitees, setInvitees] = useState<Invitees>({ email: '' });
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
-  const [selectedColor, setSelectedColor] = useState<string>(dashboard.color);
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
 
   const fetchData = async () => {
-    if (id) {
+    if (idNumber) {
       const membersData = await getMembers(idNumber);
       const inviteesData = await getInvitees(idNumber);
       // const dashboardData = await getDashboard(idNumber);
       setMembers(membersData);
       setInvitees(inviteesData);
+      setSelectedColor(dashboard.color);
       // setDashboard(dashboardData);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id, router]);
 
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
@@ -83,6 +78,11 @@ const Dashboard = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleDeleteDashboard = async () => {
+    await instance.delete(`/dashboards/${idNumber}`);
+    router.push('/my-dashboard');
   };
 
   return (
@@ -99,12 +99,7 @@ const Dashboard = () => {
             labelId="text"
             labelText="대시보드 이름"
             type="text"
-            register={register('text', {
-              required: {
-                value: true,
-                message: '대시보드 이름을 입력해주세요',
-              },
-            })}
+            register={register('text', {})}
             inputCheckStyle="flex my-10"
             labelDropStyle="w-full"
           />
@@ -179,12 +174,7 @@ const Dashboard = () => {
             ))}
         </Table>
       </DashboardCard>
-      <Button
-        buttonType="dashboardDelete"
-        bgColor="white"
-        className="mt-25"
-        onClick={() => handleDeleteDashboard(idNumber)}
-      >
+      <Button buttonType="dashboardDelete" bgColor="white" className="mt-25" onClick={() => handleDeleteDashboard()}>
         대시보드 삭제하기
       </Button>
     </div>
