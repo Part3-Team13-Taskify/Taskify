@@ -38,7 +38,7 @@ const buttonClasses = {
   delete: 'w-84 h-32 rounded-4 text-14 font-medium mobile:w-52 mobile:h-28 mobile:text-12',
   // 컬럼 추가 버튼 : width-354px
   columnAdd:
-    'flex justify-center items-center gap-12 w-354 h-70 rounded-8 text-18 font-bold tablet:w-544 mobile:w-284 mobile:h-60 mobile:text-16',
+    'flex justify-center items-center gap-12 w-200 h-60 rounded-50 text-18 font-bold  tablet:w-60 tablet:h-60 mobile:text-16',
   // +아이콘만 있는 버튼 : width-314px
   add: 'flex justify-center items-center w-314 h-40 rounded-6 tablet:w-544 mobile:w-284 mobile:h-32',
   // 대시보드삭제 버튼 : width-320px
