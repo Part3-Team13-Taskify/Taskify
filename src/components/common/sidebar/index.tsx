@@ -3,8 +3,8 @@ import logo from '@/public/assets/logo/violetHeaderLogo.svg';
 import add from '@/public/assets/icon/addBox.svg';
 import mobileLogo from '@/public/assets/logo/violetHeaderMobileLogo.svg';
 import AddDashboardModal from '@/src/components/dashboardModal/addDashboardModal';
-import Link from 'next/link';
 import useModal from '@/src/hooks/useModal';
+import Link from 'next/link';
 import DashboardList from './DashboardList';
 import ModalPortal from '../modalPortal';
 
