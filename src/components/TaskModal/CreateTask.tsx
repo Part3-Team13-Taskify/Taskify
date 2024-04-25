@@ -183,7 +183,8 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           ></input>
         </TaskLabel>
         {/* TODO
-        이미지 업로드 구현 */}
+        이미지 업로드 구현
+        이미지 업로드 API 사용 */}
         <TaskLabel label="이미지">
           <label htmlFor="image" className="p-24 bg-gray-9f w-fit rounded-6">
             <Image src={add} width={28} height={28} alt="add image"></Image>
