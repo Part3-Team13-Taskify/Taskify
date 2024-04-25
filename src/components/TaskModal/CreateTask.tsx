@@ -150,6 +150,8 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             }}
           />
         </TaskLabel>
+        {/* TODO
+        Enter로 태그 구분 기능 고려 */}
         <TaskLabel htmlFor="tag" label="태그">
           {!!createData.tags.length && (
             <div className="flex flex-row gap-6">
