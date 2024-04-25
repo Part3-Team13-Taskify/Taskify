@@ -61,24 +61,25 @@ const Profile = () => {
   return (
     <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-full">
       <p className="font-bold text-20">프로필</p>
-      <div className="flex items-center justify-center mobile:flex-col">
-        <form className="w-366 tablet:w-290 mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            register={register('file', {})}
-            type="file"
-            inputName="file"
-            labelId="file"
-            focusType="file"
-            divCheckStyle="flex items-center justify-center w-182 h-182 mr-16 py-0"
-            inputCheckStyle="hidden"
-            labelDropStyle="flex flex-col items-center justify-center w-182 h-182 border-2 bg-gray-fa border-dashed rounded-6 cursor-pointerdark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          >
-            {temp === null ? (
-              <Image src={add} width={40} height={40} alt="add icon" />
-            ) : (
-              <Image src={temp} width={202} height={202} className="overflow-hidden rounded-6" alt="profile image" />
-            )}
-          </Input>
+
+      <form className="flex flex-row w-366 tablet:w-290 mobile:flex-col mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          register={register('file', {})}
+          type="file"
+          inputName="file"
+          labelId="file"
+          focusType="file"
+          divCheckStyle="flex items-center justify-center w-182 h-182 mr-16 py-0"
+          inputCheckStyle="hidden"
+          labelDropStyle="flex flex-col items-center justify-center w-182 h-182 border-2 bg-gray-fa border-dashed rounded-6 cursor-pointerdark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          {temp === null ? (
+            <Image src={add} width={40} height={40} alt="add icon" />
+          ) : (
+            <Image src={temp} width={202} height={202} className="overflow-hidden rounded-6" alt="profile image" />
+          )}
+        </Input>
+        <div>
           <Input
             register={register('email', {
               disabled: true,
@@ -126,8 +127,8 @@ const Profile = () => {
               저장
             </Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
