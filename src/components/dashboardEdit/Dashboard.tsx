@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import add from '@/public/assets/icon/addWhite.svg';
 import instance from '@/src/util/axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { getInvitees, getMembers, handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
-import { useDashboardStore, useMembersStore } from '@/src/util/zustand';
+import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
+import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -13,62 +13,19 @@ import TableHeader from './table/TableHeader';
 import TableList from './table/TableList';
 import DashboardCard from './DashboardCard';
 import Input, { InputForm } from '../common/input';
-
-// type DashboardData = {
-//   title: string;
-//   color: string;
-//   createdByMe: boolean;
-// };
-
-// type Members = {
-//   id: number;
-//   email: string;
-//   nickname: string;
-//   profileImageUrl: string;
-//   isOwner: boolean;
-//   userId: number;
-// };
-
-type Invitees = {
-  email: string;
-};
+import MembersPagination from './table/MembersPagination';
+import InviteePagination from './table/InviteePagination';
 
 const Dashboard = () => {
-  // const [dashboard, setDashboard] = useState<DashboardData>({ title: '', color: '', createdByMe: false });
   const dashboard = useDashboardStore((state) => state.dashboardData);
   const setDashboard = useDashboardStore((state) => state.setDashboardData);
   const members = useMembersStore((state) => state.membersData);
-  const setMembers = useMembersStore((state) => state.setMembersData);
-  // const [members, setMembers] = useState<Members>({
-  //   id: 0,
-  //   email: '',
-  //   nickname: '',
-  //   profileImageUrl: '',
-  //   isOwner: false,
-  //   userId: 0,
-  // });
-  const [invitees, setInvitees] = useState<Invitees>({ email: '' });
+  const invitees = useInviteesStore((state) => state.inviteesData);
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const [selectedColor, setSelectedColor] = useState<string>('');
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
-
-  const fetchData = async () => {
-    if (idNumber) {
-      const membersData = await getMembers(idNumber);
-      const inviteesData = await getInvitees(idNumber);
-      // const dashboardData = await getDashboard(idNumber);
-      setMembers(membersData);
-      setInvitees(inviteesData);
-      setSelectedColor(dashboard.color);
-      // setDashboard(dashboardData);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [id, router]);
 
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
@@ -118,15 +75,17 @@ const Dashboard = () => {
       </DashboardCard>
 
       <DashboardCard className="px-0 pb-0">
-        <TableHeader title="구성원" />
+        <TableHeader title="구성원">
+          <MembersPagination />
+        </TableHeader>
         <Table label="이름">
           {Array.isArray(members) &&
             members.map((member) => (
               <TableList
+                key={member.userId}
                 src={member.profileImageUrl}
                 text={member.nickname}
                 isOwner={member.isOwner}
-                key={member.userId}
                 button={
                   <Button
                     buttonType="delete"
@@ -144,6 +103,7 @@ const Dashboard = () => {
 
       <DashboardCard className="px-0 pb-0 relative">
         <TableHeader title="초대 내역">
+          <InviteePagination />
           <Button
             buttonType="modal1"
             bgColor="violet"
@@ -160,13 +120,14 @@ const Dashboard = () => {
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
               <TableList
+                key={invitee.invitee.id}
                 text={invitee.invitee.email}
                 button={
                   <Button
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleCancelInvitation(idNumber, invitee.dashboard.id)}
+                    onClick={() => handleCancelInvitation(idNumber, invitee.id)}
                   >
                     취소
                   </Button>

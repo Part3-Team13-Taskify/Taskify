@@ -1,19 +1,29 @@
 import instance from '@/src/util/axios';
 
-export const getMembers = async (id: number) => {
+export const getMembers = async (id: number, offset: number = 1) => {
   try {
-    const response = await instance.get(`/members?page=1&size=20&dashboardId=${id}`);
-    return response.data.members;
+    const response = await instance.get(`/members?page=${offset}&size=4&dashboardId=${id}`);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
   return null;
 };
 
-export const getInvitees = async (id: number) => {
+export const getTotalMembers = async (id: number) => {
   try {
-    const response = await instance.get(`/dashboards/${id}/invitations?page=1&size=10`);
-    return response.data.invitations;
+    const response = await instance.get(`/members?page=1&size=20&dashboardId=${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
+};
+
+export const getInvitees = async (id: number, offset: number = 1) => {
+  try {
+    const response = await instance.get(`/dashboards/${id}/invitations?page=${offset}&size=4`);
+    return response.data;
   } catch (error) {
     console.error(error);
   }

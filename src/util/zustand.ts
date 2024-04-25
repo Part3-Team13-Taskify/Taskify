@@ -35,6 +35,37 @@ export const useMembersStore = create<MembersStore>((set) => ({
   setMembersData: (data) => set(() => ({ membersData: data })),
 }));
 
+type TotalMembersStore = {
+  totalMembersData: MembersData[];
+  setTotalMembersData: (data: MembersData[]) => void;
+};
+
+export const useTotalMembersStore = create<TotalMembersStore>((set) => ({
+  totalMembersData: [],
+  setTotalMembersData: (data) => set(() => ({ totalMembersData: data })),
+}));
+
+type NestedInvitee = {
+  id: number;
+  email: string;
+  nickname: string;
+};
+
+type InviteesData = {
+  id: number;
+  invitee: NestedInvitee;
+};
+
+type InviteesStore = {
+  inviteesData: InviteesData[];
+  setInviteesData: (data: InviteesData[]) => void;
+};
+
+export const useInviteesStore = create<InviteesStore>((set) => ({
+  inviteesData: [],
+  setInviteesData: (data) => set(() => ({ inviteesData: data })),
+}));
+
 export interface Dashboard {
   id: number;
   title: string;

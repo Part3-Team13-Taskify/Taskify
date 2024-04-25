@@ -5,7 +5,7 @@ import { getDashboardList } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardListStore } from '@/src/util/zustand';
 import { useEffect, useState } from 'react';
 
-const Pagination = () => {
+const DashboardListPagination = () => {
   const [offset, setOffset] = useState(1);
   const itemsPerPage = 10;
   const [totalCount, setTotalCount] = useState(0);
@@ -50,4 +50,4 @@ const Pagination = () => {
   );
 };
 
-export default Pagination;
+export default DashboardListPagination;
