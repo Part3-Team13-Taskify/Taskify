@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
-import { ChangeEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
 import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
@@ -20,7 +20,7 @@ interface CreateData {
   title: string;
   description: string;
   dueDate?: string;
-  tags?: string[] | [];
+  tags: (string | undefined)[];
   imageUrl?: string;
 }
 
@@ -36,6 +36,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   if (!openModal) return null;
 
   const [memberData, setMemberData] = useState<Member[]>([]);
+  const [tagValue, setTagValue] = useState<string>();
   const [createData, setCreateData] = useState<CreateData>({
     dashboardId: dashboardId,
     columnId: columnId,
@@ -75,9 +76,24 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
-    setCreateData((prev) => {
-      return { ...prev, tags: tags.split(' ') };
-    });
+    setTagValue(tags);
+  };
+  const handleTagEnter: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    const tagInput = e.target as HTMLInputElement;
+    const tag = tagInput.value.trim();
+
+    if (e.key === 'Enter' && tag !== '' && !createData.tags.includes(tag)) {
+      createData.tags.push(tag);
+      return setTagValue('');
+    }
+    if (e.key === 'Enter' && createData.tags.includes(tag)) return alert('이미 존재하는 태그입니다');
+    if (e.key === 'Backspace' && tag === '') {
+      createData.tags.pop();
+      setCreateData((prev) => {
+        return { ...prev };
+      });
+    }
   };
 
   const handleCreateClick = async () => {
@@ -87,12 +103,11 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       handleModalClose();
     }
   };
-  console.log(createData.dueDate);
 
   return (
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
       <div className="text-24 font-bold">할 일 생성</div>
-      <form className="flex flex-col gap-32 overflow-y-auto">
+      <div className="flex flex-col gap-32 overflow-y-auto">
         {/* TODO
         담당자 프로필 UI 구현 */}
         <TaskLabel htmlFor="assignee" label="담당자">
@@ -143,12 +158,21 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         {/* TODO
         Enter로 태그 구분 기능 고려 */}
         <TaskLabel htmlFor="tag" label="태그">
+          {!!createData.tags.length && (
+            <div className="flex flex-row gap-4">
+              {createData.tags.map((tag) => {
+                return <div>{tag}</div>;
+              })}
+            </div>
+          )}
           <input
             id="tag"
             type="text"
             placeholder="입력 후 Enter"
+            value={tagValue}
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             onChange={handleTagChange}
+            onKeyUp={handleTagEnter}
           ></input>
         </TaskLabel>
         {/* TODO
@@ -158,7 +182,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             <Image src="/assets/icon/addViolet.svg" width={28} height={28} alt="add image"></Image>
           </button>
         </TaskLabel>
-      </form>
+      </div>
       <div className="flex flex-row-reverse gap-12">
         <Button
           buttonType="modal2"
