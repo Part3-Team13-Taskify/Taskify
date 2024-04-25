@@ -7,6 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
 import { format } from 'date-fns';
 import Chip from '../common/chip';
+import { useTotalMembersStore } from '@/src/util/zustand';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -46,16 +47,19 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     tags: [],
   });
 
+  const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+
   useEffect(() => {
-    const getMemberData = async (dashboardId: number) => {
-      try {
-        const res = await instance.get(`members?dashboardId=${dashboardId}`);
-        setMemberData(res.data.members);
-      } catch {
-        console.log('error');
-      }
-    };
-    getMemberData(dashboardId);
+    // const getMemberData = async (dashboardId: number) => {
+    //   try {
+    //     const res = await instance.get(`members?dashboardId=${dashboardId}`);
+    //     setMemberData(res.data.members);
+    //   } catch {
+    //     console.log('error');
+    //   }
+    // };
+    // getMemberData(dashboardId);
+    setMemberData(totalMembers);
   }, []);
 
   const isRequiredFilled = createData.description && createData.title;
