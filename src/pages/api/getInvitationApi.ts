@@ -33,9 +33,10 @@ interface InvitationsResponse {
   invitations: Invitation[];
 }
 
-export const fetchInvitations = async (size: number): Promise<InvitationsResponse> => {
+export const fetchInvitations = async (size: number, cursorId: number | null = null): Promise<InvitationsResponse> => {
+  const cursorQuery = cursorId ? `&cursorId=${cursorId}` : '';
   try {
-    const response = await axios.get<InvitationsResponse>(`invitations?size=${size}`);
+    const response = await axios.get<InvitationsResponse>(`invitations?size=${size}${cursorQuery}`);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
