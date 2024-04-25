@@ -1,22 +1,35 @@
 import { useState } from 'react';
-import { postColumns } from '@/src/api/columnsApi';
+import { postColumns } from '@/src/pages/api/columnsApi';
 import { useForm } from 'react-hook-form';
 
 import Button from '../../common/button';
 import Modal from '../../common/modal';
 import Input from '../../common/input';
 
+type Columns = {
+  id: number;
+  title: string;
+  teamId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 interface AddColumnModalProps {
   openModal: boolean;
   handleModalClose: () => void;
   dashboardId: number;
+  setColumnsList: React.Dispatch<React.SetStateAction<Columns[]>>;
 }
 
 interface InputForm {
   text: string;
 }
-
-const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalClose, dashboardId }) => {
+const AddColumnModal: React.FC<AddColumnModalProps> = ({
+  openModal,
+  handleModalClose,
+  dashboardId,
+  setColumnsList,
+}) => {
   const {
     register,
     handleSubmit, // handleSubmit 추가
@@ -42,7 +55,9 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
       setIsSubmitting(true);
 
       const columnData = { title: data.text, dashboardId: dashboardId };
-      await postColumns(columnData);
+      const response = await postColumns(columnData);
+      console.log(response);
+      setColumnsList((prevColumns) => [...prevColumns, response]);
 
       handleModalClose();
     } catch (error) {
@@ -70,7 +85,7 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({ openModal, handleModalC
           labelDropStyle="w-full text-18"
           inputCheckStyle="mb-28 mt-10 text-16 mobile:mb-24"
           inputName="text"
-          inputContent="새로운 프로젝트"
+          inputContent="새로운 컬럼"
           labelId="text"
           labelText="이름"
           type="text"
