@@ -9,6 +9,9 @@ import { format } from 'date-fns';
 import Chip from '../common/chip';
 import { useTotalMembersStore } from '@/src/util/zustand';
 
+import add from '@/public/assets/icon/addViolet.svg';
+import close from '@/public/assets/icon/close.svg';
+
 interface CreateTaskModalProps {
   openModal: boolean;
   handleModalClose: () => void;
@@ -23,7 +26,7 @@ interface CreateData {
   description: string;
   dueDate?: string;
   tags: (string | undefined)[];
-  imageUrl?: string;
+  imageUrl?: string | null;
 }
 
 type Member =
@@ -45,20 +48,12 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     title: '',
     description: '',
     tags: [],
+    imageUrl: undefined,
   });
 
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
 
   useEffect(() => {
-    // const getMemberData = async (dashboardId: number) => {
-    //   try {
-    //     const res = await instance.get(`members?dashboardId=${dashboardId}`);
-    //     setMemberData(res.data.members);
-    //   } catch {
-    //     console.log('error');
-    //   }
-    // };
-    // getMemberData(dashboardId);
     setMemberData(totalMembers);
   }, []);
 
@@ -98,6 +93,9 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         return { ...prev };
       });
     }
+  };
+  const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    console.log(e.target.value);
   };
 
   const handleCreateClick = async () => {
@@ -151,7 +149,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           라이브러리 폰트 크기 및 디자인 조정 */}
           <DateTimePicker
             label="날짜를 입력해 주세요"
-            className="w-full h-55"
+            className="w-full"
             onChange={(date) => {
               setCreateData((prev) => {
                 return { ...prev, dueDate: date ? format(date, 'yyyy-MM-dd HH:mm') : undefined };
@@ -174,7 +172,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
                         });
                       }}
                     >
-                      <Image src="/assets/icon/close.svg" width={14} height={14} alt="close"></Image>
+                      <Image src={close} alt="close"></Image>
                     </button>
                   </Chip>
                 );
@@ -193,10 +191,19 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         </TaskLabel>
         {/* TODO
         이미지 업로드 구현 */}
-        <TaskLabel htmlFor="image" label="이미지">
-          <button className="p-24 bg-gray-9f w-fit rounded-6">
-            <Image src="/assets/icon/addViolet.svg" width={28} height={28} alt="add image"></Image>
-          </button>
+        <TaskLabel label="이미지">
+          <label htmlFor="image" className="p-24 bg-gray-9f w-fit rounded-6">
+            <Image src={add} width={28} height={28} alt="add image"></Image>
+          </label>
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            className="w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f text-black-33 focus:outline-none  focus:border-violet"
+            hidden
+            name="이미지 등록"
+            onChange={handleImageChange}
+          ></input>
         </TaskLabel>
       </div>
       <div className="flex flex-row-reverse gap-12">

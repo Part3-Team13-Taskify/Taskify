@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 type Props = {
-  htmlFor: string;
+  htmlFor?: string;
   label: string;
   children: ReactNode;
   isRequired?: boolean;
