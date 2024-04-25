@@ -34,7 +34,7 @@ const Dashboard = () => {
   const hideAddDashboardModal = () => {
     setIsAddDashboardModalVisible(false);
   };
-
+  const removeInvitee = useInviteesStore((state) => state.removeInvitee);
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -136,7 +136,7 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleCancelInvitation(idNumber, invitee.id)}
+                    onClick={() => handleCancelInvitation(idNumber, invitee.id, removeInvitee)}
                   >
                     취소
                   </Button>

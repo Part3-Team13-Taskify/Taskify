@@ -48,9 +48,20 @@ export const handleDeleteMember = async ({ userId }: { userId: number }) => {
   }
 };
 
-export const handleCancelInvitation = async (id: number, invitationId: number) => {
+export const handleCancelInvitation = async (
+  id: number,
+  invitationId: number,
+  onInvitationCancelled: (invitationId: number) => void,
+) => {
+  const confirmDeletion = window.confirm('초대를 취소할까요?');
+  if (!confirmDeletion) {
+    return;
+  }
+
   try {
     await instance.delete(`/dashboards/${id}/invitations/${invitationId}`);
+    alert('초대를 취소했습니다.');
+    onInvitationCancelled(invitationId);
   } catch (error) {
     console.error(error);
   }
