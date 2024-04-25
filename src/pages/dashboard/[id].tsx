@@ -1,5 +1,5 @@
 import SideBar from '@/src/components/common/sidebar';
-import ColumnsList from '@/src/components/dashboard/ColumnsList';
+import ColumnsList from '@/src/components/dashboard/columnList';
 import Navigation from '@/src/components/common/navigation';
 
 const Dashboard = () => {
