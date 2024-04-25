@@ -9,6 +9,7 @@ import ScrollButton from '../scrollButton';
 import useModal from '@/src/hooks/useModal';
 import AddColumnButton from '../addColumnButton';
 import EditColumnButton from '../editColumnButton';
+import CreateTaskButton from '../createTaskButton';
 import CreateTask from '../../TaskModal/CreateTask';
 import ModalPortal from '../../common/modalPortal';
 
@@ -82,26 +83,7 @@ const ColumnsList: React.FC = () => {
                   setColumnsList={setColumnsList}
                 />
               </div>
-              <div>
-                <ModalPortal>
-                  <CreateTask
-                    openModal={createTaskModal}
-                    handleModalClose={createTaskModalClose}
-                    dashboardId={dashboardId}
-                    columnId={column.id}
-                  />
-                </ModalPortal>
-                <Button
-                  className="tablet:w-full mobile:w-full"
-                  buttonType="add"
-                  bgColor="white"
-                  textColor="black"
-                  type="button"
-                  onClick={createTaskModalOpen}
-                >
-                  <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
-                </Button>
-              </div>
+              <CreateTaskButton dashboardId={dashboardId} columnId={column.id} />
             </div>
           );
         })}
