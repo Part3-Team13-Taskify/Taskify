@@ -67,8 +67,6 @@ const InvitationDashboard = () => {
       {isAddDashboardModalVisible && (
         <AddDashboardModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
       )}
-<<<<<<< HEAD
-<<<<<<< HEAD
       <div className="w-1022 h-auto mx-40 my-40 py-32 rounded-lg bg-white tablet:w-screen tablet:h-400 mobile:mx-24 mobile:h-screen">
         <h1 className="self-start pl-28 text-24 font-bold mobile:text-20">초대받은 대시보드</h1>
         {invitations.length > 0 ? (
@@ -82,24 +80,6 @@ const InvitationDashboard = () => {
             <p className="text-18 font-normal text-gray-9f mobile:text-14">아직 초대받은 대시보드가 없어요</p>
           </div>
         )}
-<<<<<<< HEAD
-=======
-      <div className="w-1022 h-auto mx-40 my-40 py-32 rounded-lg  bg-white tablet:w-screen tablet:h-400 mobile:screen mobile:mx-24 mobile:h-screen">
-=======
-      <div className="w-1022 h-auto mx-40 my-40 py-32 rounded-lg bg-white tablet:w-screen tablet:h-400 mobile:mx-24 mobile:h-screen">
->>>>>>> d6d728a (✨ Feat: 초대목록조회 API 연결)
-        <h1 className="self-start pl-28 text-24 font-bold mobile:text-20">초대받은 대시보드</h1>
-        {/* <div className="flex flex-col items-center mt-66">
-          <Image src={unsubscribeEmail} alt="unsubscribeEmail " className="mb-24" />
-          <p className="text-18 font-normal text-gray-9f mobile:text-14">아직 초대받은 대시보드가 없어요</p>
-        </div> */}
-        <InvitationSearch />
-        <div className="">
-          <InvitationTable />
-        </div>
->>>>>>> 7577910 (✨ Feat: InvitationTable UI)
-=======
->>>>>>> b23c7a1 (✨ Feat: 초대목록 유무에 따라 UI 다르게)
       </div>
     </div>
   );
