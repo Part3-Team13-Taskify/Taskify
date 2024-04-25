@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
+import { useInviteesStore } from '@/src/util/zustand';
 import Button from '../common/button';
 import Modal from '../common/modal';
 import Input, { InputForm } from '../common/input';
@@ -25,15 +26,19 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
   const { id } = router.query;
-
+  const setInviteesData = useInviteesStore((state) => state.setInviteesData);
+  const invitees = useInviteesStore((state) => state.inviteesData);
   const handleInvite = async () => {
     const email = getValues('email') || '';
     try {
       const data = { email: email };
-      await instance.post(`/dashboards/${id}/invitations`, data);
+      const res = await instance.post(`/dashboards/${id}/invitations`, data);
+      const updatedInvitees = [res.data, ...invitees.slice(0, 3)];
+      setInviteesData(updatedInvitees);
       handleModalClose();
+      alert('초대 메일이 발송되었습니다.');
     } catch (error: any) {
-      if (error.response && error.response.status === 404) {
+      if (error.response && error.response.status !== 201) {
         setError('email', {
           type: 'server',
           message: `${error.response.data.message}`,
