@@ -26,7 +26,7 @@ interface CreateData {
   description: string;
   dueDate?: string;
   tags: (string | undefined)[];
-  imageUrl?: string;
+  imageUrl?: string | null;
 }
 
 type Member =
