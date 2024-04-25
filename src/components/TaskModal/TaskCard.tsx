@@ -21,8 +21,8 @@ interface TaskModalProps extends ModalProps {
   columnName: string;
 }
 
-interface TaskData {
-  assignee: {
+export interface TaskData {
+  assignee?: {
     id: number;
     nickname: string;
     profileImageUrl?: string;
@@ -94,14 +94,14 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
     };
   }, []);
 
-  if (!isPending)
+  if (!isPending && cardData)
     return (
       <Modal className="flex-shrink-0" openModal={openModal} handleModalClose={handleModalClose}>
         <div className="grid grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
           <div className="row-start-2 col-start-1 sm:row-start-1 text-24 font-semibold">{cardData?.title}</div>
           <div className="flex justify-end gap-24 row-start-1 col-start-2">
             <ModalPortal>
-              <EditTask openModal={editTaskModal} handleModalClose={editTaskModalClose} />
+              <EditTask cardData={cardData} openModal={editTaskModal} handleModalClose={editTaskModalClose} />
             </ModalPortal>
             {isDropdownOpen && (
               <div

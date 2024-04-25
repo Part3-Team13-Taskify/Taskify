@@ -18,7 +18,7 @@ interface CreateTaskModalProps {
   dashboardId: number;
   columnId: number;
 }
-interface CreateData {
+export interface CardData {
   assigneeUserId?: number;
   dashboardId: number;
   columnId: number;
@@ -29,7 +29,7 @@ interface CreateData {
   imageUrl?: string | null;
 }
 
-type Member =
+export type Member =
   | {
       nickname: string;
       profileImageUrl?: string;
@@ -42,7 +42,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
 
   const [memberData, setMemberData] = useState<Member[]>([]);
   const [tagValue, setTagValue] = useState<string>();
-  const [createData, setCreateData] = useState<CreateData>({
+  const [createData, setCreateData] = useState<CardData>({
     dashboardId: dashboardId,
     columnId: columnId,
     title: '',
