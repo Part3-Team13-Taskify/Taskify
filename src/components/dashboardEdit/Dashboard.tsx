@@ -15,6 +15,7 @@ import DashboardCard from './DashboardCard';
 import Input, { InputForm } from '../common/input';
 import MembersPagination from './table/MembersPagination';
 import InviteePagination from './table/InviteePagination';
+import InviteModal from '../InviteModal';
 
 const Dashboard = () => {
   const dashboard = useDashboardStore((state) => state.dashboardData);
@@ -26,6 +27,13 @@ const Dashboard = () => {
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
+  const [isAddDashboardModalVisible, setIsAddDashboardModalVisible] = useState(false);
+  const showAddDashboardModal = () => {
+    setIsAddDashboardModalVisible(true);
+  };
+  const hideAddDashboardModal = () => {
+    setIsAddDashboardModalVisible(false);
+  };
 
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
@@ -109,6 +117,7 @@ const Dashboard = () => {
             bgColor="violet"
             textColor="white"
             className="mobile:absolute mobile:right-20 mobile:top-90 w-105"
+            onClick={showAddDashboardModal}
           >
             <div className="flex gap-6 items-center justify-center ">
               <Image src={add} alt="add" />
@@ -120,7 +129,7 @@ const Dashboard = () => {
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
               <TableList
-                key={invitee.invitee.id}
+                key={invitee.id}
                 text={invitee.invitee.email}
                 button={
                   <Button
@@ -139,6 +148,9 @@ const Dashboard = () => {
       <Button buttonType="dashboardDelete" bgColor="white" className="mt-25" onClick={() => handleDeleteDashboard()}>
         대시보드 삭제하기
       </Button>
+      {isAddDashboardModalVisible && (
+        <InviteModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
+      )}
     </div>
   );
 };

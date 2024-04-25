@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
@@ -32,7 +32,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
       const data = { email: email };
       await instance.post(`/dashboards/${id}/invitations`, data);
       handleModalClose();
-    } catch (error) {
+    } catch (error: any) {
       if (error.response && error.response.status === 404) {
         setError('email', {
           type: 'server',
