@@ -8,8 +8,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getDashboard, getMyProfile } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore } from '@/src/util/zustand';
+import useModal from '@/src/hooks/useModal';
 import MyProfile from './MyProfile';
 import Members from './Members';
+import InviteModal from '../../InviteModal';
+import ModalPortal from '../modalPortal';
 
 type NavigationProps = {
   title?: string;
@@ -22,6 +25,7 @@ const Navigation = ({ title }: NavigationProps) => {
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
+  const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
 
   useEffect(() => {
     if (idNumber) getDashboard(idNumber).then((res) => setDashboardData(res));
@@ -51,12 +55,15 @@ const Navigation = ({ title }: NavigationProps) => {
           <div className="flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
               href={`/dashboard/${id}/edit`}
-              className=" flex gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7  mobile:text-14"
+              className=" flex gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7 mobile:text-14"
             >
               <Image className="mobile:hidden" src={setting} alt="setting" />
               <p>관리</p>
             </Link>
-            <div className=" flex flex-row gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7  mobile:text-14">
+            <div
+              onClick={inviteModalOpen}
+              className="cursor-pointer flex flex-row gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7 mobile:text-14"
+            >
               <Image className="mobile:hidden" src={addBox} alt="addBox" />
               <p>초대하기</p>
             </div>
@@ -104,6 +111,9 @@ const Navigation = ({ title }: NavigationProps) => {
           </div>
         </div>
       </div>
+      <ModalPortal>
+        <InviteModal openModal={inviteModal} handleModalClose={inviteModalClose} />
+      </ModalPortal>
     </header>
   );
 };

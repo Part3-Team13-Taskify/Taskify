@@ -30,7 +30,7 @@ const MembersPagination = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!idNumber) return;
     getMembers(idNumber, offset).then((res) => {
       setMembersData(res.members);
       setTotalCount(res.totalCount);

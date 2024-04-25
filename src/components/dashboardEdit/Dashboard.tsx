@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
+import useModal from '@/src/hooks/useModal';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -15,6 +16,8 @@ import DashboardCard from './DashboardCard';
 import Input, { InputForm } from '../common/input';
 import MembersPagination from './table/MembersPagination';
 import InviteePagination from './table/InviteePagination';
+import InviteModal from '../InviteModal';
+import ModalPortal from '../common/modalPortal';
 
 const Dashboard = () => {
   const dashboard = useDashboardStore((state) => state.dashboardData);
@@ -26,7 +29,9 @@ const Dashboard = () => {
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
-
+  const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
+  const removeInvitee = useInviteesStore((state) => state.removeInvitee);
+  const removeMember = useMembersStore((state) => state.removeMember);
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -38,7 +43,11 @@ const Dashboard = () => {
   };
 
   const handleDeleteDashboard = async () => {
+    const confirmDeletion = window.confirm('대시보드를 삭제할까요?');
+    if (!confirmDeletion) return;
+
     await instance.delete(`/dashboards/${idNumber}`);
+    alert('대시보드를 삭제했습니다.');
     router.push('/my-dashboard');
   };
 
@@ -91,7 +100,7 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleDeleteMember({ userId: member.userId })}
+                    onClick={() => handleDeleteMember(member.id, removeMember)}
                   >
                     삭제
                   </Button>
@@ -109,6 +118,7 @@ const Dashboard = () => {
             bgColor="violet"
             textColor="white"
             className="mobile:absolute mobile:right-20 mobile:top-90 w-105"
+            onClick={inviteModalOpen}
           >
             <div className="flex gap-6 items-center justify-center ">
               <Image src={add} alt="add" />
@@ -120,14 +130,14 @@ const Dashboard = () => {
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
               <TableList
-                key={invitee.invitee.id}
+                key={invitee.id}
                 text={invitee.invitee.email}
                 button={
                   <Button
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleCancelInvitation(idNumber, invitee.id)}
+                    onClick={() => handleCancelInvitation(idNumber, invitee.id, removeInvitee)}
                   >
                     취소
                   </Button>
@@ -139,6 +149,9 @@ const Dashboard = () => {
       <Button buttonType="dashboardDelete" bgColor="white" className="mt-25" onClick={() => handleDeleteDashboard()}>
         대시보드 삭제하기
       </Button>
+      <ModalPortal>
+        <InviteModal openModal={inviteModal} handleModalClose={inviteModalClose} />
+      </ModalPortal>
     </div>
   );
 };
