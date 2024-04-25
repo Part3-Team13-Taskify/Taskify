@@ -4,7 +4,6 @@ import Button from '../common/button';
 import { ChangeEventHandler, useState } from 'react';
 import Modal from '../common/modal';
 import { faker } from '@faker-js/faker';
-import { getRandomColor } from '@/faker';
 
 interface EditTaskModalProps {
   openModal: boolean;
@@ -58,7 +57,6 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose })
 
   return (
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
-      {' '}
       <div className="text-24 font-bold">할 일 생성</div>
       <form className="flex flex-col gap-32 overflow-y-auto">
         <div className="flex flex-row mobile:flex-col gap-16 mobile:gap-24">

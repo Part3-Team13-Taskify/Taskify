@@ -7,6 +7,7 @@ import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } fr
 import Modal from '../common/modal';
 import instance from '@/src/util/axios';
 import Chip from '../common/chip';
+import EditTaskButton from './EditTaskButton';
 
 interface ModalProps {
   openModal: boolean;
@@ -92,7 +93,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                 className="flex flex-col absolute border-1 rounded-6 p-6 text-14 font-normal bg-white top-65 right-95"
                 ref={dropdownRef}
               >
-                <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%">수정</button>
+                <EditTaskButton />
                 <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%">삭제</button>
               </div>
             )}
