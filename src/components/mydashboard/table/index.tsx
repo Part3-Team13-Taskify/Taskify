@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { fetchInvitations } from '@/src/pages/api/getInvitationApi';
+import { putInvitation } from '@/src/pages/api/putInvitationApi';
 import InvitationList from '@/src/components/mydashboard/table/InvitaionList';
 import Button from '@/src/components/common/button';
 
@@ -25,6 +26,23 @@ const InvitationTable = () => {
   const [loading, setLoading] = useState(false);
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
+
+  const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
+    try {
+      setLoading(true);
+      await putInvitation(invitationId, accept);
+
+      setInvitations((currentInvitations) =>
+        currentInvitations.map((invite) =>
+          invite.id === invitationId ? { ...invite, inviteAccepted: accept } : invite,
+        ),
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadInvitations = useCallback(
     async (initialLoad = false) => {
@@ -86,12 +104,22 @@ const InvitationTable = () => {
             nickname={invitation.dashboard.title}
             inviter={invitation.inviter.nickname}
             acceptButton={
-              <Button buttonType="decision" bgColor="violet" textColor="white">
+              <Button
+                buttonType="decision"
+                bgColor="violet"
+                textColor="white"
+                onClick={() => handleInvitationResponse(invitation.id, true)}
+              >
                 수락
               </Button>
             }
             rejectButton={
-              <Button buttonType="decision" textColor="violet" className="outline outline-1 outline-gray-d9">
+              <Button
+                buttonType="decision"
+                textColor="violet"
+                className="outline outline-1 outline-gray-d9"
+                onClick={() => handleInvitationResponse(invitation.id, false)}
+              >
                 거절
               </Button>
             }
