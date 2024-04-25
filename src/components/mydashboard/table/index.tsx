@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fetchInvitations } from '@/src/pages/api/getInvitationApi';
 import InvitationList from '@/src/components/mydashboard/table/InvitaionList';
 import Button from '@/src/components/common/button';
@@ -20,14 +20,57 @@ interface Invitation {
   dashboard: Dashboard;
 }
 
-export const InvitationTable = () => {
+const InvitationTable = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadInvitations = useCallback(
+    async (initialLoad = false) => {
+      if (loading && !initialLoad) return;
+
+      setLoading(true);
+      try {
+        const response = await fetchInvitations(10, cursorId);
+        setInvitations((prevInvitations) => [...prevInvitations, ...response.invitations]);
+        const newInvitations = initialLoad
+          ? response.invitations
+          : [
+              ...invitations.filter((inv) => response.invitations.every((newInv) => newInv.id !== inv.id)),
+              ...response.invitations,
+            ];
+        setInvitations(newInvitations);
+        setCursorId(response.cursorId);
+        setHasMore(response.invitations.length === 10);
+      } catch (error) {
+        console.error('Error fetching invitations:', error);
+      }
+      setLoading(false);
+    },
+    [cursorId, loading, invitations],
+  );
 
   useEffect(() => {
-    fetchInvitations(10)
-      .then((response) => setInvitations(response.invitations))
-      .catch((error) => console.error('Error fetching invitations:', error));
+    loadInvitations(true);
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight ||
+        loading ||
+        !hasMore
+      ) {
+        return;
+      }
+      loadInvitations();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loading, hasMore, loadInvitations]);
 
   return (
     <div>
@@ -39,6 +82,7 @@ export const InvitationTable = () => {
       <div className="flex flex-col overflow-y-scroll h-340 tablet:h-190 mobile:h-300">
         {invitations.map((invitation) => (
           <InvitationList
+            key={invitation.id}
             nickname={invitation.dashboard.title}
             inviter={invitation.inviter.nickname}
             acceptButton={
