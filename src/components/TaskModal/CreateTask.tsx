@@ -6,6 +6,7 @@ import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
 import { format } from 'date-fns';
+import Chip from '../common/chip';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -155,13 +156,11 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             }}
           />
         </TaskLabel>
-        {/* TODO
-        Enter로 태그 구분 기능 고려 */}
         <TaskLabel htmlFor="tag" label="태그">
           {!!createData.tags.length && (
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-6">
               {createData.tags.map((tag) => {
-                return <div>{tag}</div>;
+                return <Chip size="small">{tag}</Chip>;
               })}
             </div>
           )}
