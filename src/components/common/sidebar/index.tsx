@@ -3,6 +3,7 @@ import logo from '@/public/assets/logo/violetHeaderLogo.svg';
 import add from '@/public/assets/icon/addBox.svg';
 import mobileLogo from '@/public/assets/logo/violetHeaderMobileLogo.svg';
 import AddDashboardModal from '@/src/components/dashboardModal/addDashboardModal';
+import Link from 'next/link';
 import useModal from '@/src/hooks/useModal';
 import DashboardList from './DashboardList';
 import ModalPortal from '../modalPortal';
@@ -15,12 +16,14 @@ const SideBar = () => {
   } = useModal();
   return (
     <div className="top-0 left-0 w-300 h-screen border-1 bg-white pt-20 px-24 tablet:w-160 mobile:w-67">
-      <div className="w-109 mb-60 mobile:hidden">
-        <Image src={logo} alt="logo" />
-      </div>
-      <div className="hidden tabelt:hidden mobile:block w-24 ">
-        <Image src={mobileLogo} alt="mobile logo" />
-      </div>
+      <Link href="/my-dashboard">
+        <div className="w-109 mb-60 mobile:hidden">
+          <Image src={logo} alt="logo" />
+        </div>
+        <div className="hidden tabelt:hidden mobile:block w-24 ">
+          <Image src={mobileLogo} alt="mobile logo" />
+        </div>
+      </Link>
       <div className="flex justify-between">
         <p className="text-12 font-bold text-gray-78 mobile:hidden">Dash Boards</p>
         <Image
