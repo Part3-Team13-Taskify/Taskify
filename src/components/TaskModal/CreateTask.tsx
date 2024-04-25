@@ -80,15 +80,14 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     setTagValue(tags);
   };
   const handleTagEnter: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    e.preventDefault();
     const tagInput = e.target as HTMLInputElement;
     const tag = tagInput.value.trim();
 
-    if (e.key === 'Enter' && tag !== '' && !createData.tags.includes(tag)) {
+    if ((e.key === 'Enter' || e.key === ' ') && tag !== '' && !createData.tags.includes(tag)) {
       createData.tags.push(tag);
       return setTagValue('');
     }
-    if (e.key === 'Enter' && createData.tags.includes(tag)) return alert('이미 존재하는 태그입니다');
+    if ((e.key === 'Enter' || e.key === ' ') && createData.tags.includes(tag)) return alert('이미 존재하는 태그입니다');
     if (e.key === 'Backspace' && tag === '') {
       createData.tags.pop();
       setCreateData((prev) => {
@@ -160,7 +159,21 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           {!!createData.tags.length && (
             <div className="flex flex-row gap-6">
               {createData.tags.map((tag) => {
-                return <Chip size="small">{tag}</Chip>;
+                return (
+                  <Chip>
+                    {tag}
+                    <button
+                      onClick={() => {
+                        createData.tags.pop();
+                        setCreateData((prev) => {
+                          return { ...prev };
+                        });
+                      }}
+                    >
+                      <Image src="/assets/icon/close.svg" width={14} height={14} alt="close"></Image>
+                    </button>
+                  </Chip>
+                );
               })}
             </div>
           )}
