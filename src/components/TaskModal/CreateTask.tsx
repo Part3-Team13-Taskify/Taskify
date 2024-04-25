@@ -86,13 +86,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       createData.tags.push(tag);
       return setTagValue('');
     }
-    if ((e.key === 'Enter' || e.key === ' ') && createData.tags.includes(tag)) return alert('이미 존재하는 태그입니다');
-    if (e.key === 'Backspace' && tag === '') {
-      createData.tags.pop();
-      setCreateData((prev) => {
-        return { ...prev };
-      });
-    }
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     console.log(e.target.value);
@@ -157,8 +150,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             }}
           />
         </TaskLabel>
-        {/* TODO
-        Enter로 태그 구분 기능 고려 */}
         <TaskLabel htmlFor="tag" label="태그">
           {!!createData.tags.length && (
             <div className="flex flex-row gap-6">
@@ -174,7 +165,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
                         });
                       }}
                     >
-                      <Image src={close} alt="close"></Image>
+                      <Image src={close} width={14} height={14} alt="close"></Image>
                     </button>
                   </Chip>
                 );
