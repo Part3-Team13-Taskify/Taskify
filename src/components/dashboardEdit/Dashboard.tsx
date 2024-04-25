@@ -35,6 +35,7 @@ const Dashboard = () => {
     setIsAddDashboardModalVisible(false);
   };
   const removeInvitee = useInviteesStore((state) => state.removeInvitee);
+  const removeMember = useMembersStore((state) => state.removeMember);
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -99,7 +100,7 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleDeleteMember({ userId: member.userId })}
+                    onClick={() => handleDeleteMember(member.id, removeMember)}
                   >
                     삭제
                   </Button>

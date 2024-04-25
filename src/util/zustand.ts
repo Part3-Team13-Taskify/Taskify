@@ -28,11 +28,17 @@ type MembersData = {
 type MembersStore = {
   membersData: MembersData[];
   setMembersData: (data: MembersData[]) => void;
+  removeMember: (userId: number) => void;
 };
 
-export const useMembersStore = create<MembersStore>((set) => ({
+export const useMembersStore = create<MembersStore>((set, get) => ({
   membersData: [],
   setMembersData: (data) => set(() => ({ membersData: data })),
+  removeMember: (userId) => {
+    const currentMembers = get().membersData;
+    const updatedMembers = currentMembers.filter((member) => member.id !== userId);
+    set({ membersData: updatedMembers });
+  },
 }));
 
 type TotalMembersStore = {

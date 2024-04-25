@@ -40,9 +40,14 @@ export const getDashboard = async (id: number) => {
   return null;
 };
 
-export const handleDeleteMember = async ({ userId }: { userId: number }) => {
+export const handleDeleteMember = async (userId: number, onMemberDeletion: (userId: number) => void) => {
+  const confirmDeletion = window.confirm('멤버를 삭제할까요?');
+  if (!confirmDeletion) return;
+
   try {
     await instance.delete(`/members/${userId}`);
+    alert('멤버를 삭제했습니다.');
+    onMemberDeletion(userId);
   } catch (error) {
     console.error(error);
   }
@@ -54,9 +59,7 @@ export const handleCancelInvitation = async (
   onInvitationCancelled: (invitationId: number) => void,
 ) => {
   const confirmDeletion = window.confirm('초대를 취소할까요?');
-  if (!confirmDeletion) {
-    return;
-  }
+  if (!confirmDeletion) return;
 
   try {
     await instance.delete(`/dashboards/${id}/invitations/${invitationId}`);
