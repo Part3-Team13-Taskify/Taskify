@@ -21,8 +21,12 @@ interface Invitation {
   dashboard: Dashboard;
 }
 
-const InvitationTable = () => {
-  const [invitations, setInvitations] = useState<Invitation[]>([]);
+interface InvitationTableProps {
+  invitations: Invitation[]; // 초대 목록 배열
+  setInvitations: React.Dispatch<React.SetStateAction<Invitation[]>>; // 초대 목록 배열을 업데이트하는 함수
+}
+
+const InvitationTable: React.FC<InvitationTableProps> = ({ invitations, setInvitations }) => {
   const [loading, setLoading] = useState(false);
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
