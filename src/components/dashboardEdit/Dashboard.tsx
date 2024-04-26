@@ -127,6 +127,7 @@ const Dashboard = () => {
           </Button>
         </TableHeader>
         <Table label="이메일">
+          {invitees.length === 0 && <p className="text-center mb-50 text-gray-400">초대된 사용자가 없습니다.</p>}
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
               <TableList

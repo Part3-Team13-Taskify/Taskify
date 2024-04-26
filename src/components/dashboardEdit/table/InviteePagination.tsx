@@ -13,7 +13,7 @@ const InviteesPagination = () => {
   const [offset, setOffset] = useState(1);
   const itemsPerPage = 4;
   const [totalCount, setTotalCount] = useState(0);
-  const maxOffest = Math.ceil(totalCount / itemsPerPage);
+  const maxOffest = Math.ceil(totalCount / itemsPerPage) || 1;
 
   const setInviteesData = useInviteesStore((state) => state.setInviteesData);
   const handleNextPage = () => {
