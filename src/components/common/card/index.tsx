@@ -1,8 +1,9 @@
 import { FormatDate } from '@/src/util/dateFormat';
 import Image from 'next/image';
-import { CardType } from '../../dashboard/cardList';
 import Chip from '../chip';
-
+import { useCardId } from '@/src/util/zustand';
+import { MouseEventHandler } from 'react';
+import useModal from '@/src/hooks/useModal';
 /**
  * 카드 컴포넌트
  * @param src: 이미지 주소
@@ -10,22 +11,36 @@ import Chip from '../chip';
  * @param date: 날짜 별도의 변환 없이 string 형식으로 입력
  */
 const Card = ({
+  id,
   src,
   title,
   date,
   profile,
   tags,
+  onClick,
 }: {
+  id: number;
   src?: string;
   title: string;
   date?: string;
   profile?: string;
   tags: string[] | [];
+  onClick: MouseEventHandler<HTMLButtonElement>;
 }) => {
+  const setCardId = useCardId((state) => state.setCardId);
   const titleShort = title.length > 30 ? title.slice(0, 29) + '...' : title;
   const formattedDate = date ? FormatDate(date) : undefined;
+
+  const handleCardClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+    setCardId(id);
+    onClick(e);
+  };
+
   return (
-    <div className="max-w-450 md:max-w-full xl:max-w-450 rounded-6 py-16 px-16 border-1 border-gray-d9 bg-white hover:border-violet">
+    <button
+      onClick={handleCardClick}
+      className="text-left max-w-450 md:max-w-full xl:max-w-450 rounded-6 py-16 px-16 border-1 border-gray-d9 bg-white hover:border-violet"
+    >
       <div className="flex flex-col md:flex-row xl:flex-col justify:start gap-12">
         {!!src && (
           <Image
@@ -58,7 +73,7 @@ const Card = ({
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 

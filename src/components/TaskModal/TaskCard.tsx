@@ -12,6 +12,10 @@ import ModalPortal from '../common/modalPortal';
 import EditTask from './EditTask';
 import Button from '../common/button';
 
+import more from '@/public/assets/icon/moreVert.svg';
+import exit from '@/public/assets/icon/close.svg';
+import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
+
 interface ModalProps {
   openModal: boolean;
   handleModalClose: () => void;
@@ -120,10 +124,10 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
               </div>
             )}
             <button onClick={handleDropdownOpen}>
-              <Image src="assets/icon/moreVert.svg" width={28} height={28} alt="more" />
+              <Image src={more} alt="more" />
             </button>
             <button onClick={handleModalClose}>
-              <Image src="assets/icon/close.svg" width={28} height={28} alt="exit" />
+              <Image src={exit} alt="exit" />
             </button>
           </div>
         </div>
@@ -140,7 +144,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
               )}
             </div>
             <p className="text-14 font-normal">{cardData?.description}</p>
-            {!!cardData.imageUrl && <Image src={cardData.imageUrl} width={450} height={263} alt="Task Image" />}
+            {!!cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
             <div className="gap-24">
               <div className="flex flex-col relative">
                 <label htmlFor="reply" className="my-10">
@@ -191,7 +195,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                   <span className="text-12 font-semibold">담당자</span>
                   <div className="flex flex-row justify-start content-center gap-8">
                     <Image
-                      src={cardData?.assignee?.profileImageUrl || 'assets/chip/ellipseDefault.svg'}
+                      src={cardData?.assignee?.profileImageUrl || defaultProfile}
                       width={34}
                       height={34}
                       alt="profile"

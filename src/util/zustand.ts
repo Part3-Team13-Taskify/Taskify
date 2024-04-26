@@ -97,3 +97,13 @@ export const useDashboardListStore = create<DashboardListStore>((set) => ({
   dashboardList: [],
   setDashboardList: (dashboards) => set({ dashboardList: dashboards }),
 }));
+
+type CardId = {
+  cardId: number;
+  setCardId: (id: number) => void;
+};
+
+export const useCardId = create<CardId>((set) => ({
+  cardId: 0,
+  setCardId: (id) => set({ cardId: id }),
+}));

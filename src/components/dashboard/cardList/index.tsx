@@ -1,6 +1,10 @@
 import instance from '@/src/util/axios';
 import Card from '../../common/card';
 import { useEffect, useState } from 'react';
+import ModalPortal from '../../common/modalPortal';
+import { TaskCard } from '../../TaskModal/TaskCard';
+import useModal from '@/src/hooks/useModal';
+import { useCardId } from '@/src/util/zustand';
 
 export interface CardType {
   id: number;
@@ -30,23 +34,30 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
     const response = await instance.get(`cards?columnId=${columnId}`);
     setCards(response.data);
   };
+  const { openModal: taskModal, handleModalClose: TaskModalClose, handleModalOpen: TaskModalOpen } = useModal();
+  const cardId = useCardId((state) => state.cardId);
 
   useEffect(() => {
     getCardList();
   }, [columnId]);
-  console.log(cardList);
 
   return (
     <>
       {cardList?.cards.map((card) => {
         return (
           <>
+            <ModalPortal>
+              <TaskCard cardId={cardId} columnName={title} openModal={taskModal} handleModalClose={TaskModalClose} />
+            </ModalPortal>
             <Card
+              key={card.id}
+              id={card.id}
               src={card.imageUrl}
               profile={card.assignee?.profileImageUrl}
               title={title}
               date={card.dueDate}
               tags={card.tags}
+              onClick={TaskModalOpen}
             ></Card>
           </>
         );
