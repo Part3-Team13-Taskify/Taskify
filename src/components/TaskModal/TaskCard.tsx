@@ -10,6 +10,7 @@ import Chip from '../common/chip';
 import useModal from '@/src/hooks/useModal';
 import ModalPortal from '../common/modalPortal';
 import EditTask from './EditTask';
+import Button from '../common/button';
 
 interface ModalProps {
   openModal: boolean;
@@ -96,10 +97,14 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
 
   if (!isPending && cardData)
     return (
-      <Modal className="flex-shrink-0" openModal={openModal} handleModalClose={handleModalClose}>
-        <div className="grid grid-cols-2 grid-rows-2 sm:grid-rows-none justify-between">
-          <div className="row-start-2 col-start-1 sm:row-start-1 text-24 font-semibold">{cardData?.title}</div>
-          <div className="flex justify-end gap-24 row-start-1 col-start-2">
+      <Modal
+        className="flex-shrink-0 max-h-910 h-vh overflow-y-auto"
+        openModal={openModal}
+        handleModalClose={handleModalClose}
+      >
+        <div className="flex flex-row mobile:flex-col-reverse justify-between">
+          <div className="text-24 font-semibold">{cardData?.title}</div>
+          <div className="flex justify-end gap-24">
             <ModalPortal>
               <EditTask cardData={cardData} openModal={editTaskModal} handleModalClose={editTaskModalClose} />
             </ModalPortal>
@@ -122,7 +127,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
             </button>
           </div>
         </div>
-        <div className="flex flex-row gap-32">
+        <div className="flex flex-row gap-24 mobile:gap-16 mobile:flex-col-reverse">
           <div className="flex flex-col gap-16 max-w-450 mt-12">
             <div className="flex flex-row gap-12">
               <Chip dot={true}>{columnName}</Chip>
@@ -135,7 +140,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
               )}
             </div>
             <p className="text-14 font-normal">{cardData?.description}</p>
-            <Image src="assets/card/desktop/card_image1.svg" width={450} height={263} alt="Task Image" />
+            {!!cardData.imageUrl && <Image src={cardData.imageUrl} width={450} height={263} alt="Task Image" />}
             <div className="gap-24">
               <div className="flex flex-col relative">
                 <label htmlFor="reply" className="my-10">
@@ -147,8 +152,18 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                   placeholder="댓글 작성하기"
                   onChange={handleTextChange}
                 ></textarea>
+                <Button
+                  className="absolute bottom-12 right-12"
+                  buttonType="modal1"
+                  type="button"
+                  bgColor="white"
+                  textColor="violet"
+                  disabled={!!replyValue}
+                >
+                  입력
+                </Button>
                 <button
-                  className={`absolute bottom-12 right-12 border rounded-6 border-gray-df px-31 py-6 ${
+                  className={`absolute bottom-12 right-12 text-12 border rounded-6 border-gray-df px-31 py-6 ${
                     replyValue ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
                   }`}
                   disabled={!replyValue}
@@ -170,7 +185,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
             </div>
           </div>
           {(!!cardData?.assignee || !!cardData?.dueDate) && (
-            <div className="flex flex-col gap-6 border-1 border-gray-d9 rounded-8 w-200 max-h-160 p-16 min-w-180 my-16">
+            <div className="flex flex-col gap-6 border-1 border-gray-d9 rounded-8 w-200 mobile:w-full max-h-160 p-16 min-w-180 my-16">
               {!!cardData?.assignee && (
                 <>
                   <span className="text-12 font-semibold">담당자</span>
