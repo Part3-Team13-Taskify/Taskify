@@ -1,36 +1,52 @@
 import Image from 'next/image';
-import { RefObject } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import arrow from '@/public/assets/icon/arrow.svg';
 import arrowReverse from '@/public/assets/icon/arrowReverse.svg';
 import Button from '../../common/button';
 
 interface ScrollButtonProps {
   containerRef: RefObject<HTMLDivElement>;
-  //   columnsListLength: number;
 }
 
 const ScrollButton: React.FC<ScrollButtonProps> = ({ containerRef }) => {
-  //   const [showButton, setShowButton] = useState(false);
+  const [showLeftButton, setShowLeftButton] = useState(false);
+  const [showRightButton, setShowRightButton] = useState(false);
 
-  //   const checkScroll = () => {
-  //     const element = containerRef.current;
-  //     if (element) {
-  //       console.log(`scrollWidth: ${element.scrollWidth}, clientWidth: ${element.clientWidth}`);
-  //       setShowButton(element.scrollWidth > element.clientWidth + 1);
-  //     }
-  //   };
+  useEffect(() => {
+    const checkScroll = () => {
+      if (containerRef.current) {
+        const { scrollWidth, clientWidth, scrollLeft } = containerRef.current;
+        setShowLeftButton(scrollLeft > 0);
+        setShowRightButton(scrollLeft + clientWidth < scrollWidth);
+      }
+    };
 
-  //   useEffect(() => {
-  //     const timer = setTimeout(() => {
-  //       checkScroll();
-  //     }, 100); // Delay the check to allow layout to stabilize
+    const handleResize = () => {
+      checkScroll();
+    };
 
-  //     window.addEventListener('resize', checkScroll);
-  //     return () => {
-  //       clearTimeout(timer);
-  //       window.removeEventListener('resize', checkScroll);
-  //     };
-  //   }, [containerRef, columnsListLength]);
+    const handleScroll = () => {
+      checkScroll();
+    };
+
+    const observer = new MutationObserver(() => {
+      checkScroll();
+    });
+
+    if (containerRef.current) {
+      checkScroll();
+      observer.observe(containerRef.current, { attributes: true, childList: true, subtree: true });
+    }
+
+    window.addEventListener('resize', handleResize);
+    containerRef.current?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      containerRef.current?.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
+  }, [containerRef]);
 
   const scrollToRight = () => {
     if (containerRef.current) {
@@ -50,34 +66,36 @@ const ScrollButton: React.FC<ScrollButtonProps> = ({ containerRef }) => {
     }
   };
 
-  //   if (!showButton) return null;
-
   return (
     <>
-      <div className="fixed top-[50%] left-330 tablet:hidden">
-        <Button
-          className="w-40 h-40 hover:border-gray-78"
-          buttonType="columnAdd"
-          bgColor="white"
-          textColor="black"
-          type="button"
-          onClick={scrollToLeft}
-        >
-          <Image src={arrow} alt="arrow" />
-        </Button>
-      </div>
-      <div className="fixed top-[50%] right-30 tablet:hidden">
-        <Button
-          className="w-40 h-40 hover:border-gray-78"
-          buttonType="columnAdd"
-          bgColor="white"
-          textColor="black"
-          type="button"
-          onClick={scrollToRight}
-        >
-          <Image src={arrowReverse} alt="arrow" />
-        </Button>
-      </div>
+      {showLeftButton && (
+        <div className="fixed top-[50%] left-330 tablet:hidden">
+          <Button
+            className="w-40 h-40 hover:border-gray-78"
+            buttonType="columnAdd"
+            bgColor="white"
+            textColor="black"
+            type="button"
+            onClick={scrollToLeft}
+          >
+            <Image src={arrow} alt="arrow" />
+          </Button>
+        </div>
+      )}
+      {showRightButton && (
+        <div className="fixed top-[50%] right-30 tablet:hidden">
+          <Button
+            className="w-40 h-40 hover:border-gray-78"
+            buttonType="columnAdd"
+            bgColor="white"
+            textColor="black"
+            type="button"
+            onClick={scrollToRight}
+          >
+            <Image src={arrowReverse} alt="arrow" />
+          </Button>
+        </div>
+      )}
     </>
   );
 };

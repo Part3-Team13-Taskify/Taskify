@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { postColumns } from '@/src/pages/api/columnsApi';
 import { useForm } from 'react-hook-form';
-
+import { AxiosError } from 'axios';
 import Button from '../../common/button';
 import Modal from '../../common/modal';
 import Input from '../../common/input';
@@ -19,16 +19,23 @@ interface AddColumnModalProps {
   handleModalClose: () => void;
   dashboardId: number;
   setColumnsList: React.Dispatch<React.SetStateAction<Columns[]>>;
+  columnsList: Columns[];
 }
 
 interface InputForm {
   text: string;
 }
+
+interface ErrorResponse {
+  message: string;
+}
+
 const AddColumnModal: React.FC<AddColumnModalProps> = ({
   openModal,
   handleModalClose,
   dashboardId,
   setColumnsList,
+  columnsList,
 }) => {
   const {
     register,
@@ -36,7 +43,7 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({
     formState: { errors },
     watch,
     reset,
-    // setError,
+    setError,
     // clearErrors,
   } = useForm<InputForm>({ mode: 'onChange', reValidateMode: 'onChange' });
 
@@ -45,31 +52,45 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({
   // watch를 사용하여 입력 필드의 값을 실시간으로 확인
   const textValue = watch('text');
 
+  const handleCloseModal = () => {
+    reset();
+    handleModalClose();
+  };
   const onSubmit = async (data: InputForm) => {
     // 이미 요청 중인 경우 무시
     if (isSubmitting) {
       return;
     }
 
-    try {
-      setIsSubmitting(true);
+    // 컬럼 중복 체크
+    const isDuplicate = columnsList.some((column) => column.title === data.text);
+    if (isDuplicate) {
+      setError('text', {
+        type: 'manual',
+        message: '중복된 컬럼 이름입니다.',
+      });
+      return;
+    }
+    setIsSubmitting(true);
 
+    try {
       const columnData = { title: data.text, dashboardId: dashboardId };
       const response = await postColumns(columnData);
-      console.log(response);
       setColumnsList((prevColumns) => [...prevColumns, response]);
 
-      handleModalClose();
+      handleCloseModal();
     } catch (error) {
-      console.error('Failed to post columns data:', error);
+      // 컬럼 10개 초과시 에러메시지
+      const axiosError = error as AxiosError<ErrorResponse>;
+      if (axiosError.response && axiosError.response.status === 400) {
+        setError('text', {
+          type: 'manual',
+          message: axiosError.response.data.message,
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleCloseModal = () => {
-    reset();
-    handleModalClose();
   };
 
   if (!openModal) {
@@ -90,7 +111,7 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({
           labelText="이름"
           type="text"
           // clearError={clearErrors}
-          // error={errors.text}
+          error={errors.text}
           register={register('text', {
             required: {
               value: true,
@@ -98,6 +119,7 @@ const AddColumnModal: React.FC<AddColumnModalProps> = ({
             },
           })}
         />
+
         <div className="flex flex-row-reverse gap-12 mobile:gap-11">
           <Button
             type="submit"
