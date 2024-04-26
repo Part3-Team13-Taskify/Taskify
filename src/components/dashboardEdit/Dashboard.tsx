@@ -4,7 +4,7 @@ import instance from '@/src/util/axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
+import { handleCancelInvitation, handleDeleteMember, getInvitees } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
 import ColorPicker from '../common/colorpicker';
@@ -30,8 +30,9 @@ const Dashboard = () => {
   const { id } = router.query;
   const idNumber = Number(id);
   const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
-  const removeInvitee = useInviteesStore((state) => state.removeInvitee);
+  const setInviteesData = useInviteesStore((state) => state.setInviteesData);
   const removeMember = useMembersStore((state) => state.removeMember);
+  const offset = useInviteesStore((state) => state.offset);
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -49,6 +50,12 @@ const Dashboard = () => {
     await instance.delete(`/dashboards/${idNumber}`);
     alert('대시보드를 삭제했습니다.');
     router.push('/my-dashboard');
+  };
+
+  const handleRefetch = () => {
+    getInvitees(idNumber, offset).then((res) => {
+      setInviteesData(res.invitations);
+    });
   };
 
   return (
@@ -138,7 +145,9 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleCancelInvitation(idNumber, invitee.id, removeInvitee)}
+                    onClick={() => {
+                      handleCancelInvitation(idNumber, invitee.id).then(() => handleRefetch());
+                    }}
                   >
                     취소
                   </Button>

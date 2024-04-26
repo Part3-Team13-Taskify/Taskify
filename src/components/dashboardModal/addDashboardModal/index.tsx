@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
+import { useDashboardListStore } from '@/src/util/zustand';
 import Button from '../../common/button';
 import Modal from '../../common/modal';
 import ColorPicker from '../../common/colorpicker';
@@ -28,11 +29,16 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
   const router = useRouter();
   const textValue = watch('text');
 
+  const setDashboardList = useDashboardListStore((state) => state.setDashboardList);
+  const dashboardList = useDashboardListStore((state) => state.dashboardList);
   const handleCreateDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
       const data = { title: dashboardTitle, color: selectedColor };
-      await instance.post(`/dashboards/`, data).then((res) => router.push(`/dashboard/${res.data.id}`));
+      const res = await instance.post(`/dashboards/`, data);
+      router.push(`/dashboard/${res.data.id}`);
+      const updatedDashboardList = [res.data, ...dashboardList.slice(0, 9)];
+      setDashboardList(updatedDashboardList);
       handleModalClose();
     } catch (error) {
       console.error(error);

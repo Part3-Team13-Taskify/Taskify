@@ -1,27 +1,26 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { useDashboardListStore } from '@/src/util/zustand';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getDashboardList } from '@/src/pages/api/dashboardEditApi';
 import type { Dashboard } from '@/src/util/zustand';
 import DashboardListPagination from './DashboardListPagination';
 import DashboardListItem from './DashboardListItem';
 
 const DashboardList = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  // const router = useRouter();
+  // const { id } = router.query;
   const [selectedDashboard, setSelectedDashboard] = useState(0);
   const dashboardList = useDashboardListStore((state) => state.dashboardList);
   const setDashboardList = useDashboardListStore((state) => state.setDashboardList);
-  const handleClick = useCallback((dashboardId: number) => {
+  const handleClick = (dashboardId: number) => {
     setSelectedDashboard(dashboardId);
-  }, []);
+  };
 
   useEffect(() => {
     getDashboardList().then((res) => {
       setDashboardList([...res.dashboards]);
-      setSelectedDashboard(res.dashboards[0].id);
     });
-  }, [id]);
+  }, []);
 
   return (
     <div className="w-full h-45 flex my-16 flex-col mobile:gap-30 mobile:translate-x-4">

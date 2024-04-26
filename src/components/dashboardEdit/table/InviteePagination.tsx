@@ -10,7 +10,9 @@ const InviteesPagination = () => {
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
-  const [offset, setOffset] = useState(1);
+  // const [offset, setOffset] = useState(1);
+  const offset = useInviteesStore((state) => state.offset);
+  const setOffset = useInviteesStore((state) => state.setOffset);
   const itemsPerPage = 4;
   const [totalCount, setTotalCount] = useState(0);
   const maxOffest = Math.ceil(totalCount / itemsPerPage) || 1;
