@@ -17,7 +17,7 @@ const TableList = ({ src, text, button, isOwner }: TableListProps) => {
         {text}
         {isOwner && <Image src={crown} alt="crown" width={18} />}
       </div>
-      {button}
+      {!isOwner && button}
     </div>
   );
 };
