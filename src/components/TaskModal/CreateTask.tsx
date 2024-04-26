@@ -11,6 +11,7 @@ import { useTotalMembersStore } from '@/src/util/zustand';
 
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
+import { twMerge } from 'tailwind-merge';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -58,6 +59,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   }, []);
 
   const isRequiredFilled = createData.description && createData.title;
+  const imageBg = twMerge('z-10 p-24 w-fit rounded-6', createData.imageUrl ? '' : 'bg-gray-d9');
 
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCreateData((prev) => {
@@ -88,7 +90,20 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     }
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log(e.target.value);
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const imageDataUrl = event.target?.result as string;
+        const response = await instance.post(`columns/${columnId}/card-image`, imageDataUrl);
+        if (response.status === 201) {
+          setCreateData((prev) => {
+            return { ...prev, imageUrl: response.data.imageUrl };
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleCreateClick = async () => {
@@ -185,8 +200,8 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         {/* TODO
         이미지 업로드 구현
         이미지 업로드 API 사용 */}
-        <TaskLabel label="이미지">
-          <label htmlFor="image" className="p-24 bg-gray-9f w-fit rounded-6">
+        <TaskLabel label="이미지" divClass="relative">
+          <label htmlFor="image" className={imageBg}>
             <Image src={add} width={28} height={28} alt="add image"></Image>
           </label>
           <input
@@ -198,6 +213,15 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             name="이미지 등록"
             onChange={handleImageChange}
           ></input>
+          {!!createData.imageUrl && (
+            <Image
+              src={createData.imageUrl}
+              width={76}
+              height={76}
+              alt="이미지"
+              className="absolute rounded-6 w-76 h-76 opacity-70 top-1/2 -translate-y-1/4"
+            ></Image>
+          )}
         </TaskLabel>
       </div>
       <div className="flex flex-row-reverse gap-12">

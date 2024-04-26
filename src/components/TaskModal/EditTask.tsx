@@ -13,6 +13,8 @@ import { format } from 'date-fns';
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
 import Chip from '../common/chip';
+import instance from '@/src/util/axios';
+import { twMerge } from 'tailwind-merge';
 
 interface EditTaskModalProps {
   openModal: boolean;
@@ -35,6 +37,8 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
   });
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
   const isRequiredFilled = editData.title && editData.description;
+  const imageBg = twMerge('z-10 p-24 w-fit rounded-6', editData.imageUrl ? '' : 'bg-gray-d9');
+
   useEffect(() => {
     setMemberData(totalMembers);
   }, []);
@@ -73,7 +77,20 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     }
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log(e.target.value);
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const imageDataUrl = event.target?.result as string;
+        const response = await instance.post(`columns/${editData.columnId}/card-image`, imageDataUrl);
+        if (response.status === 201) {
+          setEditData((prev) => {
+            return { ...prev, imageUrl: response.data.imageUrl };
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
   // TODO
   // 수정 api 구현
@@ -83,7 +100,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
 
   return (
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
-      <div className="text-24 font-bold">할 일 생성</div>
+      <div className="text-24 font-bold">할 일 수정</div>
       <form className="flex flex-col gap-32 overflow-y-auto">
         <div className="flex flex-row mobile:flex-col gap-16 mobile:gap-24">
           <TaskLabel htmlFor="status" label="상태">
@@ -177,8 +194,8 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             onKeyUp={handleTagEnter}
           ></input>
         </TaskLabel>
-        <TaskLabel label="이미지">
-          <label htmlFor="image" className="p-24 bg-gray-9f w-fit rounded-6">
+        <TaskLabel label="이미지" divClass="relative">
+          <label htmlFor="image" className={imageBg}>
             <Image src={add} width={28} height={28} alt="add image"></Image>
           </label>
           <input
@@ -190,6 +207,15 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             name="이미지 등록"
             onChange={handleImageChange}
           ></input>
+          {!!editData.imageUrl && (
+            <Image
+              src={editData.imageUrl}
+              width={76}
+              height={76}
+              alt="이미지"
+              className="absolute rounded-6 w-76 h-76 opacity-70 top-1/2 -translate-y-1/4"
+            ></Image>
+          )}
         </TaskLabel>
       </form>
       <div className="flex flex-row-reverse gap-12">
