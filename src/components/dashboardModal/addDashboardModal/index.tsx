@@ -23,8 +23,10 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
     handleSubmit,
     formState: { errors },
     clearErrors,
+    watch,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
+  const textValue = watch('text');
 
   const handleCreateDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
@@ -70,6 +72,7 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
             bgColor="violet"
             textColor="white"
             type="submit"
+            disabled={!textValue}
             onClick={handleSubmit(handleCreateDashboard)}
           >
             생성

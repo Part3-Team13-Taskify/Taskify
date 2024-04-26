@@ -23,11 +23,14 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
     formState: { errors },
     setError,
     clearErrors,
+    watch,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
   const { id } = router.query;
   const setInviteesData = useInviteesStore((state) => state.setInviteesData);
   const invitees = useInviteesStore((state) => state.inviteesData);
+  const textValue = watch('email');
+
   const handleInvite = async () => {
     const email = getValues('email') || '';
     try {
@@ -83,6 +86,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
             textColor="white"
             type="submit"
             onClick={handleSubmit(handleInvite)}
+            disabled={!textValue || !!errors.email}
           >
             초대
           </Button>

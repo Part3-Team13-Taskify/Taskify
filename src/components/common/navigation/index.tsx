@@ -9,11 +9,12 @@ import { useRouter } from 'next/router';
 import { getDashboard, getMyProfile } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import MyProfile from './MyProfile';
 import Members from './Members';
 import InviteModal from '../../InviteModal';
 import ModalPortal from '../modalPortal';
-import Logout from './logout';
+import Dropdown from './Dropdown';
 
 type NavigationProps = {
   title?: string;
@@ -77,33 +78,20 @@ const Navigation = ({ title }: NavigationProps) => {
               <Image src={vector} alt="vector" />
             </>
           )}
-          <div role="none" onClick={toggle} onKeyDown={toggle} className="relative cursor-pointer">
+          <div
+            role="none"
+            onClick={toggle}
+            onKeyDown={toggle}
+            className="flex items-center gap-10 relative cursor-pointer"
+          >
             {myProfile && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
-            {dropDown && (
-              <nav className="absolute z-10 w-100 bg-white divide-y divide-gray-d9 rounded-lg shadow  dark:bg-black-4b dark:divide-gray-78 ">
-                <ul className="py-2 text-16 text-black-4b dark:text-gray-200">
-                  <li className=" hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white">
-                    <Logout />
-                  </li>
-                  <li>
-                    <Link
-                      href="/my-page"
-                      className="block px-10 py-2 hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white"
-                    >
-                      내 정보
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/my-dashboard"
-                      className="block px-10 py-2 hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white"
-                    >
-                      내 대시보드
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
+            {!dropDown ? (
+              <ChevronDownIcon className="w-20 h-20 text-gray-78" />
+            ) : (
+              <ChevronUpIcon className="w-20 h-20 text-gray-78" />
             )}
+
+            {dropDown && <Dropdown setDropDown={setDropDown} />}
           </div>
         </div>
       </div>
