@@ -37,7 +37,8 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
   });
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
   const isRequiredFilled = editData.title && editData.description;
-  const imageBg = twMerge('z-10 p-24 w-fit rounded-6', editData.imageUrl ? '' : 'bg-gray-d9');
+  const currentImage = editData.imageUrl || cardData.imageUrl;
+  const imageBg = twMerge('z-10 p-24 w-fit rounded-6', currentImage ? '' : 'bg-gray-d9');
 
   useEffect(() => {
     setMemberData(totalMembers);
@@ -92,10 +93,12 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       reader.readAsDataURL(file);
     }
   };
-  // TODO
-  // 수정 api 구현
   const handleEditClick = async () => {
-    console.log(editData);
+    const response = await instance.put(`cards/${cardData.id}`, editData);
+    if (response.status === 200) {
+      alert('수정 성공!');
+      handleModalClose();
+    }
   };
 
   return (
@@ -207,9 +210,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             name="이미지 등록"
             onChange={handleImageChange}
           ></input>
-          {!!editData.imageUrl && (
+          {!!currentImage && (
             <Image
-              src={editData.imageUrl}
+              src={currentImage}
               width={76}
               height={76}
               alt="이미지"
