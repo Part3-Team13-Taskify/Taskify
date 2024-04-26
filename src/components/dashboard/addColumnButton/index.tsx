@@ -16,9 +16,10 @@ type Columns = {
 interface AddColumnButtonProps {
   dashboardId: number;
   setColumnsList: React.Dispatch<React.SetStateAction<Columns[]>>;
+  columnsList: Columns[];
 }
 
-const AddColumnButton: React.FC<AddColumnButtonProps> = ({ dashboardId, setColumnsList }) => {
+const AddColumnButton: React.FC<AddColumnButtonProps> = ({ dashboardId, setColumnsList, columnsList }) => {
   const {
     openModal: addColumnModal,
     handleModalClose: addColumnModalClose,
@@ -32,6 +33,7 @@ const AddColumnButton: React.FC<AddColumnButtonProps> = ({ dashboardId, setColum
           handleModalClose={addColumnModalClose}
           dashboardId={dashboardId}
           setColumnsList={setColumnsList}
+          columnsList={columnsList}
         />
       </ModalPortal>
 
