@@ -4,9 +4,10 @@ import instance from '@/src/util/axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { handleCancelInvitation, handleDeleteMember, getInvitees } from '@/src/pages/api/dashboardEditApi';
+import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
 import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
+import useInvitees from '@/src/hooks/useInvitees';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -30,9 +31,8 @@ const Dashboard = () => {
   const { id } = router.query;
   const idNumber = Number(id);
   const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
-  const setInviteesData = useInviteesStore((state) => state.setInviteesData);
   const removeMember = useMembersStore((state) => state.removeMember);
-  const offset = useInviteesStore((state) => state.offset);
+  const { handleLoadInvitees } = useInvitees(idNumber);
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -50,12 +50,6 @@ const Dashboard = () => {
     await instance.delete(`/dashboards/${idNumber}`);
     alert('대시보드를 삭제했습니다.');
     router.push('/my-dashboard');
-  };
-
-  const handleRefetch = () => {
-    getInvitees(idNumber, offset).then((res) => {
-      setInviteesData(res.invitations);
-    });
   };
 
   return (
@@ -146,7 +140,7 @@ const Dashboard = () => {
                     textColor="violet"
                     bgColor="white"
                     onClick={() => {
-                      handleCancelInvitation(idNumber, invitee.id).then(() => handleRefetch());
+                      handleCancelInvitation(idNumber, invitee.id).then(() => handleLoadInvitees());
                     }}
                   >
                     취소

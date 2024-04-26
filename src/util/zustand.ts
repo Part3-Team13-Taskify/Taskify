@@ -67,20 +67,17 @@ type InviteesStore = {
   setInviteesData: (data: InviteesData[]) => void;
   offset: number;
   setOffset: (offset: number) => void;
-
-  // removeInvitee: (invitationId: number) => void;
+  maxOffset: number;
+  setMaxOffset: (maxOffset: number) => void;
 };
 
-export const useInviteesStore = create<InviteesStore>((set, get) => ({
+export const useInviteesStore = create<InviteesStore>((set) => ({
   inviteesData: [],
   setInviteesData: (data) => set(() => ({ inviteesData: data })),
-  // removeInvitee: (invitationId) => {
-  //   const currentInvitees = get().inviteesData;
-  //   const updatedInvitees = currentInvitees.filter((invitee) => invitee.id !== invitationId);
-  //   set({ inviteesData: updatedInvitees });
-  // },
   offset: 1,
   setOffset: (offset) => set({ offset }),
+  maxOffset: 1,
+  setMaxOffset: (maxOffset) => set({ maxOffset }),
 }));
 
 export interface Dashboard {

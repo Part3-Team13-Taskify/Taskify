@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
-import { useInviteesStore } from '@/src/util/zustand';
+import useInvitees from '@/src/hooks/useInvitees';
 import Button from '../common/button';
 import Modal from '../common/modal';
 import Input, { InputForm } from '../common/input';
@@ -31,13 +31,16 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
   const invitees = useInviteesStore((state) => state.inviteesData);
   const textValue = watch('email');
 
+  const idNumber = Number(id);
+  const { handleLoadInvitees } = useInvitees(idNumber);
+
   const handleInvite = async () => {
     const email = getValues('email') || '';
+    const resetOffset = 1;
     try {
       const data = { email: email };
-      const res = await instance.post(`/dashboards/${id}/invitations`, data);
-      const updatedInvitees = [res.data, ...invitees.slice(0, 3)];
-      setInviteesData(updatedInvitees);
+      await instance.post(`/dashboards/${id}/invitations`, data);
+      handleLoadInvitees(resetOffset);
       handleModalClose();
       alert('초대 메일이 발송되었습니다.');
     } catch (error: any) {
