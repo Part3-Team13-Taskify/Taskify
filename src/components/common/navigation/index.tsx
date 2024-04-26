@@ -13,6 +13,7 @@ import MyProfile from './MyProfile';
 import Members from './Members';
 import InviteModal from '../../InviteModal';
 import ModalPortal from '../modalPortal';
+import Logout from './logout';
 
 type NavigationProps = {
   title?: string;
@@ -81,13 +82,8 @@ const Navigation = ({ title }: NavigationProps) => {
             {dropDown && (
               <nav className="absolute z-10 w-100 bg-white divide-y divide-gray-d9 rounded-lg shadow  dark:bg-black-4b dark:divide-gray-78 ">
                 <ul className="py-2 text-16 text-black-4b dark:text-gray-200">
-                  <li>
-                    <Link
-                      href="/"
-                      className="block px-10 py-2 hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white"
-                    >
-                      로그아웃
-                    </Link>
+                  <li className=" hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white">
+                    <Logout />
                   </li>
                   <li>
                     <Link
