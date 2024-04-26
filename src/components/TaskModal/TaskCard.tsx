@@ -132,7 +132,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
           </div>
         </div>
         <div className="flex flex-row gap-24 mobile:gap-16 mobile:flex-col-reverse">
-          <div className="flex flex-col gap-16 max-w-450 mt-12">
+          <div className="flex flex-col gap-16 max-w-450 w-full mt-12">
             <div className="flex flex-row gap-12">
               <Chip dot={true}>{columnName}</Chip>
               {!!cardData?.tags?.length && (
@@ -189,9 +189,9 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
             </div>
           </div>
           {(!!cardData?.assignee || !!cardData?.dueDate) && (
-            <div className="flex flex-col gap-6 border-1 border-gray-d9 rounded-8 w-200 mobile:w-full max-h-160 p-16 min-w-180 my-16">
+            <div className="flex flex-col mobile:flex-row gap-10 border-1 border-gray-d9 rounded-8 max-w-200 mobile:max-w-none w-full max-h-160 p-16 min-w-180 my-16">
               {!!cardData?.assignee && (
-                <>
+                <div className="flex flex-col gap-6 mobile:w-1/2">
                   <span className="text-12 font-semibold">담당자</span>
                   <div className="flex flex-row justify-start content-center gap-8">
                     <Image
@@ -203,13 +203,13 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                     />
                     <span className="text-14 font-normal content-center">{cardData?.assignee?.nickname}</span>
                   </div>
-                </>
+                </div>
               )}
               {!!cardData?.dueDate && (
-                <>
+                <div className="flex flex-col gap-6 mobile:w-1/2">
                   <span className="text-12 font-semibold">마감일</span>
                   <span className="text-14 font-normal">{dueDate}</span>
-                </>
+                </div>
               )}
             </div>
           )}
