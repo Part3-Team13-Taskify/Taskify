@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRef, useEffect } from 'react';
+import Logout from './logout';
 
 const Dropdown = ({ setDropDown }: { setDropDown: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -22,9 +23,7 @@ const Dropdown = ({ setDropDown }: { setDropDown: React.Dispatch<React.SetStateA
     >
       <ul className="py-2 text-16 text-black-4b dark:text-gray-200">
         <li>
-          <Link href="/" className="block px-10 py-2 hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white">
-            로그아웃
-          </Link>
+          <Logout />
         </li>
         <li>
           <Link
