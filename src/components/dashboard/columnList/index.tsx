@@ -2,17 +2,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { getColumns } from '@/src/pages/api/columnsApi';
 import Image from 'next/image';
-import addLarge from '@/public/assets/chip/addLarge.svg';
-import Button from '@/src/components/common/button';
 import Violet from '@/public/assets/chip/ellipseVioletSmall.svg';
 import ScrollButton from '../scrollButton';
-import useModal from '@/src/hooks/useModal';
 import AddColumnButton from '../addColumnButton';
 import EditColumnButton from '../editColumnButton';
 import CreateTaskButton from '../createTaskButton';
-import CreateTask from '../../TaskModal/CreateTask';
-import ModalPortal from '../../common/modalPortal';
-
 type Columns = {
   id: number;
   title: string;
@@ -22,12 +16,6 @@ type Columns = {
 };
 
 const ColumnsList: React.FC = () => {
-  const {
-    openModal: createTaskModal,
-    handleModalClose: createTaskModalClose,
-    handleModalOpen: createTaskModalOpen,
-  } = useModal();
-
   const router = useRouter();
   const { id } = router.query;
   const dashboardId = Number(id);
