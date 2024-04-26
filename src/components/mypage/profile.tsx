@@ -48,14 +48,17 @@ const Profile = () => {
   // 버튼클릭시, 새 닉네임, 이미지 url 전달
   const onSubmit = async (data: InputForm) => {
     // 이미지 url전달(서버에 최종전달)
-    const formdata = new FormData();
-    if (data.file) {
+    if (data.file && data.file['length'] === 1) {
+      // data.file 키로 0, length가 있는데, 0은 url이므로 판별이 어려움
+      const formdata = new FormData();
       formdata.append('image', data.file[0]);
+      const response = await postMyPageProfile(formdata);
+      const putdata = { nickname: data.text, profileImageUrl: response.profileImageUrl };
+      putMyPageProfile(putdata);
+    } else {
+      const putdata = { nickname: data.text, profileImageUrl: data.file ? data.file : '' }; // nickname만 필요하지만 put은 전체 데이터를 요구
+      putMyPageProfile(putdata);
     }
-    const response = await postMyPageProfile(formdata);
-    const putdata = { nickname: data.text, profileImageUrl: response.profileImageUrl };
-    putMyPageProfile(putdata);
-    // 새 닉네임 , 새 url 전달
   };
 
   return (
