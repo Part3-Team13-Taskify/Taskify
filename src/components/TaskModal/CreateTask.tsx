@@ -1,11 +1,16 @@
 import Image from 'next/image';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
-import { ChangeEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
 import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
 import { format } from 'date-fns';
+import Chip from '../common/chip';
+import { useTotalMembersStore } from '@/src/util/zustand';
+
+import add from '@/public/assets/icon/addViolet.svg';
+import close from '@/public/assets/icon/close.svg';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -20,8 +25,8 @@ interface CreateData {
   title: string;
   description: string;
   dueDate?: string;
-  tags?: string[] | [];
-  imageUrl?: string;
+  tags: (string | undefined)[];
+  imageUrl?: string | null;
 }
 
 type Member =
@@ -36,24 +41,20 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   if (!openModal) return null;
 
   const [memberData, setMemberData] = useState<Member[]>([]);
+  const [tagValue, setTagValue] = useState<string>();
   const [createData, setCreateData] = useState<CreateData>({
     dashboardId: dashboardId,
     columnId: columnId,
     title: '',
     description: '',
     tags: [],
+    imageUrl: undefined,
   });
 
+  const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+
   useEffect(() => {
-    const getMemberData = async (dashboardId: number) => {
-      try {
-        const res = await instance.get(`members?dashboardId=${dashboardId}`);
-        setMemberData(res.data.members);
-      } catch {
-        console.log('error');
-      }
-    };
-    getMemberData(dashboardId);
+    setMemberData(totalMembers);
   }, []);
 
   const isRequiredFilled = createData.description && createData.title;
@@ -75,9 +76,19 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
-    setCreateData((prev) => {
-      return { ...prev, tags: tags.split(' ') };
-    });
+    setTagValue(tags);
+  };
+  const handleTagEnter: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    const tagInput = e.target as HTMLInputElement;
+    const tag = tagInput.value.trim();
+
+    if ((e.key === 'Enter' || e.key === ' ') && tag !== '' && !createData.tags.includes(tag)) {
+      createData.tags.push(tag);
+      return setTagValue('');
+    }
+  };
+  const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    console.log(e.target.value);
   };
 
   const handleCreateClick = async () => {
@@ -87,12 +98,11 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       handleModalClose();
     }
   };
-  console.log(createData.dueDate);
 
   return (
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
       <div className="text-24 font-bold">할 일 생성</div>
-      <form className="flex flex-col gap-32 overflow-y-auto">
+      <div className="flex flex-col gap-32 overflow-y-auto">
         {/* TODO
         담당자 프로필 UI 구현 */}
         <TaskLabel htmlFor="assignee" label="담당자">
@@ -132,7 +142,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           라이브러리 폰트 크기 및 디자인 조정 */}
           <DateTimePicker
             label="날짜를 입력해 주세요"
-            className="w-full h-55"
+            className="w-full"
             onChange={(date) => {
               setCreateData((prev) => {
                 return { ...prev, dueDate: date ? format(date, 'yyyy-MM-dd HH:mm') : undefined };
@@ -140,25 +150,55 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             }}
           />
         </TaskLabel>
-        {/* TODO
-        Enter로 태그 구분 기능 고려 */}
         <TaskLabel htmlFor="tag" label="태그">
+          {!!createData.tags.length && (
+            <div className="flex flex-row gap-6">
+              {createData.tags.map((tag) => {
+                return (
+                  <Chip>
+                    {tag}
+                    <button
+                      onClick={() => {
+                        createData.tags.pop();
+                        setCreateData((prev) => {
+                          return { ...prev };
+                        });
+                      }}
+                    >
+                      <Image src={close} width={14} height={14} alt="close"></Image>
+                    </button>
+                  </Chip>
+                );
+              })}
+            </div>
+          )}
           <input
             id="tag"
             type="text"
             placeholder="입력 후 Enter"
+            value={tagValue}
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             onChange={handleTagChange}
+            onKeyUp={handleTagEnter}
           ></input>
         </TaskLabel>
         {/* TODO
         이미지 업로드 구현 */}
-        <TaskLabel htmlFor="image" label="이미지">
-          <button className="p-24 bg-gray-9f w-fit rounded-6">
-            <Image src="/assets/icon/addViolet.svg" width={28} height={28} alt="add image"></Image>
-          </button>
+        <TaskLabel label="이미지">
+          <label htmlFor="image" className="p-24 bg-gray-9f w-fit rounded-6">
+            <Image src={add} width={28} height={28} alt="add image"></Image>
+          </label>
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            className="w-full h-50 py-15 px-16 border-1 rounded-lg border-gray-9f text-black-33 focus:outline-none  focus:border-violet"
+            hidden
+            name="이미지 등록"
+            onChange={handleImageChange}
+          ></input>
         </TaskLabel>
-      </form>
+      </div>
       <div className="flex flex-row-reverse gap-12">
         <Button
           buttonType="modal2"

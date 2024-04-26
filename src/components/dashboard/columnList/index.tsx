@@ -6,8 +6,12 @@ import addLarge from '@/public/assets/chip/addLarge.svg';
 import Button from '@/src/components/common/button';
 import Violet from '@/public/assets/chip/ellipseVioletSmall.svg';
 import ScrollButton from '../scrollButton';
+import useModal from '@/src/hooks/useModal';
 import AddColumnButton from '../addColumnButton';
 import EditColumnButton from '../editColumnButton';
+import CreateTaskButton from '../createTaskButton';
+import CreateTask from '../../TaskModal/CreateTask';
+import ModalPortal from '../../common/modalPortal';
 
 type Columns = {
   id: number;
@@ -18,6 +22,12 @@ type Columns = {
 };
 
 const ColumnsList: React.FC = () => {
+  const {
+    openModal: createTaskModal,
+    handleModalClose: createTaskModalClose,
+    handleModalOpen: createTaskModalOpen,
+  } = useModal();
+
   const router = useRouter();
   const { id } = router.query;
   const dashboardId = Number(id);
@@ -73,17 +83,7 @@ const ColumnsList: React.FC = () => {
                   setColumnsList={setColumnsList}
                 />
               </div>
-              <div>
-                <Button
-                  className="tablet:w-full mobile:w-full"
-                  buttonType="add"
-                  bgColor="white"
-                  textColor="black"
-                  type="button"
-                >
-                  <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
-                </Button>
-              </div>
+              <CreateTaskButton dashboardId={dashboardId} columnId={column.id} />
             </div>
           );
         })}
