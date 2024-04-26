@@ -8,7 +8,6 @@ interface ColumnData {
 export const postColumns = async (columnData: ColumnData) => {
   try {
     const response = await axios.post('columns', columnData);
-    console.log('Response data:', response.data);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
