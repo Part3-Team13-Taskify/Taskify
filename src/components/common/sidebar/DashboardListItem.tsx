@@ -14,19 +14,21 @@ const DashboardListItem = React.memo(({ data, handleClick, selectedDashboard }: 
   <Link href={`/dashboard/${data.id}`} key={data.id}>
     <div
       key={data.id}
-      className="flex my-6 rounded-4 items-center"
+      className="flex my-6 rounded-4 items-center justify-between "
       role="button"
       tabIndex={0}
       onClick={() => handleClick(data.id)}
     >
-      <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99 flex-shrink-0" />
-      <p
-        className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
-          data.id === selectedDashboard && ' text-violet'
-        }`}
-      >
-        {data.title}
-      </p>
+      <div className="flex items-center">
+        <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99 flex-shrink-0" />
+        <p
+          className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
+            data.id === selectedDashboard && ' text-violet'
+          }`}
+        >
+          {data.title}
+        </p>
+      </div>
       {data.createdByMe && <Image src={crown} alt="crown" width={18} className="-translate-y-1 mobile:hidden" />}
     </div>
   </Link>

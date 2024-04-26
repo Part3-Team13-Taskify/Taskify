@@ -1,19 +1,15 @@
-import SideBar from '@/src/components/common/sidebar';
 import InvitationDashboard from '@/src/components/mydashboard/InvitationDashboard';
 import Navigation from '@/src/components/common/navigation';
+import Layout from '@/src/components/common/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/src/pages/_app';
 
-const MyDashboard = () => {
-  return (
-    <div className="flex w-screen">
-      <SideBar />
-      <div className="flex flex-col flex-grow">
-        <Navigation title="내 대시보드" />
-        <div className="h-full bg-gray-fa">
-          <InvitationDashboard />
-        </div>
-      </div>
-    </div>
-  );
+const MyDashboard: NextPageWithLayout = () => {
+  return <InvitationDashboard />;
+};
+
+MyDashboard.getLayout = function getLayout(page: ReactElement) {
+  return <Layout navChildren={<Navigation title="내 대시보드" />}>{page}</Layout>;
 };
 
 export default MyDashboard;
