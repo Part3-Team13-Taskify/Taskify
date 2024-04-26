@@ -3,7 +3,7 @@ import axios from 'axios';
 
 interface profileProps {
   nickname: string | undefined;
-  profileImageUrl: string;
+  profileImageUrl?: string;
 }
 
 interface passwordCheckProps {
@@ -23,7 +23,7 @@ export const getMyPageProfile = async () => {
 
 export const postMyPageProfile = async (data: FormData) => {
   try {
-    const response = await instance.post(`users/me/image`, data);
+    const response = await instance.post('users/me/image', data);
     return response.data;
   } catch (error) {
     console.log(error);
