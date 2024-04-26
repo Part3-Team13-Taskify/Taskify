@@ -7,6 +7,7 @@ import ScrollButton from '../scrollButton';
 import AddColumnButton from '../addColumnButton';
 import EditColumnButton from '../editColumnButton';
 import CreateTaskButton from '../createTaskButton';
+import CardList from '../cardList';
 type Columns = {
   id: number;
   title: string;
@@ -47,30 +48,37 @@ const ColumnsList: React.FC = () => {
       >
         {/* {MOCK_DATA.map((dataGroup) =>
           dataGroup.dashboards.map((dashboard) => ( */}
-        {columnsList?.map((column) => (
-          <div
-            key={column.id}
-            className="w-354 h-full p-20 bg-gray-fa border-solid border-r-1 border-gray-ee tablet:w-full tablet:border-b-1 mobile:w-full"
-          >
-            <div className=" flex justify-between mb-25">
-              <div className="flex justify-center items-center">
-                <Image src={Violet} alt="컬럼 원 이미지" className="w-8 h-8 mr-8" />
-                <h3 className="text-18 font-bold mr-12 mobile:text-16">{column.title}</h3>
-                {/* <p className="flex justify-center items-center w-20 h-20 text-12 font-medium text-gray-78 bg-gray-ee rounded">
+        {columnsList?.map((column) => {
+          if (!column || !column.title) return null;
+          // console.log(column.title); // Log the column object
+          return (
+            <div
+              key={column.id}
+              className="w-354 h-full p-20 bg-gray-fa border-solid border-r-1 border-gray-ee tablet:w-full tablet:border-b-1 mobile:w-full"
+            >
+              <div className=" flex justify-between mb-25">
+                <div className="flex justify-center items-center">
+                  <Image src={Violet} alt="컬럼 원 이미지" className="w-8 h-8 mr-8" />
+                  <h3 className="text-18 font-bold mr-12 mobile:text-16">{column.title}</h3>
+                  {/* <p className="flex justify-center items-center w-20 h-20 text-12 font-medium text-gray-78 bg-gray-ee rounded">
               {dataGroup.totalCount}
             </p> */}
+                </div>
+                <EditColumnButton
+                  dashboardId={dashboardId}
+                  columnsTitle={column.title}
+                  columnId={column.id}
+                  columnsList={columnsList}
+                  setColumnsList={setColumnsList}
+                />
               </div>
-              <EditColumnButton
-                dashboardId={dashboardId}
-                columnsTitle={column.title}
-                columnId={column.id}
-                columnsList={columnsList}
-                setColumnsList={setColumnsList}
-              />
+              <div className="flex flex-col gap-16">
+                <CreateTaskButton dashboardId={dashboardId} columnId={column.id} />
+                <CardList columnId={column.id} title={column.title}></CardList>
+              </div>
             </div>
-            <CreateTaskButton dashboardId={dashboardId} columnId={column.id} />
-          </div>
-        ))}
+          );
+        })}
       </div>
       {/* )),
         )} */}

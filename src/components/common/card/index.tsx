@@ -1,5 +1,7 @@
 import { FormatDate } from '@/src/util/dateFormat';
 import Image from 'next/image';
+import { CardType } from '../../dashboard/cardList';
+import Chip from '../chip';
 
 /**
  * 카드 컴포넌트
@@ -7,9 +9,21 @@ import Image from 'next/image';
  * @param title: 제목 30자 이상 시 말줄임표
  * @param date: 날짜 별도의 변환 없이 string 형식으로 입력
  */
-const Card = ({ src, title, date, profile }: { src?: string; title: string; date: string; profile: string }) => {
+const Card = ({
+  src,
+  title,
+  date,
+  profile,
+  tags,
+}: {
+  src?: string;
+  title: string;
+  date?: string;
+  profile?: string;
+  tags: string[] | [];
+}) => {
   const titleShort = title.length > 30 ? title.slice(0, 29) + '...' : title;
-  const formattedDate = FormatDate(date);
+  const formattedDate = date ? FormatDate(date) : undefined;
   return (
     <div className="max-w-450 md:max-w-full xl:max-w-450 rounded-6 py-16 px-16 border-1 border-gray-d9 bg-white hover:border-violet">
       <div className="flex flex-col md:flex-row xl:flex-col justify:start gap-12">
@@ -25,16 +39,21 @@ const Card = ({ src, title, date, profile }: { src?: string; title: string; date
         <div className="w-full flex flex-col gap-10">
           <span className="text-black font-medium">{titleShort}</span>
           <div className="flex flex-col md:flex-row xl:flex-col gap-16 overflow-auto">
-            <div className="flex flex-row flex-none justify-start gap-6">
-              <Image src="assets/card/exampleChip/large1.svg" width={44} height={22} alt="chip" className="w-auto" />
-              <Image src="assets/card/exampleChip/large3.svg" width={44} height={22} alt="chip" className="w-auto" />
-            </div>
-            <div className="flex flex-row justify-between content-center w-full">
-              <div className="flex flex-row gap-6">
-                <Image src="assets/icon/calendar.svg" width={18} height={18} alt="date" className="inline-block" />
-                <span className="font-medium text-gray-78">{formattedDate}</span>
+            {tags.length !== 0 && (
+              <div className="flex flex-row flex-none justify-start gap-6">
+                {tags.map((tag) => {
+                  return <Chip>{tag}</Chip>;
+                })}
               </div>
-              <Image src={profile} width={24} height={24} alt="profileImg" />
+            )}
+            <div className="flex flex-row justify-between content-center w-full">
+              {!!formattedDate && (
+                <div className="flex flex-row gap-6">
+                  <Image src="/assets/icon/calendar.svg" width={18} height={18} alt="date" className="inline-block" />
+                  <span className="font-medium text-gray-78">{formattedDate}</span>
+                </div>
+              )}
+              {!!profile && <Image src={profile} width={24} height={24} alt="profileImg" />}
             </div>
           </div>
         </div>
