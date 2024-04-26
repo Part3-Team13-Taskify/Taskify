@@ -130,3 +130,13 @@ export const useMyProfileStore = create<ProfileStore>((set) => ({
   myProfile: { email: '', nickname: '', profileImageUrl: '' },
   setMyProfile: (data) => set({ myProfile: data }),
 }));
+
+type MyDashboardListStore = {
+  myDashboardList: Dashboard[];
+  setMyDashboardList: (dashboards: Dashboard[]) => void;
+};
+
+export const useMyDashboardListStore = create<MyDashboardListStore>((set) => ({
+  myDashboardList: [],
+  setMyDashboardList: (dashboards) => set({ myDashboardList: dashboards }),
+}));
