@@ -56,7 +56,7 @@ const Dashboard = () => {
       <DashboardCard>
         <div className="flex justify-between">
           <p className="font-bold text-20">{dashboard.title}</p>
-          <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
+          <ColorPicker selectedColor={dashboard.color} setSelectedColor={setSelectedColor} />
         </div>
         <form onSubmit={handleSubmit(handleEditDashboard)}>
           <Input
