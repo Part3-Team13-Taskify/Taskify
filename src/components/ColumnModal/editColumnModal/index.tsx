@@ -50,7 +50,7 @@ const EditColumnModal: React.FC<EditColumnModalProps> = ({
     formState: { errors },
     watch,
     reset,
-    // setError,
+    setError,
     // clearErrors,
   } = useForm<InputForm>({ mode: 'onChange', reValidateMode: 'onChange' });
 
@@ -62,6 +62,16 @@ const EditColumnModal: React.FC<EditColumnModalProps> = ({
   const onSubmit = async (data: InputForm) => {
     // 이미 요청 중인 경우 무시
     if (isSubmitting) {
+      return;
+    }
+
+    // 컬럼 중복 체크
+    const isDuplicate = columnsList.some((column) => column.title === data.text);
+    if (isDuplicate) {
+      setError('text', {
+        type: 'manual',
+        message: '중복된 컬럼 이름입니다.',
+      });
       return;
     }
 
@@ -106,8 +116,8 @@ const EditColumnModal: React.FC<EditColumnModalProps> = ({
           labelText="이름"
           type="text"
           defaultValue={columnsTitle}
+          error={errors.text}
           // clearError={clearErrors}
-          // error={errors.text}
           register={register('text', {
             required: {
               value: true,
