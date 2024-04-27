@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
-import { useDashboardListStore } from '@/src/util/zustand';
+// import { useDashboardListStore } from '@/src/util/zustand';
 import useDashboardList from '@/src/hooks/useDashboardList';
 import Button from '../../common/button';
 import Modal from '../../common/modal';
@@ -29,18 +29,20 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
   const textValue = watch('text');
-  const { setSelectedDashboard } = useDashboardList();
-  const setDashboardList = useDashboardListStore((state) => state.setDashboardListData);
-  const dashboardList = useDashboardListStore((state) => state.dashboardListData);
+  const { setSelectedDashboard, handleLoadDashboardList } = useDashboardList();
+  const resetOffset = 1;
+  // const setDashboardList = useDashboardListStore((state) => state.setDashboardListData);
+  // const dashboardList = useDashboardListStore((state) => state.dashboardListData);
   const handleCreateDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
       const data = { title: dashboardTitle, color: selectedColor };
       const res = await instance.post(`/dashboards/`, data);
       router.push(`/dashboard/${res.data.id}`);
-      const updatedDashboardList = [res.data, ...dashboardList.slice(0, 9)];
+      // const updatedDashboardList = [res.data, ...dashboardList.slice(0, 9)];
       setSelectedDashboard(res.data);
-      setDashboardList(updatedDashboardList);
+      // setDashboardList(updatedDashboardList);
+      handleLoadDashboardList(resetOffset);
       handleModalClose();
     } catch (error) {
       console.error(error);
