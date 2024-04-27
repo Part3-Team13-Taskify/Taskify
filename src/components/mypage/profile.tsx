@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { getMyPageProfile, postMyPageProfile, putMyPageProfile } from '@/src/pages/api/mypageApi';
 import Button from '../common/button';
 import Input from '../common/input';
+import SignModal from '../common/signModal';
 
 interface InputForm {
   text?: string;
@@ -35,6 +36,14 @@ const Profile = () => {
       return { email: response.email, text: response.nickname, file: response.profileImageUrl }; // 가져온 사용자 정보 확인용
     },
   });
+
+  const [open, setOpen] = useState(false);
+
+  const handleModal = () => {
+    // open이 true일때 모달이 열림
+    setOpen(!open);
+  };
+
   const imagefile = watch('file'); // watch를 통해서 input의 value를 가져옴 : 능동적으로 움직여야해서 getValue말고 watch를 씀
 
   // 이미지 미리보기(브라우저에 임시 전달)
@@ -47,15 +56,25 @@ const Profile = () => {
 
   // 버튼클릭시, 새 닉네임, 이미지 url 전달
   const onSubmit = async (data: InputForm) => {
-    // 이미지 url전달(서버에 최종전달)
-    const formdata = new FormData();
-    if (data.file) {
-      formdata.append('image', data.file[0]);
+    if (temp === null || temp === '') {
+      handleModal();
     }
-    const response = await postMyPageProfile(formdata);
-    const putdata = { nickname: data.text, profileImageUrl: response.profileImageUrl };
-    putMyPageProfile(putdata);
-    // 새 닉네임 , 새 url 전달
+    // 이미지 url전달(서버에 최종전달)
+    if (data.file && data.file['length'] === 1) {
+      // data.file 키로 0, length가 있는데, 0은 url이므로 판별이 어려움
+      const formdata = new FormData();
+      formdata.append('image', data.file[0]);
+      const response = await postMyPageProfile(formdata);
+      const putdata = { nickname: data.text, profileImageUrl: response.profileImageUrl };
+      putMyPageProfile(putdata);
+    } else {
+      const putdata = { nickname: data.text, profileImageUrl: data.file ? data.file : '' }; // nickname만 필요하지만 put은 전체 데이터를 요구
+      putMyPageProfile(putdata);
+    }
+  };
+
+  const handleBack = () => {
+    setTemp('');
   };
 
   return (
@@ -70,13 +89,21 @@ const Profile = () => {
           labelId="file"
           focusType="file"
           divCheckStyle="flex items-center justify-center w-182 h-182 mr-16 py-0"
-          inputCheckStyle="hidden"
-          labelDropStyle="flex flex-col items-center justify-center w-182 h-182 border-2 bg-gray-fa border-dashed rounded-6 cursor-pointerdark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          inputCheckStyle="hidden "
+          labelDropStyle="flex flex-col relative items-center justify-center w-182 h-182 border-2 bg-gray-fa border-dashed rounded-6 cursor-pointerdark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
         >
-          {temp === null ? (
+          {temp === null || temp === '' ? (
             <Image src={add} width={40} height={40} alt="add icon" />
           ) : (
-            <Image src={temp} width={202} height={202} className="overflow-hidden rounded-6" alt="profile image" />
+            <>
+              <Image src={temp} width={202} height={202} className="overflow-hidden rounded-6 " alt="profile image" />
+              <button
+                onClick={handleBack}
+                className="bg-violet w-25 h-25 border rounded-full text-white absolute -top-10 -left-10"
+              >
+                X
+              </button>
+            </>
           )}
         </Input>
         <div>
@@ -129,6 +156,7 @@ const Profile = () => {
           </div>
         </div>
       </form>
+      <SignModal errorText="이미지는 필수 요소입니다." openModal={open} handleModalClose={handleModal} />
     </div>
   );
 };
