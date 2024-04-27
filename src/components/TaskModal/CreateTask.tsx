@@ -91,11 +91,12 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0];
+    const formdata = new FormData();
     if (file) {
+      formdata.append('image', file);
       const reader = new FileReader();
-      reader.onload = async (event) => {
-        const imageDataUrl = event.target?.result as string;
-        const response = await instance.post(`columns/${columnId}/card-image`, imageDataUrl);
+      reader.onload = async () => {
+        const response = await instance.post(`columns/${createData.columnId}/card-image`, formdata);
         if (response.status === 201) {
           setCreateData((prev) => {
             return { ...prev, imageUrl: response.data.imageUrl };

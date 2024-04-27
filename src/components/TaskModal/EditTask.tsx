@@ -79,11 +79,12 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0];
+    const formdata = new FormData();
     if (file) {
+      formdata.append('image', file);
       const reader = new FileReader();
-      reader.onload = async (event) => {
-        const imageDataUrl = event.target?.result as string;
-        const response = await instance.post(`columns/${editData.columnId}/card-image`, imageDataUrl);
+      reader.onload = async () => {
+        const response = await instance.post(`columns/${editData.columnId}/card-image`, formdata);
         if (response.status === 201) {
           setEditData((prev) => {
             return { ...prev, imageUrl: response.data.imageUrl };
@@ -93,6 +94,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       reader.readAsDataURL(file);
     }
   };
+
   const handleEditClick = async () => {
     const response = await instance.put(`cards/${cardData.id}`, editData);
     if (response.status === 200) {
