@@ -13,7 +13,7 @@ const InviteesPagination = () => {
   return (
     <>
       <p className="mobile:text-12">
-        {maxOffset} 페이지 중 {offset}
+        {maxOffset || 1} 페이지 중 {offset}
       </p>
       <div className="flex">
         <div
