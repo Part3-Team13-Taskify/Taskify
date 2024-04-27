@@ -13,8 +13,10 @@ interface passwordCheckProps {
 
 export const getMyPageProfile = async () => {
   try {
-    const response = await instance.get('users/me');
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await instance.get('users/me');
+      return response.data;
+    }
   } catch (error) {
     console.log(error);
   }
@@ -23,8 +25,10 @@ export const getMyPageProfile = async () => {
 
 export const postMyPageProfile = async (data: FormData) => {
   try {
-    const response = await instance.post('users/me/image', data);
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await instance.post('users/me/image', data);
+      return response.data;
+    }
   } catch (error) {
     console.log(error);
   }
@@ -33,8 +37,10 @@ export const postMyPageProfile = async (data: FormData) => {
 
 export const putMyPageProfile = async (data: profileProps) => {
   try {
-    const response = await instance.put('users/me', data);
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await instance.put('users/me', data);
+      return response.data;
+    }
   } catch (error) {
     console.log(error);
   }
@@ -43,8 +49,10 @@ export const putMyPageProfile = async (data: profileProps) => {
 
 export const putMyPagePasswordChange = async (data: passwordCheckProps) => {
   try {
-    const response = await instance.put('auth/password', data);
-    return response;
+    if (localStorage.getItem('accessToken')) {
+      const response = await instance.put('auth/password', data);
+      return response;
+    }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       return error.response;

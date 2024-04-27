@@ -7,8 +7,10 @@ interface ColumnData {
 
 export const postColumns = async (columnData: ColumnData) => {
   try {
-    const response = await axios.post('columns', columnData);
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await axios.post('columns', columnData);
+      return response.data;
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error posting Columns data:', error.message);
@@ -21,8 +23,10 @@ export const postColumns = async (columnData: ColumnData) => {
 
 export const getColumns = async (dashboardId: number) => {
   try {
-    const response = await axios.get(`columns?dashboardId=${dashboardId}`);
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await axios.get(`columns?dashboardId=${dashboardId}`);
+      return response.data;
+    }
   } catch (error) {
     console.error('Error fetching columns', error);
     return [];
@@ -31,8 +35,10 @@ export const getColumns = async (dashboardId: number) => {
 
 export const putColumns = async (columnId: number | undefined, title: string) => {
   try {
-    const response = await axios.put(`columns/${columnId}`, { title: title });
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await axios.put(`columns/${columnId}`, { title: title });
+      return response.data;
+    }
   } catch (error) {
     console.error('Error putting Columns', error);
     throw error;
@@ -41,8 +47,10 @@ export const putColumns = async (columnId: number | undefined, title: string) =>
 
 export const deleteColumns = async (columnId: number | undefined) => {
   try {
-    const response = await axios.delete(`columns/${columnId}`);
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await axios.delete(`columns/${columnId}`);
+      return response.data;
+    }
   } catch (error) {
     console.error('Error deleting Columns', error);
     throw error;

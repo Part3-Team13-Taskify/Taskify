@@ -47,13 +47,13 @@ const Navigation = ({ title }: NavigationProps) => {
             <h2>{title}</h2>
           ) : (
             <div className="flex gap-4 items-center tablet:hidden mobile:hidden">
-              <h2>{dashboardData.title}</h2> {dashboardData.createdByMe && <Image src={crown} alt="crown" />}
+              <h2>{dashboardData?.title}</h2> {dashboardData?.createdByMe && <Image src={crown} alt="crown" />}
             </div>
           )}
         </div>
       </div>
       <div className={`flex gap-32 mobile:gap-12 ${!title && 'tablet:flex-grow tablet:justify-between'} `}>
-        {!title && dashboardData.createdByMe && (
+        {!title && dashboardData?.createdByMe && (
           <div className="flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
               href={`/dashboard/${id}/edit`}
@@ -84,7 +84,7 @@ const Navigation = ({ title }: NavigationProps) => {
             onKeyDown={toggle}
             className="flex items-center gap-10 relative cursor-pointer"
           >
-            {myProfile.nickname && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
+            {myProfile?.nickname && <MyProfile nickname={myProfile?.nickname} src={myProfile?.profileImageUrl} />}
             {!dropDown ? (
               <ChevronDownIcon className="w-20 h-20 text-gray-78" />
             ) : (
