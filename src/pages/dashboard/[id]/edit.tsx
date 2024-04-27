@@ -3,6 +3,7 @@ import DashboardEditContent from '@/src/components/dashboardEdit';
 import Layout from '@/src/components/common/layout';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/src/pages/_app';
+import withAuth from '@/src/components/common/hocs/withAuth';
 
 const DashboardEdit: NextPageWithLayout = () => {
   return <DashboardEditContent />;
@@ -12,4 +13,4 @@ DashboardEdit.getLayout = function getLayout(page: ReactElement) {
   return <Layout navChildren={<Navigation />}>{page}</Layout>;
 };
 
-export default DashboardEdit;
+export default withAuth(DashboardEdit);

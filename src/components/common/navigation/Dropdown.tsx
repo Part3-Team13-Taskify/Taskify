@@ -22,7 +22,7 @@ const Dropdown = ({ setDropDown }: { setDropDown: React.Dispatch<React.SetStateA
       className="absolute top-50 left-33 mobile:-left-29 mobile:top-45 w-100 bg-white divide-y divide-gray-d9 rounded-lg shadow  dark:bg-black-4b dark:divide-gray-78 "
     >
       <ul className="py-2 text-16 text-black-4b dark:text-gray-200">
-        <li>
+        <li className=" hover:bg-gray-d9 dark:hover:bg-gray-78 dark:hover:text-white">
           <Logout />
         </li>
         <li>

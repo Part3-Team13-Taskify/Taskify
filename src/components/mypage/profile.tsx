@@ -34,7 +34,7 @@ const Profile = () => {
       // defaultValues : form의 기본값을 정해줄수있음 -> 이용해서 이메일, 닉네임 전달해주기
       const response = await getMyPageProfile();
       setTemp(response.profileImageUrl); // 처음 서버에서 url을 받아서 브라우저 url에 넣어줌
-      return { email: response.email, text: response.nickname, file: response.profileImageUrl }; // 가져온 사용자 정보 확인용
+      return { email: response.email, text: response.nickname, file: temp }; // 가져온 사용자 정보 확인용
     },
   });
 
