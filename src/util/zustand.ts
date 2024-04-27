@@ -92,14 +92,32 @@ export interface Dashboard {
   userId: number;
 }
 
+export type SelectedDashboard = {
+  id: number;
+  title: string;
+  color: string;
+};
+
 type DashboardListStore = {
-  dashboardList: Dashboard[];
-  setDashboardList: (dashboards: Dashboard[]) => void;
+  dashboardListData: Dashboard[];
+  setDashboardListData: (data: Dashboard[]) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  maxOffset: number;
+  setMaxOffset: (maxOffset: number) => void;
+  selectedDashboard: SelectedDashboard;
+  setSelectedDashboard: (data: SelectedDashboard) => void;
 };
 
 export const useDashboardListStore = create<DashboardListStore>((set) => ({
-  dashboardList: [],
-  setDashboardList: (dashboards) => set({ dashboardList: dashboards }),
+  dashboardListData: [],
+  setDashboardListData: (data) => set({ dashboardListData: data }),
+  offset: 1,
+  setOffset: (offset) => set({ offset }),
+  maxOffset: 1,
+  setMaxOffset: (maxOffset) => set({ maxOffset }),
+  selectedDashboard: { id: 0, title: '', color: '' },
+  setSelectedDashboard: (data) => set({ selectedDashboard: data }),
 }));
 
 type CardId = {

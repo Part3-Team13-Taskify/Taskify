@@ -3,6 +3,7 @@ import { useForm, FieldError } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
 import { useDashboardListStore } from '@/src/util/zustand';
+import useDashboardList from '@/src/hooks/useDashboardList';
 import Button from '../../common/button';
 import Modal from '../../common/modal';
 import ColorPicker from '../../common/colorpicker';
@@ -28,9 +29,9 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
   const textValue = watch('text');
-
-  const setDashboardList = useDashboardListStore((state) => state.setDashboardList);
-  const dashboardList = useDashboardListStore((state) => state.dashboardList);
+  const { setSelectedDashboard } = useDashboardList();
+  const setDashboardList = useDashboardListStore((state) => state.setDashboardListData);
+  const dashboardList = useDashboardListStore((state) => state.dashboardListData);
   const handleCreateDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -38,6 +39,7 @@ const AddDashboardModal: React.FC<AddDashboardModalProps> = ({ openModal, handle
       const res = await instance.post(`/dashboards/`, data);
       router.push(`/dashboard/${res.data.id}`);
       const updatedDashboardList = [res.data, ...dashboardList.slice(0, 9)];
+      setSelectedDashboard(res.data);
       setDashboardList(updatedDashboardList);
       handleModalClose();
     } catch (error) {
