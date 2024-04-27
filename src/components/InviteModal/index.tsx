@@ -27,11 +27,10 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
   const { id } = router.query;
-  const setInviteesData = useInviteesStore((state) => state.setInviteesData);
-  const invitees = useInviteesStore((state) => state.inviteesData);
+  const idNumber = Number(id);
+
   const textValue = watch('email');
 
-  const idNumber = Number(id);
   const { handleLoadInvitees } = useInvitees(idNumber);
 
   const handleInvite = async () => {

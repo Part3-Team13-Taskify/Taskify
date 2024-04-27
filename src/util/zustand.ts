@@ -28,17 +28,19 @@ type MembersData = {
 type MembersStore = {
   membersData: MembersData[];
   setMembersData: (data: MembersData[]) => void;
-  removeMember: (userId: number) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  maxOffset: number;
+  setMaxOffset: (maxOffset: number) => void;
 };
 
-export const useMembersStore = create<MembersStore>((set, get) => ({
+export const useMembersStore = create<MembersStore>((set) => ({
   membersData: [],
   setMembersData: (data) => set(() => ({ membersData: data })),
-  removeMember: (userId) => {
-    const currentMembers = get().membersData;
-    const updatedMembers = currentMembers.filter((member) => member.id !== userId);
-    set({ membersData: updatedMembers });
-  },
+  offset: 1,
+  setOffset: (offset) => set({ offset }),
+  maxOffset: 1,
+  setMaxOffset: (maxOffset) => set({ maxOffset }),
 }));
 
 type TotalMembersStore = {

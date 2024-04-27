@@ -40,14 +40,13 @@ export const getDashboard = async (id: number) => {
   return null;
 };
 
-export const handleDeleteMember = async (userId: number, onMemberDeletion: (userId: number) => void) => {
+export const handleDeleteMember = async (userId: number) => {
   const confirmDeletion = window.confirm('멤버를 삭제할까요?');
   if (!confirmDeletion) return;
 
   try {
     await instance.delete(`/members/${userId}`);
     alert('멤버를 삭제했습니다.');
-    onMemberDeletion(userId);
   } catch (error) {
     console.error(error);
   }

@@ -8,6 +8,7 @@ import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dash
 import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
 import useInvitees from '@/src/hooks/useInvitees';
+import useMembers from '@/src/hooks/useMembers';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -31,8 +32,9 @@ const Dashboard = () => {
   const { id } = router.query;
   const idNumber = Number(id);
   const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
-  const removeMember = useMembersStore((state) => state.removeMember);
   const { handleLoadInvitees } = useInvitees(idNumber);
+  const { handleLoadMembers } = useMembers(idNumber);
+
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
@@ -101,7 +103,7 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleDeleteMember(member.id, removeMember)}
+                    onClick={() => handleDeleteMember(member.id).then(() => handleLoadMembers())}
                   >
                     삭제
                   </Button>
