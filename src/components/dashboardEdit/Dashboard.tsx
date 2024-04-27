@@ -5,10 +5,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
-import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
+import { useDashboardListStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
 import useInvitees from '@/src/hooks/useInvitees';
 import useMembers from '@/src/hooks/useMembers';
+import useDashboardList from '@/src/hooks/useDashboardList';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -22,24 +23,26 @@ import InviteModal from '../InviteModal';
 import ModalPortal from '../common/modalPortal';
 
 const Dashboard = () => {
-  const dashboard = useDashboardStore((state) => state.dashboardData);
-  const setDashboard = useDashboardStore((state) => state.setDashboardData);
+  const selectedDashboard = useDashboardListStore((state) => state.selectedDashboard);
+  const setSelectedDashboard = useDashboardListStore((state) => state.setSelectedDashboard);
   const members = useMembersStore((state) => state.membersData);
   const invitees = useInviteesStore((state) => state.inviteesData);
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
-  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>(selectedDashboard.color);
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
   const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
   const { handleLoadInvitees } = useInvitees(idNumber);
   const { handleLoadMembers } = useMembers(idNumber);
+  const { handleLoadDashboardList } = useDashboardList();
 
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
       const data = { title: dashboardTitle, color: selectedColor };
-      await instance.put(`/dashboards/${idNumber}`, data).then((res) => setDashboard(res.data));
+      await instance.put(`/dashboards/${idNumber}`, data).then((res) => setSelectedDashboard(res.data));
+      handleLoadDashboardList();
     } catch (error) {
       console.error(error);
     }
@@ -58,13 +61,13 @@ const Dashboard = () => {
     <div className="flex flex-col gap-25 tablet:gap-12">
       <DashboardCard>
         <div className="flex justify-between">
-          <p className="font-bold text-20">{dashboard.title}</p>
-          <ColorPicker selectedColor={dashboard.color} setSelectedColor={setSelectedColor} />
+          <p className="font-bold text-20">{selectedDashboard.title}</p>
+          <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
         </div>
         <form onSubmit={handleSubmit(handleEditDashboard)}>
           <Input
             inputName="text"
-            inputContent={dashboard.title}
+            inputContent={selectedDashboard.title}
             labelId="text"
             labelText="대시보드 이름"
             type="text"
