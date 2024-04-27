@@ -1,9 +1,10 @@
-import { useTotalMembersStore } from '@/src/util/zustand';
+import { useTotalMembersStore, useMembersStore } from '@/src/util/zustand';
 import Image from 'next/image';
 import useWindowSize from '@/src/hooks/useWindowSize';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { getTotalMembers } from '@/src/pages/api/dashboardEditApi';
+import InitialImage from './InitialImage';
 
 const Members = () => {
   const { width } = useWindowSize();
@@ -15,20 +16,23 @@ const Members = () => {
   const visibleCount = width <= 1199 ? 2 : 4;
   const visibleMembers = totalMembers.slice(0, visibleCount);
   const remainingCount = totalMembers.length - visibleMembers.length;
+  const members = useMembersStore((state) => state.membersData);
 
   useEffect(() => {
     if (!idNumber) return;
     getTotalMembers(idNumber).then((res) => {
       setTotalMembersData(res.members);
     });
-  }, [idNumber]);
+  }, [idNumber, members]);
 
   return (
-    <div className="flex gap-0">
+    <div className="flex">
       {visibleMembers.map((member) => (
-        <div className="border-2 rounded-99 -ml-8" key={member.id}>
-          {member.profileImageUrl && (
-            <Image src={member.profileImageUrl} alt="profile" width={30} height={30} className="rounded-99 " />
+        <div key={member.id}>
+          {member.profileImageUrl ? (
+            <Image src={member.profileImageUrl} alt="profile" width={30} height={30} className="border-2 rounded-99 " />
+          ) : (
+            <InitialImage nickname={member.nickname} className="-ml-8" />
           )}
         </div>
       ))}
