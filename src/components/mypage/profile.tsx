@@ -3,6 +3,7 @@ import Image from 'next/image';
 import add from '@/public/assets/icon/addViolet.svg';
 import { useEffect, useState } from 'react';
 import { getMyPageProfile, postMyPageProfile, putMyPageProfile } from '@/src/pages/api/mypageApi';
+import { useMyProfileStore } from '@/src/util/zustand';
 import Button from '../common/button';
 import Input from '../common/input';
 import SignModal from '../common/signModal';
@@ -19,7 +20,7 @@ interface InputForm {
 
 const Profile = () => {
   const [temp, setTemp] = useState(''); // 이미지 url이 담김
-
+  const setMyProfile = useMyProfileStore((state) => state.setMyProfile);
   const {
     register,
     handleSubmit,
@@ -60,16 +61,18 @@ const Profile = () => {
       handleModal();
     }
     // 이미지 url전달(서버에 최종전달)
-    if (data.file && data.file['length'] === 1) {
+    if (data.file && data.file.length === 1) {
       // data.file 키로 0, length가 있는데, 0은 url이므로 판별이 어려움
       const formdata = new FormData();
       formdata.append('image', data.file[0]);
       const response = await postMyPageProfile(formdata);
       const putdata = { nickname: data.text, profileImageUrl: response.profileImageUrl };
-      putMyPageProfile(putdata);
+      const updatedMyProfile = await putMyPageProfile(putdata);
+      setMyProfile(updatedMyProfile);
     } else {
       const putdata = { nickname: data.text, profileImageUrl: data.file ? data.file : '' }; // nickname만 필요하지만 put은 전체 데이터를 요구
-      putMyPageProfile(putdata);
+      const updatedMyProfile = await putMyPageProfile(putdata);
+      setMyProfile(updatedMyProfile);
     }
   };
 
