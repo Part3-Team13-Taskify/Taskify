@@ -84,7 +84,7 @@ const Navigation = ({ title }: NavigationProps) => {
             onKeyDown={toggle}
             className="flex items-center gap-10 relative cursor-pointer"
           >
-            {myProfile && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
+            {myProfile.nickname && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
             {!dropDown ? (
               <ChevronDownIcon className="w-20 h-20 text-gray-78" />
             ) : (

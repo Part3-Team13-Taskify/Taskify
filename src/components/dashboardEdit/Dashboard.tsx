@@ -55,6 +55,7 @@ const Dashboard = () => {
     await instance.delete(`/dashboards/${idNumber}`);
     alert('대시보드를 삭제했습니다.');
     router.push('/my-dashboard');
+    handleLoadDashboardList();
   };
 
   return (
