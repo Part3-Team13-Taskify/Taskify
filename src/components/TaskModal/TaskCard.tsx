@@ -73,7 +73,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
       }
     };
     getTaskData();
-  }, []);
+  }, [editTaskModal]);
 
   const dueDate = cardData?.dueDate ? format(new Date(cardData.dueDate).toLocaleString('en-US'), 'yyyy.MM.dd') : '';
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -144,7 +144,9 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
               )}
             </div>
             <p className="text-14 font-normal">{cardData?.description}</p>
-            {!!cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
+            {!!cardData.imageUrl && (
+              <Image className="rounded-6 h-auto" src={cardData.imageUrl} width={450} height={450} alt="Task Image" />
+            )}
             <div className="gap-24">
               <div className="flex flex-col relative">
                 <label htmlFor="reply" className="my-10">
