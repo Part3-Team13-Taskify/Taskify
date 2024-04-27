@@ -43,12 +43,12 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
 
   return (
     <>
+      <ModalPortal>
+        <TaskCard cardId={cardId} columnName={title} openModal={taskModal} handleModalClose={TaskModalClose} />
+      </ModalPortal>
       {cardList?.cards.map((card) => {
         return (
           <>
-            <ModalPortal>
-              <TaskCard cardId={cardId} columnName={title} openModal={taskModal} handleModalClose={TaskModalClose} />
-            </ModalPortal>
             <Card
               key={card.id}
               id={card.id}
