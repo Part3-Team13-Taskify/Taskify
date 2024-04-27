@@ -10,8 +10,9 @@ type ColorPickerProps = {
 };
 
 const ColorPicker = ({ selectedColor, setSelectedColor, modal }: ColorPickerProps) => {
-  const handleSelectColor = (e: React.MouseEvent<HTMLDivElement>, color: string) => {
+  const handleSelectColor = (color: string) => {
     setSelectedColor(color);
+    console.log(selectedColor);
   };
 
   return (
@@ -23,7 +24,7 @@ const ColorPicker = ({ selectedColor, setSelectedColor, modal }: ColorPickerProp
               key={color}
               className="relative w-30 h-30 rounded-99 cursor-pointer mobile:w-28 mobile:h-28"
               style={{ backgroundColor: color }}
-              onClick={(e) => handleSelectColor(e, color)}
+              onClick={() => handleSelectColor(color)}
             >
               {selectedColor === color && (
                 <div className="w-30 h-30 mobile:w-22 mobile-h-22">
@@ -41,7 +42,7 @@ const ColorPicker = ({ selectedColor, setSelectedColor, modal }: ColorPickerProp
                 key={color}
                 className="relative w-30 h-30 rounded-99 cursor-pointer"
                 style={{ backgroundColor: color }}
-                onClick={(e) => handleSelectColor(e, color)}
+                onClick={() => handleSelectColor(color)}
               >
                 {selectedColor === color && (
                   <Image src={check} alt="check" width={30} className="absolute top-0 left-0" />

@@ -5,16 +5,11 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/src/pages/_app';
 
 const DashboardEdit: NextPageWithLayout = () => {
-  return (
-    <>
-      <Navigation />
-      <DashboardEditContent />
-    </>
-  );
+  return <DashboardEditContent />;
 };
 
 DashboardEdit.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return <Layout navChildren={<Navigation />}>{page}</Layout>;
 };
 
 export default DashboardEdit;

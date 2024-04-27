@@ -5,8 +5,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { handleCancelInvitation, handleDeleteMember } from '@/src/pages/api/dashboardEditApi';
-import { useDashboardStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
+import { useDashboardListStore, useMembersStore, useInviteesStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
+import useInvitees from '@/src/hooks/useInvitees';
+import useMembers from '@/src/hooks/useMembers';
+import useDashboardList from '@/src/hooks/useDashboardList';
 import ColorPicker from '../common/colorpicker';
 import Button from '../common/button';
 import Table from './table';
@@ -20,23 +23,26 @@ import InviteModal from '../InviteModal';
 import ModalPortal from '../common/modalPortal';
 
 const Dashboard = () => {
-  const dashboard = useDashboardStore((state) => state.dashboardData);
-  const setDashboard = useDashboardStore((state) => state.setDashboardData);
+  const selectedDashboard = useDashboardListStore((state) => state.selectedDashboard);
+  const setSelectedDashboard = useDashboardListStore((state) => state.setSelectedDashboard);
   const members = useMembersStore((state) => state.membersData);
   const invitees = useInviteesStore((state) => state.inviteesData);
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
-  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>(selectedDashboard.color);
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
   const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
-  const removeInvitee = useInviteesStore((state) => state.removeInvitee);
-  const removeMember = useMembersStore((state) => state.removeMember);
+  const { handleLoadInvitees } = useInvitees(idNumber);
+  const { handleLoadMembers } = useMembers(idNumber);
+  const { handleLoadDashboardList } = useDashboardList();
+
   const handleEditDashboard = async () => {
     const dashboardTitle = getValues('text') || '';
     try {
       const data = { title: dashboardTitle, color: selectedColor };
-      await instance.put(`/dashboards/${idNumber}`, data).then((res) => setDashboard(res.data));
+      await instance.put(`/dashboards/${idNumber}`, data).then((res) => setSelectedDashboard(res.data));
+      handleLoadDashboardList();
     } catch (error) {
       console.error(error);
     }
@@ -49,19 +55,20 @@ const Dashboard = () => {
     await instance.delete(`/dashboards/${idNumber}`);
     alert('대시보드를 삭제했습니다.');
     router.push('/my-dashboard');
+    handleLoadDashboardList();
   };
 
   return (
     <div className="flex flex-col gap-25 tablet:gap-12">
       <DashboardCard>
         <div className="flex justify-between">
-          <p className="font-bold text-20">{dashboard.title}</p>
+          <p className="font-bold text-20">{selectedDashboard.title}</p>
           <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
         </div>
         <form onSubmit={handleSubmit(handleEditDashboard)}>
           <Input
             inputName="text"
-            inputContent={dashboard.title}
+            inputContent={selectedDashboard.title}
             labelId="text"
             labelText="대시보드 이름"
             type="text"
@@ -100,7 +107,7 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleDeleteMember(member.id, removeMember)}
+                    onClick={() => handleDeleteMember(member.id).then(() => handleLoadMembers())}
                   >
                     삭제
                   </Button>
@@ -127,6 +134,7 @@ const Dashboard = () => {
           </Button>
         </TableHeader>
         <Table label="이메일">
+          {invitees.length === 0 && <p className="text-center mb-50 text-gray-400">초대된 사용자가 없습니다.</p>}
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
               <TableList
@@ -137,7 +145,9 @@ const Dashboard = () => {
                     buttonType="delete"
                     textColor="violet"
                     bgColor="white"
-                    onClick={() => handleCancelInvitation(idNumber, invitee.id, removeInvitee)}
+                    onClick={() => {
+                      handleCancelInvitation(idNumber, invitee.id).then(() => handleLoadInvitees());
+                    }}
                   >
                     취소
                   </Button>

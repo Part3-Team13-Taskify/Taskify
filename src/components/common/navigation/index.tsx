@@ -7,7 +7,7 @@ import vector from '@/public/assets/icon/vector.svg';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getDashboard, getMyProfile } from '@/src/pages/api/dashboardEditApi';
-import { useDashboardStore } from '@/src/util/zustand';
+import { useDashboardListStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import MyProfile from './MyProfile';
@@ -21,8 +21,8 @@ type NavigationProps = {
 };
 
 const Navigation = ({ title }: NavigationProps) => {
-  const dashboardData = useDashboardStore((state) => state.dashboardData);
-  const setDashboardData = useDashboardStore((state) => state.setDashboardData);
+  const dashboardData = useDashboardListStore((state) => state.selectedDashboard);
+  const setDashboardData = useDashboardListStore((state) => state.setSelectedDashboard);
   const [myProfile, setMyProfile] = useState({ nickname: '', profileImageUrl: '' });
   const router = useRouter();
   const { id } = router.query;
@@ -84,7 +84,7 @@ const Navigation = ({ title }: NavigationProps) => {
             onKeyDown={toggle}
             className="flex items-center gap-10 relative cursor-pointer"
           >
-            {myProfile && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
+            {myProfile.nickname && <MyProfile nickname={myProfile.nickname} src={myProfile.profileImageUrl} />}
             {!dropDown ? (
               <ChevronDownIcon className="w-20 h-20 text-gray-78" />
             ) : (

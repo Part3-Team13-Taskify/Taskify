@@ -1,21 +1,5 @@
 import { create } from 'zustand';
 
-type DashboardData = {
-  title: string;
-  color: string;
-  createdByMe: boolean;
-};
-
-type DashboardStore = {
-  dashboardData: DashboardData;
-  setDashboardData: (data: DashboardData) => void;
-};
-
-export const useDashboardStore = create<DashboardStore>((set) => ({
-  dashboardData: { title: '', color: '', createdByMe: false },
-  setDashboardData: (data) => set(() => ({ dashboardData: data })),
-}));
-
 type MembersData = {
   id: number;
   email: string;
@@ -28,17 +12,19 @@ type MembersData = {
 type MembersStore = {
   membersData: MembersData[];
   setMembersData: (data: MembersData[]) => void;
-  removeMember: (userId: number) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  maxOffset: number;
+  setMaxOffset: (maxOffset: number) => void;
 };
 
-export const useMembersStore = create<MembersStore>((set, get) => ({
+export const useMembersStore = create<MembersStore>((set) => ({
   membersData: [],
   setMembersData: (data) => set(() => ({ membersData: data })),
-  removeMember: (userId) => {
-    const currentMembers = get().membersData;
-    const updatedMembers = currentMembers.filter((member) => member.id !== userId);
-    set({ membersData: updatedMembers });
-  },
+  offset: 1,
+  setOffset: (offset) => set({ offset }),
+  maxOffset: 1,
+  setMaxOffset: (maxOffset) => set({ maxOffset }),
 }));
 
 type TotalMembersStore = {
@@ -65,17 +51,19 @@ type InviteesData = {
 type InviteesStore = {
   inviteesData: InviteesData[];
   setInviteesData: (data: InviteesData[]) => void;
-  removeInvitee: (invitationId: number) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  maxOffset: number;
+  setMaxOffset: (maxOffset: number) => void;
 };
 
-export const useInviteesStore = create<InviteesStore>((set, get) => ({
+export const useInviteesStore = create<InviteesStore>((set) => ({
   inviteesData: [],
   setInviteesData: (data) => set(() => ({ inviteesData: data })),
-  removeInvitee: (invitationId) => {
-    const currentInvitees = get().inviteesData;
-    const updatedInvitees = currentInvitees.filter((invitee) => invitee.id !== invitationId);
-    set({ inviteesData: updatedInvitees });
-  },
+  offset: 1,
+  setOffset: (offset) => set({ offset }),
+  maxOffset: 1,
+  setMaxOffset: (maxOffset) => set({ maxOffset }),
 }));
 
 export interface Dashboard {
@@ -88,14 +76,33 @@ export interface Dashboard {
   userId: number;
 }
 
+export type SelectedDashboard = {
+  id: number;
+  title: string;
+  color: string;
+  createdByMe?: boolean;
+};
+
 type DashboardListStore = {
-  dashboardList: Dashboard[];
-  setDashboardList: (dashboards: Dashboard[]) => void;
+  dashboardListData: Dashboard[];
+  setDashboardListData: (data: Dashboard[]) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  maxOffset: number;
+  setMaxOffset: (maxOffset: number) => void;
+  selectedDashboard: SelectedDashboard;
+  setSelectedDashboard: (data: SelectedDashboard) => void;
 };
 
 export const useDashboardListStore = create<DashboardListStore>((set) => ({
-  dashboardList: [],
-  setDashboardList: (dashboards) => set({ dashboardList: dashboards }),
+  dashboardListData: [],
+  setDashboardListData: (data) => set({ dashboardListData: data }),
+  offset: 1,
+  setOffset: (offset) => set({ offset }),
+  maxOffset: 1,
+  setMaxOffset: (maxOffset) => set({ maxOffset }),
+  selectedDashboard: { id: 0, title: '', color: '' },
+  setSelectedDashboard: (data) => set({ selectedDashboard: data }),
 }));
 
 type CardId = {

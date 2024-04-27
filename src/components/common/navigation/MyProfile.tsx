@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import InitialImage from './InitialImage';
 
 export type MyProfileProps = {
   nickname: string;
@@ -6,15 +7,14 @@ export type MyProfileProps = {
 };
 
 const MyProfile = ({ nickname, src }: MyProfileProps) => {
-  const initial = String(nickname[0]).toUpperCase();
   return (
     <div className="flex gap-12 items-center">
       {src ? (
         <Image src={src} alt="last name initial" width={30} height={30} className="rounded-99" />
       ) : (
-        <div className="w-30 h-30 rounded-99 bg-blue-bg flex items-center justify-center text-blue">{initial}</div>
+        <InitialImage nickname={nickname} />
       )}
-      <p className="mobile:hidden">{nickname}</p>
+      {nickname && <p className="mobile:hidden">{nickname}</p>}
     </div>
   );
 };

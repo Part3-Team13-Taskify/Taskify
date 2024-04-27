@@ -1,17 +1,15 @@
-import SideBar from '@/src/components/common/sidebar';
 import MyPageContent from '@/src/components/mypage';
 import Navigation from '@/src/components/common/navigation';
+import Layout from '@/src/components/common/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/src/pages/_app';
 
-const MyPage = () => {
-  return (
-    <div className="flex w-screen">
-      <SideBar />
-      <div className="flex flex-col flex-grow">
-        <Navigation title="계정관리" />
-        <MyPageContent />
-      </div>
-    </div>
-  );
+const MyPage: NextPageWithLayout = () => {
+  return <MyPageContent />;
+};
+
+MyPage.getLayout = function getLayout(page: ReactElement) {
+  return <Layout navChildren={<Navigation title="계정관리" />}>{page}</Layout>;
 };
 
 export default MyPage;

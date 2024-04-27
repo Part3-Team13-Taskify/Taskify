@@ -40,31 +40,25 @@ export const getDashboard = async (id: number) => {
   return null;
 };
 
-export const handleDeleteMember = async (userId: number, onMemberDeletion: (userId: number) => void) => {
+export const handleDeleteMember = async (userId: number) => {
   const confirmDeletion = window.confirm('멤버를 삭제할까요?');
   if (!confirmDeletion) return;
 
   try {
     await instance.delete(`/members/${userId}`);
     alert('멤버를 삭제했습니다.');
-    onMemberDeletion(userId);
   } catch (error) {
     console.error(error);
   }
 };
 
-export const handleCancelInvitation = async (
-  id: number,
-  invitationId: number,
-  onInvitationCancelled: (invitationId: number) => void,
-) => {
+export const handleCancelInvitation = async (id: number, invitationId: number) => {
   const confirmDeletion = window.confirm('초대를 취소할까요?');
   if (!confirmDeletion) return;
 
   try {
     await instance.delete(`/dashboards/${id}/invitations/${invitationId}`);
     alert('초대를 취소했습니다.');
-    onInvitationCancelled(invitationId);
   } catch (error) {
     console.error(error);
   }
