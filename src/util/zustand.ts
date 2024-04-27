@@ -114,3 +114,19 @@ export const useCardId = create<CardId>((set) => ({
   cardId: 0,
   setCardId: (id) => set({ cardId: id }),
 }));
+
+type MyProfile = {
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+};
+
+type ProfileStore = {
+  myProfile: MyProfile;
+  setMyProfile: (data: MyProfile) => void;
+};
+
+export const useMyProfileStore = create<ProfileStore>((set) => ({
+  myProfile: { email: '', nickname: '', profileImageUrl: '' },
+  setMyProfile: (data) => set({ myProfile: data }),
+}));
