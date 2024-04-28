@@ -57,7 +57,7 @@ const DashboardListItem = () => {
                   >
                     <Link href={`/dashboard/${data.id}`} key={data.id}>
                       <div
-                        className={` hover:bg-violet-8% transition-all duration-100 flex my-6 rounded-4 items-center justify-between ${data.id === selectedDashboard.id && ' text-white'}`}
+                        className={`px-20 hover:bg-violet-8% transition-all duration-100 flex my-6 rounded-8 items-center justify-between ${data.id === selectedDashboard.id && ' text-white'}`}
                         role="button"
                         tabIndex={0}
                         style={{ backgroundColor: data.id === selectedDashboard.id ? data.color : undefined }}
