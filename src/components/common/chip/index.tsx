@@ -24,14 +24,14 @@ const sizeClasses = {
   large: 'text-12',
 };
 
-const Chip = ({ children, color = 'violet', size = 'large', dot, plus }: ChipProps) => {
+const Chip = ({ children, color = 'orange', size = 'large', dot, plus }: ChipProps) => {
   const colorClass = colorClasses[color];
   const sizeClass = sizeClasses[size];
 
   return (
     <>
       {!plus && (
-        <div className={`inline-block rounded-11 px-8 py-4 ${colorClass} ${sizeClass}  text-center`}>
+        <div className={`inline-block rounded-4 px-8 py-4 ${colorClass} ${sizeClass}  text-center`}>
           <div className="flex gap-6">
             {dot && <Image src={ellipse} alt="ellipse" width={6} />}
             {children}
