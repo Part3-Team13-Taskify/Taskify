@@ -13,7 +13,7 @@ const Reply = ({ nickname: name, profile, date, content: replyContent }: Props) 
   return (
     <div className="flex flex-row gap-8">
       <div>
-        <Image src={profile} width={34} height={34} alt="profile rounded-full" className="content-center" />
+        <Image src={profile} width={34} height={34} alt="profile" className="content-center rounded-99" />
       </div>
       <div>
         <div className="flex flex-row gap-8">

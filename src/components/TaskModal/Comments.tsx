@@ -1,7 +1,6 @@
 import instance from '@/src/util/axios';
 import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 import Reply from './Reply';
-import Button from '../common/button';
 
 interface CommentData {
   id: number;
@@ -69,16 +68,6 @@ const Comments = () => {
             value={replyValue}
             onChange={handleTextChange}
           />
-          <Button
-            className="absolute bottom-12 right-12"
-            buttonType="modal1"
-            type="button"
-            bgColor="white"
-            textColor="violet"
-            disabled={!!replyValue}
-          >
-            입력
-          </Button>
           <button
             className={`absolute bottom-12 right-12 text-12 border rounded-6 border-gray-df px-31 py-6 ${
               replyValue ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
