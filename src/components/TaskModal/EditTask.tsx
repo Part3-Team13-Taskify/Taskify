@@ -1,20 +1,19 @@
 import Image from 'next/image';
-import TaskLabel from './TaskLabel';
-import Button from '../common/button';
-import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
-import Modal from '../common/modal';
-import { DateTimePicker } from '@mui/x-date-pickers';
-import { TaskData } from './TaskCard';
-import { CardData } from './CreateTask';
-import { Member } from './CreateTask';
-import { useTotalMembersStore } from '@/src/util/zustand';
-import { format } from 'date-fns';
-
-import add from '@/public/assets/icon/addViolet.svg';
-import close from '@/public/assets/icon/close.svg';
-import Chip from '../common/chip';
 import instance from '@/src/util/axios';
 import { twMerge } from 'tailwind-merge';
+import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
+import add from '@/public/assets/icon/addViolet.svg';
+import close from '@/public/assets/icon/close.svg';
+import { useTotalMembersStore } from '@/src/util/zustand';
+import { format } from 'date-fns';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import TaskLabel from './TaskLabel';
+import Button from '../common/button';
+import Modal from '../common/modal';
+import { TaskData } from './TaskCard';
+import { CardData, Member } from './CreateTask';
+
+import Chip from '../common/chip';
 
 interface EditTaskModalProps {
   openModal: boolean;
@@ -59,7 +58,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       return { ...prev, description: e.target.value };
     });
   };
-  const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
+  const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = () => {
     setEditData((prev) => {
       return { ...prev };
     });
@@ -76,6 +75,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       editData.tags.push(tag);
       return setTagValue('');
     }
+    return null;
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0];
@@ -136,7 +136,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             </select>
           </TaskLabel>
         </div>
-        <TaskLabel htmlFor="title" label="제목" isRequired={true}>
+        <TaskLabel htmlFor="title" label="제목" isRequired>
           <input
             id="title"
             className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
@@ -144,9 +144,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             value={editData.title}
             required
             onChange={handleTitleChange}
-          ></input>
+          />
         </TaskLabel>
-        <TaskLabel htmlFor="description" label="설명" isRequired={true}>
+        <TaskLabel htmlFor="description" label="설명" isRequired>
           <textarea
             id="description"
             className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
@@ -154,7 +154,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             required
             value={editData.description}
             onChange={handleDescriptionChange}
-          ></textarea>
+          />
         </TaskLabel>
         <TaskLabel htmlFor="due-date" label="마감일">
           <DateTimePicker
@@ -182,7 +182,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                         });
                       }}
                     >
-                      <Image src={close} width={14} height={14} alt="close"></Image>
+                      <Image src={close} width={14} height={14} alt="close" />
                     </button>
                   </Chip>
                 );
@@ -197,11 +197,11 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             onChange={handleTagChange}
             onKeyUp={handleTagEnter}
-          ></input>
+          />
         </TaskLabel>
         <TaskLabel label="이미지" divClass="relative">
           <label htmlFor="image" className={imageBg}>
-            <Image src={add} width={28} height={28} alt="add image"></Image>
+            <Image src={add} width={28} height={28} alt="add image" />
           </label>
           <input
             id="image"
@@ -211,7 +211,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             hidden
             name="이미지 등록"
             onChange={handleImageChange}
-          ></input>
+          />
           {!!currentImage && (
             <Image
               src={currentImage}
@@ -219,7 +219,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
               height={76}
               alt="이미지"
               className="absolute rounded-6 w-76 h-76 opacity-70 top-1/2 -translate-y-1/4"
-            ></Image>
+            />
           )}
         </TaskLabel>
       </form>

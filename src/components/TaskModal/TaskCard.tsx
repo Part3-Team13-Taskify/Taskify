@@ -1,20 +1,22 @@
 import Image from 'next/image';
-import Reply from './Reply';
-
 import comments from '@/public/mock/Comment.json';
+import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
+
 import { format } from 'date-fns';
 import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
-import Modal from '../common/modal';
 import instance from '@/src/util/axios';
-import Chip from '../common/chip';
 import useModal from '@/src/hooks/useModal';
-import ModalPortal from '../common/modalPortal';
-import EditTask from './EditTask';
-import Button from '../common/button';
 
 import more from '@/public/assets/icon/moreVert.svg';
 import exit from '@/public/assets/icon/close.svg';
-import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
+
+import Reply from './Reply';
+
+import Modal from '../common/modal';
+import Chip from '../common/chip';
+import ModalPortal from '../common/modalPortal';
+import EditTask from './EditTask';
+import Button from '../common/button';
 
 interface ModalProps {
   openModal: boolean;
@@ -135,7 +137,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
           <div className="flex flex-col gap-16 max-w-450 w-full mt-12">
             <div className="flex flex-row flex-wrap gap-12">
               <div className="h-26">
-                <Chip dot={true}>{columnName}</Chip>
+                <Chip dot>{columnName}</Chip>
               </div>
               {!!cardData?.tags?.length && (
                 <div className="flex flex-row flex-wrap gap-6 border-l-1 overflow-auto border-gray-d9 pl-12">
@@ -159,7 +161,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                   className="p-16 border-1 border-gray-d9 rounded-6 h-110 text-14 resize-none"
                   placeholder="댓글 작성하기"
                   onChange={handleTextChange}
-                ></textarea>
+                />
                 <Button
                   className="absolute bottom-12 right-12"
                   buttonType="modal1"
@@ -220,4 +222,5 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
         </div>
       </Modal>
     );
+  return null;
 };

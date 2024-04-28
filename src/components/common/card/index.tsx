@@ -1,9 +1,9 @@
-import { FormatDate } from '@/src/util/dateFormat';
+import FormatDate from '@/src/util/dateFormat';
 import Image from 'next/image';
-import Chip from '../chip';
 import { useCardId } from '@/src/util/zustand';
 import { MouseEventHandler, useState, useEffect } from 'react';
 import calender from '@/public/assets/icon/calendar.svg';
+import Chip from '../chip';
 
 interface CardInfo {
   id: number;
@@ -23,7 +23,7 @@ interface CardInfo {
  */
 const Card = ({ id, src, title, date, profile, tags, onClick }: CardInfo) => {
   const setCardId = useCardId((state) => state.setCardId);
-  const titleShort = title.length > 30 ? title.slice(0, 29) + '...' : title;
+  const titleShort = title.length > 30 ? `${title.slice(0, 29)}...` : title;
   const formattedDate = date ? FormatDate(date) : undefined;
   const [formattedTags, setFormattedTags] = useState(tags.slice(0, 3));
 

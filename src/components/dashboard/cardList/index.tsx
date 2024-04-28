@@ -1,10 +1,10 @@
 import instance from '@/src/util/axios';
-import Card from '../../common/card';
+import useModal from '@/src/hooks/useModal';
 import { useEffect, useState } from 'react';
+import { useCardId } from '@/src/util/zustand';
+import Card from '../../common/card';
 import ModalPortal from '../../common/modalPortal';
 import { TaskCard } from '../../TaskModal/TaskCard';
-import useModal from '@/src/hooks/useModal';
-import { useCardId } from '@/src/util/zustand';
 
 export interface CardType {
   id: number;
@@ -21,14 +21,14 @@ export interface CardType {
   updatedAt: string;
 }
 
-interface CardList {
+interface CardListType {
   cards: CardType[] | [];
   totalCount: number;
   cursorId: number | null;
 }
 
 const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
-  const [cardList, setCards] = useState<CardList>();
+  const [cardList, setCards] = useState<CardListType>();
 
   const getCardList = async () => {
     const response = await instance.get(`cards?columnId=${columnId}`);
@@ -48,18 +48,16 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
       </ModalPortal>
       {cardList?.cards.map((card) => {
         return (
-          <>
-            <Card
-              key={card.id}
-              id={card.id}
-              src={card.imageUrl}
-              profile={card.assignee?.profileImageUrl}
-              title={title}
-              date={card.dueDate}
-              tags={card.tags}
-              onClick={TaskModalOpen}
-            ></Card>
-          </>
+          <Card
+            key={card.id}
+            id={card.id}
+            src={card.imageUrl}
+            profile={card.assignee?.profileImageUrl}
+            title={title}
+            date={card.dueDate}
+            tags={card.tags}
+            onClick={TaskModalOpen}
+          />
         );
       })}
     </>
