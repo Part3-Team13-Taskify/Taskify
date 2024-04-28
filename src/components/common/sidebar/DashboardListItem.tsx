@@ -68,7 +68,7 @@ const DashboardListItem = () => {
                   >
                     <Link href={`/dashboard/${data.id}`} key={data.id}>
                       <div
-                        className={`mx-10 px-10 ${!isMobile() && 'hover:bg-violet-8%'} transition-all duration-100 flex my-6 rounded-8 items-center justify-between ${data.id === selectedDashboard.id && ' text-white'}`}
+                        className={`mx-10 px-10 py-5 ${!isMobile() && 'hover:bg-violet-8%'} transition-all duration-100 flex my-6 rounded-8 items-center justify-between ${data.id === selectedDashboard.id && ' text-white'}`}
                         role="button"
                         tabIndex={0}
                         style={{
