@@ -22,6 +22,10 @@ const DashboardListItem = () => {
     return width < 768;
   };
 
+  const isTablet = () => {
+    return width < 1199;
+  };
+
   const handleDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
     setIsDragging(false);
@@ -81,7 +85,7 @@ const DashboardListItem = () => {
                           <p
                             className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${data.id === selectedDashboard.id && ''}`}
                           >
-                            {data.title}
+                            {isTablet() && data.title.length > 7 ? `${data.title.substring(0, 7)}...` : data.title}
                           </p>
                         </div>
                         {data.createdByMe && (
