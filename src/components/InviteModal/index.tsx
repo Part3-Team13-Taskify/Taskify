@@ -109,7 +109,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
             />
           )}
         />
-        <div className="overflow-y-auto max-h-150">
+        <div className="overflow-y-auto max-h-132">
           {filteredOptions.map((member) => (
             <div
               key={member.id}
