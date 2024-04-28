@@ -47,6 +47,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
       const res = await instance.get(`/members?page=1&size=99&dashboardId=6074`);
       const members = res.data.members.slice(1);
       setMemberOptions(members);
+      setFilteredOptions(members);
     };
     fetchMemberOptions();
   }, []);
@@ -108,7 +109,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
             />
           )}
         />
-        <div className="overflow-y-auto" style={{ maxHeight: '150px' }}>
+        <div className="overflow-y-auto max-h-150">
           {filteredOptions.map((member) => (
             <div
               key={member.id}
