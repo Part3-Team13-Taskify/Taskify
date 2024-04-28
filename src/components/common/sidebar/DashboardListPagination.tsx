@@ -7,7 +7,7 @@ const DashboardListPagination = () => {
   const { offset, maxOffset, handleNextPage, handlePreviousPage } = useDashboardList();
 
   return (
-    <div className="mt-20 flex gap-20 justify-center">
+    <div className="mt-20 flex gap-20 justify-center mobile:hidden">
       <div
         className={`w-40 h-40 flex justify-center items-center cursor-pointer ${offset === 1 && 'opacity-25 cursor-not-allowed'}`}
         onClick={handlePreviousPage}
