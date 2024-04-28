@@ -98,7 +98,7 @@ const Dashboard = () => {
           {Array.isArray(members) &&
             members.map((member) => (
               <div className="relative">
-                <div className="absolute top-17 left-40 bg-beige-f9 px-7 py-3 rounded-10 text-violet opacity-0 hover:opacity-100 transition-opacity duration-200">
+                <div className="absolute top-15 left-40 bg-white px-7 py-3 rounded-10 text-black opacity-0 hover:opacity-100 transition-opacity duration-200">
                   {member.email}
                 </div>
                 <TableList
@@ -138,26 +138,32 @@ const Dashboard = () => {
             </div>
           </Button>
         </TableHeader>
-        <Table label="이메일">
+        <Table label="이름">
           {invitees?.length === 0 && <p className="text-center mb-50 text-gray-400">초대된 사용자가 없습니다.</p>}
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
-              <TableList
-                key={invitee.id}
-                text={invitee.invitee.email}
-                button={
-                  <Button
-                    buttonType="delete"
-                    textColor="violet"
-                    bgColor="white"
-                    onClick={() => {
-                      handleCancelInvitation(idNumber, invitee.id).then(() => handleLoadInvitees());
-                    }}
-                  >
-                    취소
-                  </Button>
-                }
-              />
+              <div className="relative">
+                <div className="absolute top-15 left-40 bg-white px-7 py-3 rounded-10 text-black opacity-0 hover:opacity-100 transition-opacity duration-200">
+                  {invitee.invitee.email}
+                </div>
+
+                <TableList
+                  key={invitee.id}
+                  text={invitee.invitee.nickname}
+                  button={
+                    <Button
+                      buttonType="delete"
+                      textColor="violet"
+                      bgColor="white"
+                      onClick={() => {
+                        handleCancelInvitation(idNumber, invitee.id).then(() => handleLoadInvitees());
+                      }}
+                    >
+                      취소
+                    </Button>
+                  }
+                />
+              </div>
             ))}
         </Table>
       </DashboardCard>
