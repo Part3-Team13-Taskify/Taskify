@@ -19,6 +19,7 @@ export const postColumns = async (columnData: ColumnData) => {
     }
     throw error;
   }
+  return null;
 };
 
 export const getColumns = async (dashboardId: number) => {
@@ -31,6 +32,7 @@ export const getColumns = async (dashboardId: number) => {
     console.error('Error fetching columns', error);
     return [];
   }
+  return null;
 };
 
 export const putColumns = async (columnId: number | undefined, title: string) => {
@@ -43,6 +45,7 @@ export const putColumns = async (columnId: number | undefined, title: string) =>
     console.error('Error putting Columns', error);
     throw error;
   }
+  return null;
 };
 
 export const deleteColumns = async (columnId: number | undefined) => {
@@ -55,4 +58,5 @@ export const deleteColumns = async (columnId: number | undefined) => {
     console.error('Error deleting Columns', error);
     throw error;
   }
+  return null;
 };

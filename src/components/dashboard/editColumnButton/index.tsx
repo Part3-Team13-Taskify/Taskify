@@ -2,7 +2,7 @@ import Image from 'next/image';
 import useModal from '@/src/hooks/useModal';
 import setting from '@/public/assets/icon/setting.svg';
 import ModalPortal from '../../common/modalPortal';
-import EditColumnModal from '../../columnModal/editColumnModal';
+import EditColumnModal from '../../ColumnModal/editColumnModal';
 
 type Columns = {
   id: number;

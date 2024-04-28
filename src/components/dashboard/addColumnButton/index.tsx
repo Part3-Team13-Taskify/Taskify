@@ -3,7 +3,7 @@ import useModal from '@/src/hooks/useModal';
 import addLarge from '@/public/assets/chip/addLarge.svg';
 import Button from '../../common/button';
 import ModalPortal from '../../common/modalPortal';
-import AddColumnModal from '../../columnModal/addColumnModal';
+import AddColumnModal from '../../ColumnModal/addColumnModal';
 
 type Columns = {
   id: number;
