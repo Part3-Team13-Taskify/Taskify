@@ -24,6 +24,7 @@ interface InputProps {
   focusType?: string;
   children?: React.ReactNode;
   defaultValue?: string;
+  value?: string;
 }
 
 const Input = ({
@@ -42,6 +43,7 @@ const Input = ({
   labelDropStyle,
   children,
   defaultValue,
+  value,
 }: InputProps) => {
   const divStyle = twMerge(`flex flex-col items-start py-8 text-gray-9f text-16`, divCheckStyle);
   const inputStyle = twMerge(
@@ -65,6 +67,7 @@ const Input = ({
           className={error?.message ? inputErrorStyle : inputStyle}
           placeholder={inputContent}
           id={labelId}
+          value={value}
           defaultValue={defaultValue}
           onFocus={() => {
             switch (focusType) {

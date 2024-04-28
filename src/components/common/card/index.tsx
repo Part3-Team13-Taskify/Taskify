@@ -74,13 +74,15 @@ const Card = ({ id, src, title, date, profile, tags, onClick }: CardInfo) => {
                 </div>
               )}
               {!!profile && (
-                <Image
-                  src={profile}
-                  className="absolute rounded-99 bottom-0 right-0"
-                  width={24}
-                  height={24}
-                  alt="profileImg"
-                />
+                <div className="w-24 h-24 rounded-99 overflow-hidden absolute bottom-0 right-0">
+                  <Image
+                    src={profile}
+                    // className="absolute rounded-99 bottom-0 right-0"
+                    width={24}
+                    height={24}
+                    alt="profileImg"
+                  />
+                </div>
               )}
             </div>
           </div>
