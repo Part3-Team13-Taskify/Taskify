@@ -23,7 +23,7 @@ const InvitationList = ({ nickname, inviter, acceptButton, rejectButton }: Invit
           {rejectButton}
         </div>
       </div>
-      <hr></hr>
+      <hr />
     </>
   );
 };

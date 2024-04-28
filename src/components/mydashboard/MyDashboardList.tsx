@@ -32,7 +32,7 @@ const DashboardList = () => {
   }, []);
 
   const updatePageInfo = useCallback(
-    (newOffset) => {
+    (newOffset: number) => {
       fetchDashboardList(newOffset, itemsPerPage).then((res) => {
         setMyDashboardList(res.dashboards);
         setTotalCount(res.totalCount);
@@ -46,7 +46,7 @@ const DashboardList = () => {
     updatePageInfo(offset);
   }, [offset, updatePageInfo]);
 
-  const handlePageChange = (newOffset) => {
+  const handlePageChange = (newOffset: number) => {
     setOffset(newOffset);
   };
 
