@@ -37,7 +37,7 @@ const Members = () => {
         </div>
       ))}
       {remainingCount > 0 && (
-        <div className="border-2 z-1 w-35 h-35 bg-pink-bg text-pink rounded-99 -ml-8 flex items-center justify-center">
+        <div className="border-2 z-1 w-30 h-30 bg-pink-bg text-pink rounded-99 -ml-8 flex items-center justify-center">
           +{remainingCount}
         </div>
       )}
