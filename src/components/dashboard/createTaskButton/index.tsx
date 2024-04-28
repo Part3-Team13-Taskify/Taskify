@@ -5,12 +5,12 @@ import CreateTask from '../../TaskModal/CreateTask';
 import Button from '../../common/button';
 import ModalPortal from '../../common/modalPortal';
 
-type CreateTask = {
+type CreateTasks = {
   dashboardId: number;
   columnId: number;
 };
 
-const CreateTaskButton = ({ dashboardId, columnId }: CreateTask) => {
+const CreateTaskButton = ({ dashboardId, columnId }: CreateTasks) => {
   const {
     openModal: createTaskModal,
     handleModalClose: createTaskModalClose,

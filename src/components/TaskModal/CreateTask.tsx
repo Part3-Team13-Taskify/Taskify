@@ -110,7 +110,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   const handleCreateClick = async () => {
     const postTaskData = await instance.post(`cards`, createData);
     if (postTaskData.status === 201) {
-      alert('생성 성공!');
+      // alert('생성 성공!');
       handleModalClose();
     }
   };

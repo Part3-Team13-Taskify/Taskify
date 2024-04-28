@@ -10,7 +10,6 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
 import Modal from '../common/modal';
-import { TaskData } from './TaskCard';
 import { CardData, Member } from './CreateTask';
 
 import Chip from '../common/chip';
@@ -19,6 +18,25 @@ interface EditTaskModalProps {
   openModal: boolean;
   handleModalClose: () => void;
   cardData: TaskData;
+}
+
+export interface TaskData {
+  assignee?: {
+    id: number;
+    nickname: string;
+    profileImageUrl?: string;
+  };
+  columnId: number;
+  createdAt: string;
+  dashboardId: number;
+  description: string;
+  dueDate?: string;
+  id: number;
+  imageUrl?: string;
+  tags?: string[];
+  teamId: string;
+  title: string;
+  updatedAt: string;
 }
 
 const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, cardData }) => {
@@ -58,11 +76,11 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       return { ...prev, description: e.target.value };
     });
   };
-  const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = () => {
-    setEditData((prev) => {
-      return { ...prev };
-    });
-  };
+  // const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = () => {
+  //   setEditData((prev) => {
+  //     return { ...prev };
+  //   });
+  // };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setTagValue(tags);
@@ -108,7 +126,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       <div className="text-24 font-bold">할 일 수정</div>
       <form className="flex flex-col gap-32 overflow-y-auto">
         <div className="flex flex-row mobile:flex-col gap-16 mobile:gap-24">
-          <TaskLabel htmlFor="status" label="상태">
+          {/* <TaskLabel htmlFor="status" label="상태">
             <select
               id="status"
               value={status}
@@ -119,7 +137,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
               <option value="done">Done</option>
               <option value="on-progress">On Progress</option>
             </select>
-          </TaskLabel>
+          </TaskLabel> */}
           <TaskLabel htmlFor="assignee" label="담당자">
             <select
               id="assignee"
