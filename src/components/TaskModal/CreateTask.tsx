@@ -168,7 +168,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         </TaskLabel>
         <TaskLabel htmlFor="tag" label="태그">
           {!!createData.tags.length && (
-            <div className="flex flex-row gap-6">
+            <div className="flex flex-row gap-6 flex-wrap">
               {createData.tags.map((tag) => {
                 return (
                   <Chip>
@@ -198,9 +198,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             onKeyUp={handleTagEnter}
           ></input>
         </TaskLabel>
-        {/* TODO
-        이미지 업로드 구현
-        이미지 업로드 API 사용 */}
         <TaskLabel label="이미지" divClass="relative">
           <label htmlFor="image" className={imageBg}>
             <Image src={add} width={28} height={28} alt="add image"></Image>

@@ -72,7 +72,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     const tagInput = e.target as HTMLInputElement;
     const tag = tagInput.value.trim();
 
-    if ((e.key === 'Enter' || e.key === ' ') && tag !== '' && !editData.tags.includes(tag)) {
+    if ((e.key === ' ' || e.key === 'Enter') && tag !== '' && !editData.tags.includes(tag)) {
       editData.tags.push(tag);
       return setTagValue('');
     }
@@ -169,7 +169,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
         </TaskLabel>
         <TaskLabel htmlFor="tag" label="태그">
           {!!editData.tags.length && (
-            <div className="flex flex-row gap-6">
+            <div className="flex flex-row gap-6 w-full flex-wrap">
               {editData.tags.map((tag) => {
                 return (
                   <Chip>

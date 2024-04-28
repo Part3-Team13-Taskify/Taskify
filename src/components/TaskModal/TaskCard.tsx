@@ -73,7 +73,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
       }
     };
     getTaskData();
-  }, [editTaskModal]);
+  }, []);
 
   const dueDate = cardData?.dueDate ? format(new Date(cardData.dueDate).toLocaleString('en-US'), 'yyyy.MM.dd') : '';
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -133,10 +133,12 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
         </div>
         <div className="flex flex-row gap-24 mobile:gap-16 mobile:flex-col-reverse">
           <div className="flex flex-col gap-16 max-w-450 w-full mt-12">
-            <div className="flex flex-row gap-12">
-              <Chip dot={true}>{columnName}</Chip>
+            <div className="flex flex-row flex-wrap gap-12">
+              <div className="h-26">
+                <Chip dot={true}>{columnName}</Chip>
+              </div>
               {!!cardData?.tags?.length && (
-                <div className="flex flex-row gap-6 border-l-1 border-gray-d9 pl-12">
+                <div className="flex flex-row flex-wrap gap-6 border-l-1 overflow-auto border-gray-d9 pl-12">
                   {cardData.tags.map((tag) => {
                     return <Chip>{tag}</Chip>;
                   })}
