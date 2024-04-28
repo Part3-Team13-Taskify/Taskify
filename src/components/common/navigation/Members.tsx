@@ -27,23 +27,24 @@ const Members = () => {
 
   return (
     <div className="flex">
-      {visibleMembers?.map((member) => (
-        <div key={member.id}>
-          {member.profileImageUrl ? (
-            <div className="overflow-hidden w-30 h-30 rounded-99 -ml-8">
-              <Image
-                src={member.profileImageUrl}
-                alt="profile"
-                width={30}
-                height={30}
-                className="border-2 rounded-99 "
-              />
-            </div>
-          ) : (
-            <InitialImage nickname={member.nickname} className="-ml-8" />
-          )}
-        </div>
-      ))}
+      {totalMembers.length > 1 &&
+        visibleMembers?.map((member) => (
+          <div key={member.id}>
+            {member.profileImageUrl ? (
+              <div className="overflow-hidden w-30 h-30 rounded-99 -ml-8">
+                <Image
+                  src={member.profileImageUrl}
+                  alt="profile"
+                  width={30}
+                  height={30}
+                  className="border-2 rounded-99 "
+                />
+              </div>
+            ) : (
+              <InitialImage nickname={member.nickname} className="-ml-8" />
+            )}
+          </div>
+        ))}
       {remainingCount > 0 && (
         <div className="border-2 z-1 w-30 h-30 bg-pink-bg text-pink rounded-99 -ml-8 flex items-center justify-center">
           +{remainingCount}

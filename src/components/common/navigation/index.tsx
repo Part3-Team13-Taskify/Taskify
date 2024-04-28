@@ -7,7 +7,7 @@ import vector from '@/public/assets/icon/vector.svg';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getDashboard, getMyProfile } from '@/src/pages/api/dashboardEditApi';
-import { useDashboardListStore, useMyProfileStore } from '@/src/util/zustand';
+import { useDashboardListStore, useMyProfileStore, useTotalMembersStore } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import MyProfile from './MyProfile';
@@ -23,13 +23,13 @@ type NavigationProps = {
 const Navigation = ({ title }: NavigationProps) => {
   const dashboardData = useDashboardListStore((state) => state.selectedDashboard);
   const setDashboardData = useDashboardListStore((state) => state.setSelectedDashboard);
-  // const [myProfile, setMyProfile] = useState({ nickname: '', profileImageUrl: '' });
   const myProfile = useMyProfileStore((state) => state.myProfile);
   const setMyProfile = useMyProfileStore((state) => state.setMyProfile);
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
   const { openModal: inviteModal, handleModalClose: inviteModalClose, handleModalOpen: inviteModalOpen } = useModal();
+  const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
 
   useEffect(() => {
     if (idNumber) getDashboard(idNumber).then((res) => setDashboardData(res));
@@ -59,7 +59,7 @@ const Navigation = ({ title }: NavigationProps) => {
           <div className="flex gap-16 text-gray-78 tablet:gap-12 mobile:gap-6">
             <Link
               href={`/dashboard/${id}/edit`}
-              className=" flex gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7 mobile:text-14"
+              className="flex gap-8 px-16 py-10 items-center border-1 rounded-lg border-gray-d9 tablet:py-10 tablet:text-14 mobile:px-12 mobile:py-7 mobile:text-14"
             >
               <Image className="mobile:hidden" src={setting} alt="setting" />
               <p>관리</p>
@@ -77,7 +77,7 @@ const Navigation = ({ title }: NavigationProps) => {
           {!title && (
             <>
               <Members />
-              <Image src={vector} alt="vector" />
+              {totalMembers.length > 1 && <Image src={vector} alt="vector" />}
             </>
           )}
           <div
