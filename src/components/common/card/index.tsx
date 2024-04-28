@@ -52,8 +52,8 @@ const Card = ({ id, src, title, date, profile, tags, onClick }: CardInfo) => {
       onClick={handleCardClick}
       className="text-left tablet:max-w-full max-w-450 rounded-6 p-16 border-1 border-gray-d9 bg-white hover:bg-violet-8%"
     >
-      <div className="flex mobile:flex-col tablet:flex-row flex-col justify:start gap-12">
-        <div className="aspect-video rounded-6 mobile:w-full tablet:w-90 w-full max-h-135 tablet:h-41 mobile:h-full mobile:max-h-none overflow-hidden">
+      <div className="flex mobile:flex-col tablet:flex-row flex-col justify:start items-center gap-12">
+        <div className="max-h-135 rounded-6 mobile:w-full tablet:w-90 w-full tablet:h-full mobile:h-full mobile:max-h-none overflow-hidden">
           {!!src && <Image src={src} width={700} height={700} alt="Card Image" className="object-cover rounded-6" />}
         </div>
         <div className="w-full flex flex-col gap-10">
