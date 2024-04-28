@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import fetchInvitations from '@/src/pages/api/getInvitationApi';
 import putInvitation from '@/src/pages/api/putInvitationApi';
 import InvitationList from '@/src/components/mydashboard/table/InvitaionList';
@@ -22,25 +22,22 @@ interface Invitation {
 }
 
 interface InvitationTableProps {
-  invitations: Invitation[]; // 초대 목록 배열
-  setInvitations: React.Dispatch<React.SetStateAction<Invitation[]>>; // 초대 목록 배열을 업데이트하는 함수
+  invitations: Invitation[];
+  setInvitations: React.Dispatch<React.SetStateAction<Invitation[]>>;
 }
 
 const InvitationTable: React.FC<InvitationTableProps> = ({ invitations, setInvitations }) => {
   const [loading, setLoading] = useState(false);
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
     try {
       setLoading(true);
       await putInvitation(invitationId, accept);
 
-      setInvitations((currentInvitations) =>
-        currentInvitations.map((invite) =>
-          invite.id === invitationId ? { ...invite, inviteAccepted: accept } : invite,
-        ),
-      );
+      setInvitations((currentInvitations) => currentInvitations.filter((invite) => invite.id !== invitationId));
     } catch (error) {
       console.error(error);
     } finally {
@@ -48,88 +45,85 @@ const InvitationTable: React.FC<InvitationTableProps> = ({ invitations, setInvit
     }
   };
 
-  const loadInvitations = useCallback(
-    async (initialLoad = false) => {
-      if (loading && !initialLoad) return;
+  const loadInvitations = useCallback(async () => {
+    if (loading || !hasMore) return;
 
-      setLoading(true);
-      try {
-        const response = await fetchInvitations(10, cursorId);
-        if (response) {
-          setInvitations((prevInvitations) => [...prevInvitations, ...response.invitations]);
-          const newInvitations = initialLoad
-            ? response.invitations
-            : [
-                ...invitations.filter((inv) => response.invitations.every((newInv) => newInv.id !== inv.id)),
-                ...response.invitations,
-              ];
-          setInvitations(newInvitations);
-          setCursorId(response.cursorId);
-          setHasMore(response.invitations.length === 10);
+    setLoading(true);
+    try {
+      const response = await fetchInvitations(10, cursorId);
+
+      const newInvitations =
+        response?.invitations.filter((invitation) => !invitations.some((inv) => inv.id === invitation.id)) ?? [];
+
+      setInvitations((prevInvitations) => [...prevInvitations, ...newInvitations]);
+      setCursorId(response?.cursorId ?? null);
+      setHasMore(response?.invitations.length === 10 ?? false);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  }, [loading, hasMore, cursorId, setInvitations, invitations]);
+
+  useEffect(() => {
+    const handleIntersect = async (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !loading && hasMore) {
+          setLoading(true);
+          loadInvitations().then(() => {
+            setLoading(false);
+          });
         }
-      } catch (error) {
-        console.error('Error fetching invitations:', error);
-      }
-      setLoading(false);
-    },
-    [cursorId, loading, invitations],
-  );
-
-  useEffect(() => {
-    loadInvitations(true);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight ||
-        loading ||
-        !hasMore
-      ) {
-        return;
-      }
-      loadInvitations();
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(handleIntersect, { threshold: 0.1 });
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
   }, [loading, hasMore, loadInvitations]);
 
   return (
     <div>
-      <div className="flex justify-between mt-24 pl-28 pr-284 text-gray-9f mobile:hidden">
+      <div className="grid grid-cols-3 mt-24 pl-70 text-gray-9f mobile:hidden">
         <p>이름</p>
         <p>초대자</p>
         <p>수락 여부</p>
       </div>
       <div className="flex flex-col overflow-y-scroll h-340 tablet:h-190 mobile:h-300">
-        {invitations.map((invitation) => (
-          <InvitationList
-            key={invitation.id}
-            nickname={invitation.dashboard.title}
-            inviter={invitation.inviter.nickname}
-            acceptButton={
-              <Button
-                buttonType="decision"
-                bgColor="violet"
-                textColor="white"
-                onClick={() => handleInvitationResponse(invitation.id, true)}
-              >
-                수락
-              </Button>
-            }
-            rejectButton={
-              <Button
-                buttonType="decision"
-                textColor="violet"
-                className="outline outline-1 outline-gray-d9"
-                onClick={() => handleInvitationResponse(invitation.id, false)}
-              >
-                거절
-              </Button>
-            }
-          />
+        {invitations.map((invitation, index) => (
+          <div key={invitation.id} ref={index === invitations.length - 1 ? observerRef : undefined}>
+            <InvitationList
+              nickname={invitation.dashboard.title}
+              inviter={invitation.inviter.nickname}
+              acceptButton={
+                <Button
+                  buttonType="decision"
+                  bgColor="violet"
+                  textColor="white"
+                  onClick={() => handleInvitationResponse(invitation.id, true)}
+                >
+                  수락
+                </Button>
+              }
+              rejectButton={
+                <Button
+                  buttonType="decision"
+                  textColor="violet"
+                  className="outline outline-1 outline-gray-d9"
+                  onClick={() => handleInvitationResponse(invitation.id, false)}
+                >
+                  거절
+                </Button>
+              }
+            />
+          </div>
         ))}
       </div>
     </div>
