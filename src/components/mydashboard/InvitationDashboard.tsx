@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import fetchInvitations from '@/src/pages/api/getInvitationApi';
-import Button from '@/src/components/common/button';
 import unsubscribeEmail from '@/public/assets/icon/unsubscribeEmail.svg';
-import addLarge from '@/public/assets/chip/addLarge.svg';
 import MyDashboardList from '@/src/components/mydashboard/MyDashboardList';
-import AddDashboardModal from '@/src/components/dashboardModal/addDashboardModal';
 import InvitationTable from '@/src/components/mydashboard/table/';
 import InvitationSearch from '@/src/components/mydashboard/table/InvitationSearch';
 import Image from 'next/image';

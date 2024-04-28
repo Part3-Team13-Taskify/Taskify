@@ -140,3 +140,13 @@ export const useMyDashboardListStore = create<MyDashboardListStore>((set) => ({
   myDashboardList: [],
   setMyDashboardList: (dashboards) => set({ myDashboardList: dashboards }),
 }));
+
+type MyDashboardListStore = {
+  myDashboardList: Dashboard[];
+  setMyDashboardList: (dashboards: Dashboard[]) => void;
+};
+
+export const useMyDashboardListStore = create<MyDashboardListStore>((set) => ({
+  myDashboardList: [],
+  setMyDashboardList: (dashboards) => set({ myDashboardList: dashboards }),
+}));

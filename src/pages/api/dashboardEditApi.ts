@@ -109,3 +109,13 @@ export const fetchDashboardList = async (offset: number = 1, size: number = 5) =
   }
   return null;
 };
+
+export const fetchDashboardList = async (offset: number = 1, size: number = 5) => {
+  try {
+    const response = await instance.get(`/dashboards?navigationMethod=pagination&page=${offset}&size=${size}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
+};
