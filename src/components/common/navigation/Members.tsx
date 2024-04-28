@@ -15,7 +15,7 @@ const Members = () => {
   const setTotalMembersData = useTotalMembersStore((state) => state.setTotalMembersData);
   const visibleCount = width <= 1199 ? 2 : 4;
   const visibleMembers = totalMembers?.slice(0, visibleCount);
-  const remainingCount = Number(totalMembers?.length) - Number(visibleMembers?.length);
+  const remainingCount = Number(totalMembers?.length) - Number(visibleMembers?.length) - 1;
   const members = useMembersStore((state) => state.membersData);
 
   useEffect(() => {
@@ -30,7 +30,15 @@ const Members = () => {
       {visibleMembers?.map((member) => (
         <div key={member.id}>
           {member.profileImageUrl ? (
-            <Image src={member.profileImageUrl} alt="profile" width={30} height={30} className="border-2 rounded-99 " />
+            <div className="overflow-hidden w-30 h-30 rounded-99 -ml-8">
+              <Image
+                src={member.profileImageUrl}
+                alt="profile"
+                width={30}
+                height={30}
+                className="border-2 rounded-99 "
+              />
+            </div>
           ) : (
             <InitialImage nickname={member.nickname} className="-ml-8" />
           )}

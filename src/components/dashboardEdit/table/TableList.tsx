@@ -15,7 +15,9 @@ const TableList = ({ src, text, button, isOwner }: TableListProps) => {
     <div className="flex items-center justify-between border-b-1 py-16">
       <div className="flex gap-12 items-center">
         {src ? (
-          <Image src={src} alt="last name initial" width={30} height={30} className="rounded-99" />
+          <div className="w-30 h-30 overflow-hidden rounded-99">
+            <Image src={src} alt="last name initial" width={30} height={30} className="rounded-99" />
+          </div>
         ) : (
           <InitialImage nickname={text} />
         )}

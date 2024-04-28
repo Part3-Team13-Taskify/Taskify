@@ -99,7 +99,9 @@ const Profile = () => {
             <Image src={add} width={40} height={40} alt="add icon" />
           ) : (
             <>
-              <Image src={temp} width={202} height={202} className="overflow-hidden rounded-6 " alt="profile image" />
+              <div className="overflow-hidden">
+                <Image src={temp} width={202} height={202} className="rounded-6 " alt="profile image" />
+              </div>
               <button
                 onClick={handleBack}
                 className="bg-violet w-25 h-25 border rounded-full text-white absolute -top-10 -left-10"
