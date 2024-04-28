@@ -19,13 +19,16 @@ interface CommentResponse {
   cursorId: number | null;
 }
 
-const Comments = () => {
-  const cardId = 5253;
-  const columnId = 22378;
-  const dashboardId = 6661;
+interface IdData {
+  cardId: number;
+  columnId: number;
+  dashboardId: number;
+}
 
+const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
   const [commentList, setCommentList] = useState<CommentResponse>({ comments: [], cursorId: null });
   const [replyValue, setReplyValue] = useState('');
+  const isReplyWritten = replyValue.trim() !== '';
 
   const getComments = async (id: number) => {
     const response = await instance.get(`comments?cardId=${id}`);
@@ -40,11 +43,12 @@ const Comments = () => {
     });
     if (response.status === 201) {
       setReplyValue('');
+      getComments(cardId);
     }
   };
 
   const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    setReplyValue(e.target.value.trim());
+    setReplyValue(e.target.value);
   };
   const handleReplyClick: MouseEventHandler<HTMLButtonElement> = () => {
     postComment(cardId, columnId, dashboardId);
@@ -52,7 +56,7 @@ const Comments = () => {
 
   useEffect(() => {
     getComments(cardId);
-  });
+  }, []);
 
   return (
     <>
@@ -70,9 +74,9 @@ const Comments = () => {
           />
           <button
             className={`absolute bottom-12 right-12 text-12 border rounded-6 border-gray-df px-31 py-6 ${
-              replyValue ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
+              isReplyWritten ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
             }`}
-            disabled={!replyValue}
+            disabled={!isReplyWritten}
             onClick={handleReplyClick}
           >
             입력

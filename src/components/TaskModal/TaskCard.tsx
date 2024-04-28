@@ -138,8 +138,12 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
               )}
             </div>
             <p className="text-14 font-normal">{cardData?.description}</p>
-            {!!cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
-            <Comments />
+            {!!cardData.imageUrl && (
+              <Image src={cardData.imageUrl} width={700} height={700} alt="Task Image" className="rounded-6" />
+            )}
+            {!!cardData.id && (
+              <Comments cardId={cardId} columnId={cardData.columnId} dashboardId={cardData.dashboardId} />
+            )}
           </div>
           {(!!cardData?.assignee || !!cardData?.dueDate) && (
             <div className="flex flex-col mobile:flex-row gap-10 border-1 border-gray-d9 rounded-8 max-w-200 mobile:max-w-none w-full max-h-160 p-16 min-w-180 my-16">

@@ -1,4 +1,3 @@
-import instance from '@/src/util/axios';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { ChangeEventHandler, useState } from 'react';
@@ -27,7 +26,7 @@ const Reply = ({ nickname: name, profile, date, content: replyContent }: Props) 
     setReplyValue(replyContent);
   };
   const handleReplyChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    setReplyValue(e.target.value.trim());
+    setReplyValue(e.target.value);
   };
 
   return (
@@ -41,33 +40,41 @@ const Reply = ({ nickname: name, profile, date, content: replyContent }: Props) 
           <div className="text-12 font-normal text-gray-9f">{formattedDate}</div>
         </div>
         {isEditting ? (
-          <div className="relative w-full">
-            <textarea className="w-full resize-none" value={replyValue} onChange={handleReplyChange} />
-            <div className="flex flex-row gap-4 absolute bottom-12 right-12 ">
-              <button
-                className="text-12 border rounded-6 border-gray-df px-31 py-6 bg-white text-black"
-                onClick={handleEditCancel}
-              >
-                취소
-              </button>
-              <button
-                className={`text-12 border rounded-6 border-gray-df px-31 py-6 ${
-                  replyContent ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
-                }`}
-              >
-                수정
-              </button>
+          <div className="w-full">
+            <div className="w-full max-h-160 h-fit p-16 border-1 border-gray-d9 rounded-6 focus-within:border-violet">
+              <textarea
+                className="resize-none outline-none w-full h-full"
+                value={replyValue}
+                onChange={handleReplyChange}
+              />
+              <div className="flex flex-row justify-end gap-4 mt-4">
+                <button
+                  className="text-12 border rounded-6 border-gray-df px-31 py-6 bg-white text-black"
+                  onClick={handleEditCancel}
+                >
+                  취소
+                </button>
+                <button
+                  className={`text-12 border rounded-6 border-gray-df px-31 py-6 ${
+                    replyContent ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
+                  }`}
+                >
+                  수정
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="text-14 font-normal">{replyContent}</div>
+          <>
+            <div className="text-14 font-normal">{replyContent}</div>
+            <div className="flex flex-row gap-12 text-12 text-gray-9f">
+              <button className="underline" onClick={handleEditCommentClick}>
+                수정
+              </button>
+              <button className="underline">삭제</button>
+            </div>
+          </>
         )}
-        <div className="flex flex-row gap-12 text-12 text-gray-9f">
-          <button className="underline" onClick={handleEditCommentClick}>
-            수정
-          </button>
-          <button className="underline">삭제</button>
-        </div>
       </div>
     </div>
   );
