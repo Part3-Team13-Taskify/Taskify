@@ -24,7 +24,7 @@ const useInvitees = (idNumber: number) => {
   const handleLoadInvitees = (resetOffset?: number) => {
     getInvitees(idNumber, resetOffset || offset).then((res) => {
       setInviteesData(res?.invitations);
-      const maxOffsets = Math.ceil(res?.totalCount / itemsPerPage);
+      const maxOffsets = Math.ceil(Number(res?.totalCount) / itemsPerPage);
       setMaxOffset(maxOffsets);
       if (resetOffset) setOffset(resetOffset);
     });

@@ -24,7 +24,7 @@ const useMembers = (idNumber: number) => {
   const handleLoadMembers = (resetOffset?: number) => {
     getMembers(idNumber, resetOffset || offset).then((res) => {
       setMembersData(res?.members);
-      const maxOffsets = Math.ceil(res?.totalCount / itemsPerPage);
+      const maxOffsets = Math.ceil(Number(res?.totalCount) / itemsPerPage);
       setMaxOffset(maxOffsets);
       if (resetOffset) setOffset(resetOffset);
     });
