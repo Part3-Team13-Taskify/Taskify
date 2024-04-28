@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
 import { format } from 'date-fns';
 import { useTotalMembersStore } from '@/src/util/zustand';
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
+import dropdownIcon from '@/public/assets/icon/arrowDropDown.svg';
 import { twMerge } from 'tailwind-merge';
 import Modal from '../common/modal';
 import Chip from '../common/chip';
@@ -42,6 +43,8 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
 
   const [memberData, setMemberData] = useState<Member[]>([]);
   const [tagValue, setTagValue] = useState<string>();
+  const [isAssigneeOpen, setIsAssigneeOpen] = useState(false);
+  const [currentAssigneee, setCurrentAssigneee] = useState<Member>();
   const [createData, setCreateData] = useState<CardData>({
     dashboardId: dashboardId,
     columnId: columnId,
@@ -52,6 +55,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   });
 
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+  const assigneeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMemberData(totalMembers);
@@ -70,11 +74,11 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       return { ...prev, description: e.target.value.trim() };
     });
   };
-  const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    setCreateData((prev) => {
-      return { ...prev, assigneeUserId: Number(e.target.value) };
-    });
-  };
+  // const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
+  //   setCreateData((prev) => {
+  //     return { ...prev, assigneeUserId: Number(e.target.value) };
+  //   });
+  // };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setTagValue(tags);
@@ -110,7 +114,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   const handleCreateClick = async () => {
     const postTaskData = await instance.post(`cards`, createData);
     if (postTaskData.status === 201) {
-      // alert('생성 성공!');
+      alert('생성 성공!');
       handleModalClose();
     }
   };
@@ -119,21 +123,84 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
       <div className="text-24 font-bold">할 일 생성</div>
       <div className="flex flex-col gap-32 overflow-y-auto">
-        {/* TODO
-        담당자 프로필 UI 구현 */}
         <TaskLabel htmlFor="assignee" label="담당자">
-          <select
-            id="assignee"
-            className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15"
-            onChange={handleAssigneeSelect}
-          >
-            <option value={undefined} className="text-gray">
-              이름을 입력해 주세요
-            </option>
-            {memberData.map((member) => {
-              return <option value={member?.userId}>{member?.nickname}</option>;
-            })}
-          </select>
+          <div className="max-w-217 w-full h-64 border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setIsAssigneeOpen(!isAssigneeOpen);
+              }}
+            >
+              {currentAssigneee ? (
+                <div className="flex flex-row gap-8">
+                  {!!currentAssigneee?.profileImageUrl && (
+                    <Image
+                      src={currentAssigneee?.profileImageUrl}
+                      className="rounded-99"
+                      width={28}
+                      height={28}
+                      alt="profile"
+                    />
+                  )}
+                  <div>{currentAssigneee?.nickname}</div>
+                </div>
+              ) : (
+                <>이름을 입력해 주세요.</>
+              )}
+              <Image
+                src={dropdownIcon}
+                alt="dropdown"
+                className="absolute right-15 top-1/2 transform -translate-y-1/2"
+              />
+            </button>
+            {isAssigneeOpen && (
+              <div
+                ref={assigneeRef}
+                className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-8"
+              >
+                <button
+                  className="flex flex-row gap-8 rounded-6 hover:bg-gray-fa p-8"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentAssigneee(undefined);
+                    setIsAssigneeOpen(false);
+                    setCreateData((prev) => {
+                      return { ...prev, assigneeUserId: undefined };
+                    });
+                  }}
+                >
+                  이름을 입력해 주세요.
+                </button>
+                {memberData.map((member) => {
+                  return (
+                    <button
+                      key={member?.userId}
+                      className="flex flex-row gap-8 rounded-6 hover:bg-gray-fa p-8"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentAssigneee(totalMembers.find((item) => item.userId === member?.userId));
+                        setIsAssigneeOpen(false);
+                        setCreateData((prev) => {
+                          return { ...prev, assigneeUserId: member?.userId };
+                        });
+                      }}
+                    >
+                      {!!member?.profileImageUrl && (
+                        <Image
+                          src={member?.profileImageUrl}
+                          className="rounded-99"
+                          width={28}
+                          height={28}
+                          alt="profile"
+                        />
+                      )}
+                      {member?.nickname}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </TaskLabel>
         <TaskLabel htmlFor="title" label="제목" isRequired>
           <input
