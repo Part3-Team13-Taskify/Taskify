@@ -124,7 +124,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       <div className="text-24 font-bold">할 일 생성</div>
       <div className="flex flex-col gap-32 overflow-y-auto">
         <TaskLabel htmlFor="assignee" label="담당자">
-          <div className="max-w-217 w-full h-64 border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
+          <div className="flex max-w-217 w-full h-48 pl-16 border-1 border-gray-9f rounded-6 relative focus:border-violet  mobile:max-w-none">
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -132,7 +132,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
               }}
             >
               {currentAssigneee ? (
-                <div className="flex flex-row gap-8">
+                <div className="flex flex-row justify-center gap-8">
                   {!!currentAssigneee?.profileImageUrl && (
                     <Image
                       src={currentAssigneee?.profileImageUrl}
@@ -145,7 +145,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
                   <div>{currentAssigneee?.nickname}</div>
                 </div>
               ) : (
-                <>이름을 입력해 주세요.</>
+                <div className="text-gray-9f">이름을 입력해 주세요</div>
               )}
               <Image
                 src={dropdownIcon}
@@ -156,7 +156,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             {isAssigneeOpen && (
               <div
                 ref={assigneeRef}
-                className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-8"
+                className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 mt-3 bg-white border-gray-9f rounded-6 w-full p-8"
               >
                 <button
                   className="flex flex-row gap-8 rounded-6 hover:bg-gray-fa p-8"
@@ -205,7 +205,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         <TaskLabel htmlFor="title" label="제목" isRequired>
           <input
             id="title"
-            className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
+            className="border-1 border-gray-9f rounded-6 focus:border-violet px-16 py-14"
             placeholder="제목을 입력해 주세요"
             required
             onChange={handleTitleChange}
@@ -214,7 +214,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         <TaskLabel htmlFor="description" label="설명" isRequired>
           <textarea
             id="description"
-            className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
+            className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet outline-none px-16 py-14"
             placeholder="설명을 입력해 주세요"
             required
             onChange={handleDescriptionChange}
@@ -225,7 +225,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
           라이브러리 폰트 크기 및 디자인 조정 */}
           <DateTimePicker
             label="날짜를 입력해 주세요"
-            className="w-full"
+            className="outline-none px-16 py-14 text-16"
             onChange={(date) => {
               setCreateData((prev) => {
                 return { ...prev, dueDate: date ? format(date, 'yyyy-MM-dd HH:mm') : undefined };
@@ -260,7 +260,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             type="text"
             placeholder="입력 후 Enter"
             value={tagValue}
-            className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
+            className="border-1 border-gray-9f rounded-6 focus-within:border-violet px-16 py-14"
             onChange={handleTagChange}
             onKeyUp={handleTagEnter}
           />
