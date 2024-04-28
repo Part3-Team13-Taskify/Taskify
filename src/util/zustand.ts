@@ -115,6 +115,37 @@ export const useCardId = create<CardId>((set) => ({
   setCardId: (id) => set({ cardId: id }),
 }));
 
+interface CardType {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[] | [];
+  dueDate?: string;
+  assignee?: { id: number; nickname: string; profileImageUrl?: string };
+  imageUrl?: string;
+  teamId: string;
+  dashboardId: number;
+  columnId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface CardListType {
+  cards: CardType[] | [];
+  totalCount: number;
+  cursorId: number | null;
+}
+
+interface CardListStore {
+  cardLists: { [columnId: number]: CardListType };
+  setCardList: (columnId: number, cardList: CardListType) => void;
+}
+
+export const useCardListStore = create<CardListStore>((set) => ({
+  cardLists: {},
+  setCardList: (columnId, cardList) => set((state) => ({ cardLists: { ...state.cardLists, [columnId]: cardList } })),
+}));
+
 type MyProfile = {
   email: string;
   nickname: string;
