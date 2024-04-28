@@ -47,7 +47,7 @@ const InvitationDashboard = () => {
         <MyDashboardList />
       </div>
 
-      <div className="max-w-1022 h-auto mx-40 my-40 py-32 rounded-lg bg-white  mobile:mx-24 ">
+      <div className="max-w-1022 h-auto mx-40 my-40 py-32 rounded-lg bg-white mobile:mx-24 ">
         <h1 className="self-start pl-28 text-24 font-bold mobile:text-20">초대받은 대시보드</h1>
         {invitations.length > 0 ? (
           <>
@@ -55,7 +55,7 @@ const InvitationDashboard = () => {
             <InvitationTable invitations={invitations} setInvitations={setInvitations} />
           </>
         ) : (
-          <div className="flex flex-col items-center mt-66">
+          <div className="flex flex-col items-center mt-66 mb-66">
             <Image src={unsubscribeEmail} alt="unsubscribeEmail " className="mb-24" />
             <p className="text-18 font-normal text-gray-9f mobile:text-14">아직 초대받은 대시보드가 없어요</p>
           </div>

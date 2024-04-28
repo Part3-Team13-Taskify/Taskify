@@ -38,7 +38,7 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
   const getCardsAdditional = async () => {
     if (cardList.cursorId) {
       try {
-        const response = await getCardListAdditional({ column: columnId, targetId: cardList.cursorId });
+        const response = await getCardListAdditional({ columnId: columnId, targetId: cardList.cursorId });
         const cardsData = response.cards;
 
         const newCardList = {
@@ -55,7 +55,9 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
   };
 
   useEffect(() => {
-    getCards();
+    if (!cardList.cards.length) {
+      getCards();
+    }
   }, []);
 
   // 무한스크롤

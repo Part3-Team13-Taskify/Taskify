@@ -12,10 +12,10 @@ export const getCardList = async ({ column }: { column: number }) => {
   }
 };
 
-export const getCardListAdditional = async ({ column, targetId }: { column: number; targetId: number }) => {
+export const getCardListAdditional = async ({ columnId, targetId }: { columnId: number; targetId: number }) => {
   try {
     if (localStorage.getItem('accessToken')) {
-      const response = await axios.get(`cards?size=5&cursorId=${targetId}&columnId=${column}`);
+      const response = await axios.get(`cards?size=5&cursorId=${targetId}&columnId=${columnId}`);
       return response.data;
     }
   } catch (error) {

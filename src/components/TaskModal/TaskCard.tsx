@@ -94,7 +94,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
   if (!isPending && cardData)
     return (
       <Modal
-        className="flex-shrink-0 max-h-910 h-vh overflow-y-auto"
+        className="flex-shrink-0 max-h-910 h-vh overflow-y-auto mobile:w-400"
         openModal={openModal}
         handleModalClose={handleModalClose}
       >
@@ -138,9 +138,11 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
               )}
             </div>
             <p className="text-14 font-normal">{cardData?.description}</p>
-            {!!cardData.imageUrl && (
-              <Image src={cardData.imageUrl} width={700} height={700} alt="Task Image" className="rounded-6" />
-            )}
+            <div className="w-450 h-full">
+              {!!cardData.imageUrl && (
+                <Image src={cardData.imageUrl} width={700} height={700} alt="Task Image" className="rounded-6" />
+              )}
+            </div>
             {!!cardData.id && (
               <Comments cardId={cardId} columnId={cardData.columnId} dashboardId={cardData.dashboardId} />
             )}
