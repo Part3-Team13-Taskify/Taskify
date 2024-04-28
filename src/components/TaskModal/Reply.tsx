@@ -16,10 +16,6 @@ const Reply = ({ id, nickname: name, profile, date, content: replyContent }: Pro
   const [isEditting, setIsEditting] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>(replyContent);
 
-  // const deleteComment = async () => {
-  //   await instance.delete(`comments/`);
-  // };
-
   const handleEditCommentClick = () => {
     setIsEditting(true);
   };
@@ -41,8 +37,20 @@ const Reply = ({ id, nickname: name, profile, date, content: replyContent }: Pro
       alert('연결 상태가 좋지 않습니다');
     }
   };
+  const deleteComment = async () => {
+    const response = await instance.delete(`comments/${id}`);
+    if (response.status === 204) {
+      return alert('삭제 성공적');
+    }
+    if (response.status === 403) {
+      return alert(response.data.message);
+    }
+  };
   const handleEditSubmit: MouseEventHandler<HTMLButtonElement> = () => {
     putComment(replyValue);
+  };
+  const handleCommentDelete: MouseEventHandler<HTMLButtonElement> = () => {
+    deleteComment();
   };
 
   return (
@@ -88,7 +96,9 @@ const Reply = ({ id, nickname: name, profile, date, content: replyContent }: Pro
               <button className="underline" onClick={handleEditCommentClick}>
                 수정
               </button>
-              <button className="underline">삭제</button>
+              <button className="underline" onClick={handleCommentDelete}>
+                삭제
+              </button>
             </div>
           </>
         )}
