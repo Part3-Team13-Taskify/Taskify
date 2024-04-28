@@ -1,22 +1,16 @@
 import Image from 'next/image';
-import comments from '@/public/mock/Comment.json';
-import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
-
 import { format } from 'date-fns';
-import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import instance from '@/src/util/axios';
 import useModal from '@/src/hooks/useModal';
-
 import more from '@/public/assets/icon/moreVert.svg';
 import exit from '@/public/assets/icon/close.svg';
-
-import Reply from './Reply';
-
+import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
 import Modal from '../common/modal';
 import Chip from '../common/chip';
 import ModalPortal from '../common/modalPortal';
 import EditTask from './EditTask';
-import Button from '../common/button';
+import Comments from './Comments';
 
 interface ModalProps {
   openModal: boolean;
@@ -59,7 +53,6 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
   } = useModal();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [replyValue, setReplyValue] = useState('');
   const [cardData, setCardData] = useState<TaskData>();
   const [isPending, setIsPending] = useState(true);
 
@@ -84,9 +77,6 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
   const handleEditClick: MouseEventHandler<HTMLButtonElement> = () => {
     editTaskModalOpen();
     setIsDropdownOpen(false);
-  };
-  const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    setReplyValue(e.target.value.trim());
   };
 
   useEffect(() => {
@@ -149,53 +139,14 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
             </div>
             <p className="text-14 font-normal">{cardData?.description}</p>
             {!!cardData.imageUrl && (
-              <Image className="rounded-6 h-auto" src={cardData.imageUrl} width={450} height={450} alt="Task Image" />
+              <Image src={cardData.imageUrl} width={700} height={700} alt="Task Image" className="rounded-6" />
             )}
-            <div className="gap-24">
-              <div className="flex flex-col relative">
-                <label htmlFor="reply" className="my-10">
-                  댓글
-                </label>
-                <textarea
-                  id="reply"
-                  className="p-16 border-1 border-gray-d9 rounded-6 h-110 text-14 resize-none"
-                  placeholder="댓글 작성하기"
-                  onChange={handleTextChange}
-                />
-                <Button
-                  className="absolute bottom-12 right-12"
-                  buttonType="modal1"
-                  type="button"
-                  bgColor="white"
-                  textColor="violet"
-                  disabled={!!replyValue}
-                >
-                  입력
-                </Button>
-                <button
-                  className={`absolute bottom-12 right-12 text-12 border rounded-6 border-gray-df px-31 py-6 ${
-                    replyValue ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
-                  }`}
-                  disabled={!replyValue}
-                >
-                  입력
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-col gap-20">
-              {comments.comments.map((comment) => (
-                <Reply
-                  key={comment.id}
-                  nickname={comment.author.nickname}
-                  profile={comment.author.profileImageUrl}
-                  date={comment.createdAt}
-                  content={comment.content}
-                />
-              ))}
-            </div>
+            {!!cardData.id && (
+              <Comments cardId={cardId} columnId={cardData.columnId} dashboardId={cardData.dashboardId} />
+            )}
           </div>
           {(!!cardData?.assignee || !!cardData?.dueDate) && (
-            <div className="flex flex-col mobile:flex-row gap-10 border-1 border-gray-d9 rounded-8 max-w-200 mobile:max-w-none w-full max-h-160 p-16 min-w-180 my-16">
+            <div className="flex flex-col mobile:flex-row gap-10 border-1 border-gray-d9 rounded-8 max-w-200 mobile:max-w-none w-full h-fit p-16 min-w-180 my-16">
               {!!cardData?.assignee && (
                 <div className="flex flex-col gap-6 mobile:w-1/2">
                   <span className="text-12 font-semibold">담당자</span>
