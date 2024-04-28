@@ -91,7 +91,7 @@ const InvitationTable: React.FC<InvitationTableProps> = ({ invitations, setInvit
 
   return (
     <div>
-      <div className="flex justify-between mt-24 pl-70 pr-284 text-gray-9f mobile:hidden">
+      <div className="grid grid-cols-3 mt-24 pl-70 text-gray-9f mobile:hidden">
         <p>이름</p>
         <p>초대자</p>
         <p>수락 여부</p>
