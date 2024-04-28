@@ -15,16 +15,19 @@ const DashboardListItem = () => {
       {dashboardListData.map((data: Dashboard) => (
         <Link href={`/dashboard/${data.id}`} key={data.id}>
           <div
-            className="flex my-6 rounded-4 items-center justify-between "
+            className={`  hover:bg-violet-8% transition-all duration-100 flex my-6 rounded-4 items-center justify-between ${
+              data.id === selectedDashboard.id && ' text-white'
+            }`}
             role="button"
             tabIndex={0}
+            style={{ backgroundColor: data.id === selectedDashboard.id ? data.color : undefined }}
             onClick={() => handleClickDashboard(data)}
           >
             <div className="flex items-center">
               <div style={{ backgroundColor: data.color }} className="w-8 h-8 rounded-99 flex-shrink-0" />
               <p
                 className={`text-18 ml-16 mr-6 tablet:text-16 tablet:ml-10 tablet:mr-4 mobile:hidden ${
-                  data.id === selectedDashboard.id && ' text-violet'
+                  data.id === selectedDashboard.id && ''
                 }`}
               >
                 {data.title}

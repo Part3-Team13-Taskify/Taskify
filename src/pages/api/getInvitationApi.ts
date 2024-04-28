@@ -33,7 +33,10 @@ interface InvitationsResponse {
   invitations: Invitation[];
 }
 
-export const fetchInvitations = async (size: number, cursorId: number | null = null): Promise<InvitationsResponse> => {
+const fetchInvitations = async (
+  size: number,
+  cursorId: number | null = null,
+): Promise<InvitationsResponse | undefined> => {
   const cursorQuery = cursorId ? `&cursorId=${cursorId}` : '';
   try {
     if (localStorage.getItem('accessToken')) {
@@ -49,4 +52,7 @@ export const fetchInvitations = async (size: number, cursorId: number | null = n
       throw new Error('알 수 없는 에러 발생');
     }
   }
+  return undefined;
 };
+
+export default fetchInvitations;

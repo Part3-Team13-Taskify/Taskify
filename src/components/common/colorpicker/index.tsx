@@ -12,7 +12,6 @@ type ColorPickerProps = {
 const ColorPicker = ({ selectedColor, setSelectedColor, modal }: ColorPickerProps) => {
   const handleSelectColor = (color: string) => {
     setSelectedColor(color);
-    console.log(selectedColor);
   };
 
   return (
