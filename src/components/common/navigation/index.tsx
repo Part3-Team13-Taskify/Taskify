@@ -80,9 +80,9 @@ const Navigation = ({ title }: NavigationProps) => {
               {totalMembers.length > 1 && <Image src={vector} alt="vector" />}
             </>
           )}
-          <div className="flex items-center gap-10 relative ">
+          <div className="flex items-center gap-10 relative">
             {myProfile?.nickname && <MyProfile nickname={myProfile?.nickname} src={myProfile?.profileImageUrl} />}
-            <div role="none" onClick={toggle} onKeyDown={toggle} className="cursor-pointer">
+            <div onClick={toggle} className="cursor-pointer">
               {!dropDown ? (
                 <ChevronDownIcon className="w-20 h-20 text-gray-78" />
               ) : (
