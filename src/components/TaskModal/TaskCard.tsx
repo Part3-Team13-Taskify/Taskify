@@ -146,7 +146,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
             )}
           </div>
           {(!!cardData?.assignee || !!cardData?.dueDate) && (
-            <div className="flex flex-col mobile:flex-row gap-10 border-1 border-gray-d9 rounded-8 max-w-200 mobile:max-w-none w-full max-h-160 p-16 min-w-180 my-16">
+            <div className="flex flex-col mobile:flex-row gap-10 border-1 border-gray-d9 rounded-8 max-w-200 mobile:max-w-none w-full h-fit p-16 min-w-180 my-16">
               {!!cardData?.assignee && (
                 <div className="flex flex-col gap-6 mobile:w-1/2">
                   <span className="text-12 font-semibold">담당자</span>

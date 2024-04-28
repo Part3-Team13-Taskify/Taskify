@@ -1,7 +1,7 @@
-import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
-import Reply from './Reply';
+import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import instance from '@/src/util/axios';
 import { postComment } from '@/src/util/comments';
+import Reply from './Reply';
 
 interface CommentData {
   id: number;
@@ -15,10 +15,8 @@ interface CommentData {
     profileImageUrl: string;
   };
 }
-interface CommentResponse {
-  comments: CommentData[];
-  cursorId: number | null;
-}
+
+type CommentList = CommentData[] | [];
 
 interface IdData {
   cardId: number;
@@ -27,13 +25,23 @@ interface IdData {
 }
 
 const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
-  const [commentList, setCommentList] = useState<CommentResponse>({ comments: [], cursorId: null });
+  const [commentList, setCommentList] = useState<CommentList>([]);
   const [replyValue, setReplyValue] = useState('');
+  const [cursorId, setCursorId] = useState<number | null>(null);
   const isReplyWritten = replyValue.trim() !== '';
+  const lastCommentRef = useRef<HTMLDivElement>(null);
 
-  const getComments = async (id: number) => {
-    const response = await instance.get(`comments?cardId=${id}`);
-    setCommentList(response.data);
+  const getInitialComments = async (id: number) => {
+    const response = await instance.get(`comments?size=10&cardId=${id}`);
+    setCommentList(response.data.comments);
+    setCursorId(response.data.cursorId);
+  };
+  const getAdditionalComments = async (id: number, cursor: number) => {
+    const response = await instance.get(`comments?size=10&cursorId=${cursor}&cardId=${id}`);
+    setCursorId(response.data.cursorId);
+    setCommentList((prev) => {
+      return [...prev, ...response.data.comments];
+    });
   };
 
   const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
@@ -49,13 +57,33 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
     const response = await postComment(commentData);
     if (response.status === 201) {
       setReplyValue('');
-      await getComments(cardId);
+      await getInitialComments(cardId);
+    }
+  };
+  const handleObserver = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (target.isIntersecting && cursorId) {
+      getAdditionalComments(cardId, cursorId);
     }
   };
 
   useEffect(() => {
-    getComments(cardId);
+    getInitialComments(cardId);
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 0,
+    });
+    if (lastCommentRef.current) {
+      observer.observe(lastCommentRef.current);
+    }
+    return () => {
+      if (lastCommentRef.current) {
+        observer.unobserve(lastCommentRef.current);
+      }
+    };
+  }, [cursorId]);
 
   return (
     <>
@@ -83,7 +111,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
         </div>
       </div>
       <div className="flex flex-col gap-20">
-        {commentList.comments.map((comment) => (
+        {commentList.map((comment) => (
           <Reply
             id={comment.id}
             key={comment.id}
@@ -94,6 +122,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
           />
         ))}
       </div>
+      <div id="observer" ref={lastCommentRef} />
     </>
   );
 };

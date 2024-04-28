@@ -28,6 +28,7 @@ const Reply = ({ id, nickname: name, profile, date, content: replyContent }: Pro
   };
   const handleEditSubmit: MouseEventHandler<HTMLButtonElement> = () => {
     putComment(id, replyValue);
+    setIsEditting(false);
   };
   const handleCommentDelete: MouseEventHandler<HTMLButtonElement> = () => {
     deleteComment(id);
