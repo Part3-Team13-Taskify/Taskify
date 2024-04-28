@@ -1,6 +1,6 @@
 import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
-import instance from '@/src/util/axios';
-import { postComment } from '@/src/util/comments';
+// import instance from '@/src/util/axios';
+import { getAdditionalComments, getInitialComments, postComment } from '@/src/util/comments';
 import Reply from './Reply';
 
 interface CommentData {
@@ -31,19 +31,6 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
   const isReplyWritten = replyValue.trim() !== '';
   const lastCommentRef = useRef<HTMLDivElement>(null);
 
-  const getInitialComments = async (id: number) => {
-    const response = await instance.get(`comments?size=10&cardId=${id}`);
-    setCommentList(response.data.comments);
-    setCursorId(response.data.cursorId);
-  };
-  const getAdditionalComments = async (id: number, cursor: number) => {
-    const response = await instance.get(`comments?size=10&cursorId=${cursor}&cardId=${id}`);
-    setCursorId(response.data.cursorId);
-    setCommentList((prev) => {
-      return [...prev, ...response.data.comments];
-    });
-  };
-
   const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setReplyValue(e.target.value);
   };
@@ -57,18 +44,31 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
     const response = await postComment(commentData);
     if (response.status === 201) {
       setReplyValue('');
-      await getInitialComments(cardId);
+      const result = getInitialComments(cardId);
+      result.then((res) => {
+        setCommentList(res.data.comments);
+      });
     }
   };
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
     const target = entries[0];
     if (target.isIntersecting && cursorId) {
-      getAdditionalComments(cardId, cursorId);
+      const result = getAdditionalComments(cardId, cursorId);
+      result.then((res) => {
+        setCommentList((prev) => {
+          return [...prev, ...res.data.comments];
+        });
+        setCursorId(res.data.cursorId);
+      });
     }
   };
 
   useEffect(() => {
-    getInitialComments(cardId);
+    const response = getInitialComments(cardId);
+    response.then((res) => {
+      setCommentList(res.data.comments);
+      setCursorId(res.data.cursorId);
+    });
   }, []);
 
   useEffect(() => {

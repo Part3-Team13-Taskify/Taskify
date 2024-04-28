@@ -25,3 +25,13 @@ export const postComment = async (data: { content: string; cardId: number; colum
   const response = await instance.post(`comments`, data);
   return response;
 };
+
+export const getInitialComments = async (id: number) => {
+  const response = await instance.get(`comments?size=10&cardId=${id}`);
+  return response;
+};
+
+export const getAdditionalComments = async (id: number, cursor: number) => {
+  const response = await instance.get(`comments?size=10&cursorId=${cursor}&cardId=${id}`);
+  return response;
+};
