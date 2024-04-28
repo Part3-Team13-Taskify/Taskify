@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { fetchInvitations } from '@/src/pages/api/getInvitationApi';
-import { putInvitation } from '@/src/pages/api/putInvitationApi';
+import fetchInvitations from '@/src/pages/api/getInvitationApi';
+import putInvitation from '@/src/pages/api/putInvitationApi';
 import InvitationList from '@/src/components/mydashboard/table/InvitaionList';
 import Button from '@/src/components/common/button';
 
@@ -55,16 +55,18 @@ const InvitationTable: React.FC<InvitationTableProps> = ({ invitations, setInvit
       setLoading(true);
       try {
         const response = await fetchInvitations(10, cursorId);
-        setInvitations((prevInvitations) => [...prevInvitations, ...response.invitations]);
-        const newInvitations = initialLoad
-          ? response.invitations
-          : [
-              ...invitations.filter((inv) => response.invitations.every((newInv) => newInv.id !== inv.id)),
-              ...response.invitations,
-            ];
-        setInvitations(newInvitations);
-        setCursorId(response.cursorId);
-        setHasMore(response.invitations.length === 10);
+        if (response) {
+          setInvitations((prevInvitations) => [...prevInvitations, ...response.invitations]);
+          const newInvitations = initialLoad
+            ? response.invitations
+            : [
+                ...invitations.filter((inv) => response.invitations.every((newInv) => newInv.id !== inv.id)),
+                ...response.invitations,
+              ];
+          setInvitations(newInvitations);
+          setCursorId(response.cursorId);
+          setHasMore(response.invitations.length === 10);
+        }
       } catch (error) {
         console.error('Error fetching invitations:', error);
       }

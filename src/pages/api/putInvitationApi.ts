@@ -28,7 +28,7 @@ interface InvitationResponse {
   updatedAt: string;
 }
 
-export const putInvitation = async (invitationId: number, accept: boolean): Promise<InvitationResponse> => {
+const putInvitation = async (invitationId: number, accept: boolean): Promise<InvitationResponse | undefined> => {
   try {
     if (localStorage.getItem('accessToken')) {
       const response = await axios.put<InvitationResponse>(`invitations/${invitationId}`, {
@@ -45,4 +45,7 @@ export const putInvitation = async (invitationId: number, accept: boolean): Prom
     }
     throw error;
   }
+  return undefined;
 };
+
+export default putInvitation;

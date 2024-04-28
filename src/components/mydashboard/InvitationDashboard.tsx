@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchInvitations } from '@/src/pages/api/getInvitationApi';
+import fetchInvitations from '@/src/pages/api/getInvitationApi';
 import Button from '@/src/components/common/button';
 import addLarge from '@/public/assets/chip/addLarge.svg';
 import unsubscribeEmail from '@/public/assets/icon/unsubscribeEmail.svg';
@@ -41,7 +41,9 @@ const InvitationDashboard = () => {
     const fetchAndSetInvitations = async () => {
       try {
         const response = await fetchInvitations(10);
-        setInvitations(response.invitations);
+        if (response) {
+          setInvitations(response.invitations);
+        }
       } catch (error) {
         console.error('초대 목록을 불러오는 데 실패했습니다.', error);
       }
