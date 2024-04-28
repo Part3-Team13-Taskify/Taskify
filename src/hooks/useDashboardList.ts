@@ -30,7 +30,7 @@ const useDashboardList = () => {
   const handleLoadDashboardList = (resetOffset?: number) => {
     getDashboardList(resetOffset || offset).then((res) => {
       setDashboardListData(res?.dashboards);
-      const maxOffsets = Math.ceil(res.totalCount / itemsPerPage);
+      const maxOffsets = Math.ceil(Number(res?.totalCount) / itemsPerPage);
       setMaxOffset(maxOffsets);
       if (resetOffset) setOffset(resetOffset);
     });
