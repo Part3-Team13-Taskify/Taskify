@@ -6,29 +6,7 @@ import Card from '../../common/card';
 import ModalPortal from '../../common/modalPortal';
 import { TaskCard } from '../../TaskModal/TaskCard';
 
-export interface CardType {
-  id: number;
-  title: string;
-  description: string;
-  tags: string[] | [];
-  dueDate?: string;
-  assignee?: { id: number; nickname: string; profileImageUrl?: string };
-  imageUrl?: string;
-  teamId: string;
-  dashboardId: number;
-  columnId: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface CardListType {
-  cards: CardType[] | [];
-  totalCount: number;
-  cursorId: number | null;
-}
-
 const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
-  // const [cardList, setCardList] = useState<CardListType>({ cards: [], totalCount: 0, cursorId: null });
   const [hasMoreItems, setHasMoreItems] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +21,7 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
       const response = await getCardList({ column: columnId });
       const cardsData = response.cards;
 
-      const newCardList: CardListType = {
+      const newCardList = {
         cards: [...cardList.cards, ...cardsData],
         totalCount: response.totalCount,
         cursorId: response.cursorId,
@@ -63,7 +41,7 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
         const response = await getCardListAdditional({ column: columnId, targetId: cardList.cursorId });
         const cardsData = response.cards;
 
-        const newCardList: CardListType = {
+        const newCardList = {
           cards: [...cardList.cards, ...cardsData],
           totalCount: response.totalCount,
           cursorId: response.cursorId,
