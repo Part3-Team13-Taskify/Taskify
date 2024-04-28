@@ -28,7 +28,7 @@ const Dashboard = () => {
   const members = useMembersStore((state) => state.membersData);
   const invitees = useInviteesStore((state) => state.inviteesData);
   const { register, getValues, handleSubmit } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
-  const [selectedColor, setSelectedColor] = useState<string>(selectedDashboard.color);
+  const [selectedColor, setSelectedColor] = useState<string>(selectedDashboard?.color);
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
@@ -62,13 +62,13 @@ const Dashboard = () => {
     <div className="flex flex-col gap-25 tablet:gap-12">
       <DashboardCard>
         <div className="flex justify-between">
-          <p className="font-bold text-20">{selectedDashboard.title}</p>
+          <p className="font-bold text-20">{selectedDashboard?.title}</p>
           <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
         </div>
         <form onSubmit={handleSubmit(handleEditDashboard)}>
           <Input
             inputName="text"
-            inputContent={selectedDashboard.title}
+            inputContent={selectedDashboard?.title}
             labelId="text"
             labelText="대시보드 이름"
             type="text"
@@ -134,7 +134,7 @@ const Dashboard = () => {
           </Button>
         </TableHeader>
         <Table label="이메일">
-          {invitees.length === 0 && <p className="text-center mb-50 text-gray-400">초대된 사용자가 없습니다.</p>}
+          {invitees?.length === 0 && <p className="text-center mb-50 text-gray-400">초대된 사용자가 없습니다.</p>}
           {Array.isArray(invitees) &&
             invitees.map((invitee) => (
               <TableList

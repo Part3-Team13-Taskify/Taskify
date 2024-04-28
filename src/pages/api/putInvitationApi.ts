@@ -30,11 +30,13 @@ interface InvitationResponse {
 
 export const putInvitation = async (invitationId: number, accept: boolean): Promise<InvitationResponse> => {
   try {
-    const response = await axios.put<InvitationResponse>(`invitations/${invitationId}`, {
-      inviteAccepted: accept,
-    });
-    console.log(response.data);
-    return response.data;
+    if (localStorage.getItem('accessToken')) {
+      const response = await axios.put<InvitationResponse>(`invitations/${invitationId}`, {
+        inviteAccepted: accept,
+      });
+      console.log(response.data);
+      return response.data;
+    }
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

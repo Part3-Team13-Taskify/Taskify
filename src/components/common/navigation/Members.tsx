@@ -14,20 +14,20 @@ const Members = () => {
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
   const setTotalMembersData = useTotalMembersStore((state) => state.setTotalMembersData);
   const visibleCount = width <= 1199 ? 2 : 4;
-  const visibleMembers = totalMembers.slice(0, visibleCount);
-  const remainingCount = totalMembers.length - visibleMembers.length;
+  const visibleMembers = totalMembers?.slice(0, visibleCount);
+  const remainingCount = totalMembers?.length - visibleMembers?.length;
   const members = useMembersStore((state) => state.membersData);
 
   useEffect(() => {
     if (!idNumber) return;
     getTotalMembers(idNumber).then((res) => {
-      setTotalMembersData(res.members);
+      setTotalMembersData(res?.members);
     });
   }, [idNumber, members]);
 
   return (
     <div className="flex">
-      {visibleMembers.map((member) => (
+      {visibleMembers?.map((member) => (
         <div key={member.id}>
           {member.profileImageUrl ? (
             <Image src={member.profileImageUrl} alt="profile" width={30} height={30} className="border-2 rounded-99 " />

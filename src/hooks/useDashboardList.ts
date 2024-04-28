@@ -29,7 +29,7 @@ const useDashboardList = () => {
 
   const handleLoadDashboardList = (resetOffset?: number) => {
     getDashboardList(resetOffset || offset).then((res) => {
-      setDashboardListData(res.dashboards);
+      setDashboardListData(res?.dashboards);
       const maxOffsets = Math.ceil(res.totalCount / itemsPerPage);
       setMaxOffset(maxOffsets);
       if (resetOffset) setOffset(resetOffset);
@@ -37,7 +37,9 @@ const useDashboardList = () => {
   };
 
   useEffect(() => {
-    handleLoadDashboardList();
+    if (localStorage.getItem('accessToken')) {
+      handleLoadDashboardList();
+    }
   }, [offset]);
 
   return {
