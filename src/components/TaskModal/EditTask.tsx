@@ -24,7 +24,7 @@ interface EditTaskModalProps {
 
 export interface TaskData {
   assignee?: {
-    id: number;
+    userId: number;
     nickname: string;
     profileImageUrl?: string;
   };
@@ -62,8 +62,11 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
   const [columnList, setColumnList] = useState<ColumnData[]>([]);
   const [currentColumn, setCurrentColumn] = useState<ColumnData | undefined>({ id: editData.columnId, title: '' });
   const [isColumnSelectOpen, setIsColumnSelectOpen] = useState(false);
+  const [isAssigneeOpen, setIsAssigneeOpen] = useState(false);
+  const [currentAssigneee, setCurrentAssigneee] = useState<Member>(cardData.assignee);
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
   const columnRef = useRef<HTMLDivElement>(null);
+  const assigneeRef = useRef<HTMLDivElement>(null);
   const isRequiredFilled = editData.title && editData.description;
   const currentImage = editData.imageUrl || cardData.imageUrl;
   const imageBg = twMerge('z-10 p-24 w-fit rounded-6', currentImage ? '' : 'bg-gray-d9');
@@ -83,11 +86,11 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     setCurrentColumn(columnList.find((item) => item.id === editData.columnId));
   }, [columnList]);
 
-  const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    setEditData((prev) => {
-      return { ...prev, assigneeUserId: Number(e.target.value) };
-    });
-  };
+  // const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
+  //   setEditData((prev) => {
+  //     return { ...prev, assigneeUserId: Number(e.target.value) };
+  //   });
+  // };
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setEditData((prev) => {
       return { ...prev, title: e.target.value };
@@ -142,14 +145,21 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
   };
 
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
+    const handleColumnOutsideClick = (e: MouseEvent) => {
       if (columnRef.current && !columnRef.current.contains(e.target as Node)) {
         setIsColumnSelectOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleOutsideClick);
+    const handleAssigneeOutsideClick = (e: MouseEvent) => {
+      if (assigneeRef.current && !assigneeRef.current.contains(e.target as Node)) {
+        setIsAssigneeOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleColumnOutsideClick);
+    document.addEventListener('mousedown', handleAssigneeOutsideClick);
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('mousedown', handleColumnOutsideClick);
+      document.removeEventListener('mousedown', handleAssigneeOutsideClick);
     };
   }, []);
 
@@ -159,7 +169,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       <form className="flex flex-col gap-32 overflow-y-auto">
         <div className="flex flex-row mobile:flex-col gap-16 mobile:gap-24">
           <TaskLabel htmlFor="status" label="상태">
-            <div className="max-w-217 w-full border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
+            <div className="max-w-217 w-full border-1 h-64 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
               <Chip dot size="large">
                 {currentColumn?.title}
               </Chip>
@@ -171,7 +181,10 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                 />
               </button>
               {isColumnSelectOpen && (
-                <div className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-15">
+                <div
+                  ref={columnRef}
+                  className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-15"
+                >
                   {columnList.map((column) => {
                     return (
                       <button
@@ -196,19 +209,66 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             </div>
           </TaskLabel>
           <TaskLabel htmlFor="assignee" label="담당자">
-            <select
-              id="assignee"
-              className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15 mobile:max-w-none"
-              value={editData.assigneeUserId}
-              onChange={handleAssigneeSelect}
-            >
-              <option value={undefined} className="text-gray">
-                이름을 입력해 주세요
-              </option>
-              {memberData.map((member) => {
-                return <option value={member?.userId}>{member?.nickname}</option>;
-              })}
-            </select>
+            <div className="max-w-217 w-full border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsAssigneeOpen(!isAssigneeOpen);
+                }}
+              >
+                <div className="flex flex-row gap-8">
+                  {!!currentAssigneee?.profileImageUrl && (
+                    <Image
+                      src={currentAssigneee?.profileImageUrl}
+                      className="rounded-99"
+                      width={28}
+                      height={28}
+                      alt="profile"
+                    />
+                  )}
+                  <div>{currentAssigneee?.nickname}</div>
+                </div>
+                <Image
+                  src={dropdownIcon}
+                  alt="dropdown"
+                  className="absolute right-15 top-1/2 transform -translate-y-1/2"
+                />
+              </button>
+              {isAssigneeOpen && (
+                <div
+                  ref={assigneeRef}
+                  className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-8"
+                >
+                  {memberData.map((member) => {
+                    return (
+                      <button
+                        key={member?.userId}
+                        className="flex flex-row gap-8 rounded-6 hover:bg-gray-fa p-8"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentAssigneee(totalMembers.find((item) => item.userId === member?.userId));
+                          setIsAssigneeOpen(false);
+                          setEditData((prev) => {
+                            return { ...prev, assigneeUserId: member?.userId };
+                          });
+                        }}
+                      >
+                        {!!member?.profileImageUrl && (
+                          <Image
+                            src={member?.profileImageUrl}
+                            className="rounded-99"
+                            width={28}
+                            height={28}
+                            alt="profile"
+                          />
+                        )}
+                        {member?.nickname}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </TaskLabel>
         </div>
         <TaskLabel htmlFor="title" label="제목" isRequired>
