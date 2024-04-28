@@ -97,22 +97,27 @@ const Dashboard = () => {
         <Table label="이름">
           {Array.isArray(members) &&
             members.map((member) => (
-              <TableList
-                key={member.id}
-                src={member.profileImageUrl}
-                text={member.nickname}
-                isOwner={member.isOwner}
-                button={
-                  <Button
-                    buttonType="delete"
-                    textColor="violet"
-                    bgColor="white"
-                    onClick={() => handleDeleteMember(member.id).then(() => handleLoadMembers())}
-                  >
-                    삭제
-                  </Button>
-                }
-              />
+              <div className="relative">
+                <div className="absolute top-17 left-40 bg-beige-f9 px-7 py-3 rounded-10 text-violet opacity-0 hover:opacity-100 transition-opacity duration-200">
+                  {member.email}
+                </div>
+                <TableList
+                  key={member.id}
+                  src={member.profileImageUrl}
+                  text={member.nickname}
+                  isOwner={member.isOwner}
+                  button={
+                    <Button
+                      buttonType="delete"
+                      textColor="violet"
+                      bgColor="white"
+                      onClick={() => handleDeleteMember(member.id).then(() => handleLoadMembers())}
+                    >
+                      삭제
+                    </Button>
+                  }
+                />
+              </div>
             ))}
         </Table>
       </DashboardCard>
