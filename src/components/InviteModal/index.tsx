@@ -1,8 +1,10 @@
-import React from 'react';
-import { useForm, FieldError } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useForm, FieldError, Controller } from 'react-hook-form';
 import instance from '@/src/util/axios';
 import { useRouter } from 'next/router';
 import useInvitees from '@/src/hooks/useInvitees';
+import { MembersData } from '@/src/util/zustand';
+import Image from 'next/image';
 import Button from '../common/button';
 import Modal from '../common/modal';
 import Input, { InputForm } from '../common/input';
@@ -24,14 +26,30 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
     setError,
     clearErrors,
     watch,
+    control,
+    setValue,
   } = useForm<InputForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
   const router = useRouter();
   const { id } = router.query;
   const idNumber = Number(id);
-
   const textValue = watch('email');
+  const [memberOptions, setMemberOptions] = useState<MembersData[]>([]);
+  const [filteredOptions, setFilteredOptions] = useState(memberOptions);
 
   const { handleLoadInvitees } = useInvitees(idNumber);
+
+  useEffect(() => {
+    setFilteredOptions(memberOptions.filter((option) => option.nickname.includes(textValue ?? '')));
+  }, [textValue]);
+
+  useEffect(() => {
+    const fetchMemberOptions = async () => {
+      const res = await instance.get(`/members?page=1&size=99&dashboardId=6074`);
+      const members = res.data.members.slice(1);
+      setMemberOptions(members);
+    };
+    fetchMemberOptions();
+  }, []);
 
   const handleInvite = async () => {
     const email = getValues('email') || '';
@@ -52,31 +70,58 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
     }
   };
 
+  const handleClickOption = (value: string) => {
+    setValue('email', value);
+    clearErrors('email');
+  };
+
   return (
     <Modal className="w-540 mobile:w-327" openModal={openModal} handleModalClose={handleModalClose}>
       <div className="mb-32 text-24 font-bold mobile:mb-24 mobile:text-20">초대하기</div>
       <form className="flex flex-col" onSubmit={handleSubmit(handleInvite)}>
-        <Input
-          inputName="email"
-          inputContent="example@example.com"
-          labelId="email"
-          labelText="이메일"
-          type="email"
-          register={register('email', {
-            required: {
-              value: true,
-              message: '이메일을 입력해주세요.',
-            },
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: '이메일 형식으로 작성해 주세요.',
-            },
-          })}
-          clearError={clearErrors}
-          error={errors.email as FieldError}
-          inputCheckStyle="flex my-10"
-          labelDropStyle="w-full"
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <Input
+              inputName="email"
+              inputContent="example@example.com"
+              labelId="email"
+              labelText="이메일"
+              type="email"
+              {...field}
+              register={register('email', {
+                required: {
+                  value: true,
+                  message: '이메일을 입력해주세요.',
+                },
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: '이메일 형식으로 작성해 주세요.',
+                },
+              })}
+              clearError={clearErrors}
+              error={errors.email as FieldError}
+              inputCheckStyle="flex my-10"
+              labelDropStyle="w-full"
+            />
+          )}
         />
+        <div className="overflow-y-auto" style={{ maxHeight: '150px' }}>
+          {filteredOptions.map((member) => (
+            <div
+              key={member.id}
+              className="cursor-pointer hover:bg-violet-8% flex gap-10 my-3 rounded-l-99 rounded-r-4"
+              onClick={() => handleClickOption(member.email)}
+            >
+              <div className="rounded-99 w-30 h-30 overflow-hidden">
+                <Image src={member.profileImageUrl} width={30} height={30} alt="profile image" />
+              </div>
+              {member.nickname}
+            </div>
+          ))}
+        </div>
 
         <div className="flex justify-end gap-16">
           <Button buttonType="modal2" bgColor="white" textColor="gray" onClick={handleModalClose}>
