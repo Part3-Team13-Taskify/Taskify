@@ -24,7 +24,7 @@ interface TaskModalProps extends ModalProps {
 
 export interface TaskData {
   assignee?: {
-    id: number;
+    userId: number;
     nickname: string;
     profileImageUrl?: string;
   };
@@ -68,7 +68,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
       }
     };
     getTaskData();
-  }, []);
+  }, [editTaskModal]);
 
   const dueDate = cardData?.dueDate ? format(new Date(cardData.dueDate).toLocaleString('en-US'), 'yyyy.MM.dd') : '';
   const dropdownRef = useRef<HTMLDivElement>(null);
