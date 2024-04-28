@@ -9,7 +9,7 @@ const Layout = ({ navChildren, children }: { navChildren: React.ReactNode; child
       <div className="col-span-1 row-span-1 tablet:col-span-1 tablet:row-span-1 pc:col-span-2">
         <div className="grid grid-rows-1">
           <div className="row-span-1">{navChildren}</div>
-          <div className="row-span-1 overflow-x-auto">{children}</div>
+          <div className="row-span-1 overflow-auto h-[calc(100vh-7rem)]">{children}</div>
         </div>
       </div>
     </div>
