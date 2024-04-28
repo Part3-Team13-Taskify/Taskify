@@ -86,11 +86,6 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     setCurrentColumn(columnList.find((item) => item.id === editData.columnId));
   }, [columnList]);
 
-  // const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-  //   setEditData((prev) => {
-  //     return { ...prev, assigneeUserId: Number(e.target.value) };
-  //   });
-  // };
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setEditData((prev) => {
       return { ...prev, title: e.target.value };
@@ -209,25 +204,29 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             </div>
           </TaskLabel>
           <TaskLabel htmlFor="assignee" label="담당자">
-            <div className="max-w-217 w-full border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
+            <div className="max-w-217 w-full h-64 border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
               <button
                 onClick={(e) => {
                   e.preventDefault();
                   setIsAssigneeOpen(!isAssigneeOpen);
                 }}
               >
-                <div className="flex flex-row gap-8">
-                  {!!currentAssigneee?.profileImageUrl && (
-                    <Image
-                      src={currentAssigneee?.profileImageUrl}
-                      className="rounded-99"
-                      width={28}
-                      height={28}
-                      alt="profile"
-                    />
-                  )}
-                  <div>{currentAssigneee?.nickname}</div>
-                </div>
+                {currentAssigneee ? (
+                  <div className="flex flex-row gap-8">
+                    {!!currentAssigneee?.profileImageUrl && (
+                      <Image
+                        src={currentAssigneee?.profileImageUrl}
+                        className="rounded-99"
+                        width={28}
+                        height={28}
+                        alt="profile"
+                      />
+                    )}
+                    <div>{currentAssigneee?.nickname}</div>
+                  </div>
+                ) : (
+                  <>이름을 입력해 주세요.</>
+                )}
                 <Image
                   src={dropdownIcon}
                   alt="dropdown"
@@ -239,6 +238,19 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                   ref={assigneeRef}
                   className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-8"
                 >
+                  <button
+                    className="flex flex-row gap-8 rounded-6 hover:bg-gray-fa p-8"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentAssigneee(undefined);
+                      setIsAssigneeOpen(false);
+                      setEditData((prev) => {
+                        return { ...prev, assigneeUserId: undefined };
+                      });
+                    }}
+                  >
+                    이름을 입력해 주세요.
+                  </button>
                   {memberData.map((member) => {
                     return (
                       <button
