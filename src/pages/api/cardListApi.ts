@@ -3,7 +3,7 @@ import axios from '../../util/axios';
 export const getCardList = async ({ column }: { column: number }) => {
   try {
     if (localStorage.getItem('accessToken')) {
-      const response = await axios.get(`cards?size=10&columnId=${column}`);
+      const response = await axios.get(`cards?size=5&columnId=${column}`);
       return response.data;
     }
   } catch (error) {
