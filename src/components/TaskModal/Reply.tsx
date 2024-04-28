@@ -1,15 +1,17 @@
+import instance from '@/src/util/axios';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
 
 interface Props {
+  id: number;
   nickname: string;
   profile: string;
   date: string;
   content: string;
 }
 
-const Reply = ({ nickname: name, profile, date, content: replyContent }: Props) => {
+const Reply = ({ id, nickname: name, profile, date, content: replyContent }: Props) => {
   const formattedDate = format(new Date(date), 'yyyy.MM.dd HH:mm');
   const [isEditting, setIsEditting] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>(replyContent);
@@ -27,6 +29,20 @@ const Reply = ({ nickname: name, profile, date, content: replyContent }: Props) 
   };
   const handleReplyChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setReplyValue(e.target.value);
+  };
+  const putComment = async (content: string) => {
+    const response = await instance.put(`comments/${id}`, { content: content });
+    if (response.status === 200) {
+      alert('성공적!');
+      setIsEditting(false);
+    } else if (response.status !== 500) {
+      alert(response.data.message);
+    } else {
+      alert('연결 상태가 좋지 않습니다');
+    }
+  };
+  const handleEditSubmit: MouseEventHandler<HTMLButtonElement> = () => {
+    putComment(replyValue);
   };
 
   return (
@@ -58,6 +74,7 @@ const Reply = ({ nickname: name, profile, date, content: replyContent }: Props) 
                   className={`text-12 border rounded-6 border-gray-df px-31 py-6 ${
                     replyContent ? 'bg-white text-violet' : 'bg-gray-50 text-gray-78'
                   }`}
+                  onClick={handleEditSubmit}
                 >
                   수정
                 </button>

@@ -86,6 +86,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
       <div className="flex flex-col gap-20">
         {commentList.comments.map((comment) => (
           <Reply
+            id={comment.id}
             key={comment.id}
             nickname={comment.author.nickname}
             profile={comment.author.profileImageUrl}
