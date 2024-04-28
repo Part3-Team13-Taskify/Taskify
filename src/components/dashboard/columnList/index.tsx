@@ -8,6 +8,7 @@ import AddColumnButton from '../addColumnButton';
 import EditColumnButton from '../editColumnButton';
 import CreateTaskButton from '../createTaskButton';
 import CardList from '../cardList';
+
 type Columns = {
   id: number;
   title: string;
@@ -74,7 +75,7 @@ const ColumnsList: React.FC = () => {
               </div>
               <div className="flex flex-col gap-16">
                 <CreateTaskButton dashboardId={dashboardId} columnId={column.id} />
-                <CardList columnId={column.id} title={column.title}></CardList>
+                <CardList columnId={column.id} title={column.title} />
               </div>
             </div>
           );

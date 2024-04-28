@@ -1,17 +1,16 @@
 import Image from 'next/image';
-import TaskLabel from './TaskLabel';
-import Button from '../common/button';
 import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
-import Modal from '../common/modal';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
 import { format } from 'date-fns';
-import Chip from '../common/chip';
 import { useTotalMembersStore } from '@/src/util/zustand';
-
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
 import { twMerge } from 'tailwind-merge';
+import Modal from '../common/modal';
+import Chip from '../common/chip';
+import TaskLabel from './TaskLabel';
+import Button from '../common/button';
 
 interface CreateTaskModalProps {
   openModal: boolean;
@@ -88,14 +87,16 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       createData.tags.push(tag);
       return setTagValue('');
     }
+    return null;
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0];
+    const formdata = new FormData();
     if (file) {
+      formdata.append('image', file);
       const reader = new FileReader();
-      reader.onload = async (event) => {
-        const imageDataUrl = event.target?.result as string;
-        const response = await instance.post(`columns/${columnId}/card-image`, imageDataUrl);
+      reader.onload = async () => {
+        const response = await instance.post(`columns/${createData.columnId}/card-image`, formdata);
         if (response.status === 201) {
           setCreateData((prev) => {
             return { ...prev, imageUrl: response.data.imageUrl };
@@ -109,7 +110,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   const handleCreateClick = async () => {
     const postTaskData = await instance.post(`cards`, createData);
     if (postTaskData.status === 201) {
-      alert('생성 성공!');
+      // alert('생성 성공!');
       handleModalClose();
     }
   };
@@ -134,23 +135,23 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             })}
           </select>
         </TaskLabel>
-        <TaskLabel htmlFor="title" label="제목" isRequired={true}>
+        <TaskLabel htmlFor="title" label="제목" isRequired>
           <input
             id="title"
             className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
             placeholder="제목을 입력해 주세요"
             required
             onChange={handleTitleChange}
-          ></input>
+          />
         </TaskLabel>
-        <TaskLabel htmlFor="description" label="설명" isRequired={true}>
+        <TaskLabel htmlFor="description" label="설명" isRequired>
           <textarea
             id="description"
             className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             placeholder="설명을 입력해 주세요"
             required
             onChange={handleDescriptionChange}
-          ></textarea>
+          />
         </TaskLabel>
         <TaskLabel htmlFor="due-date" label="마감일">
           {/* TODO
@@ -167,7 +168,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
         </TaskLabel>
         <TaskLabel htmlFor="tag" label="태그">
           {!!createData.tags.length && (
-            <div className="flex flex-row gap-6">
+            <div className="flex flex-row gap-6 flex-wrap">
               {createData.tags.map((tag) => {
                 return (
                   <Chip>
@@ -180,7 +181,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
                         });
                       }}
                     >
-                      <Image src={close} width={14} height={14} alt="close"></Image>
+                      <Image src={close} width={14} height={14} alt="close" />
                     </button>
                   </Chip>
                 );
@@ -195,14 +196,11 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             onChange={handleTagChange}
             onKeyUp={handleTagEnter}
-          ></input>
+          />
         </TaskLabel>
-        {/* TODO
-        이미지 업로드 구현
-        이미지 업로드 API 사용 */}
         <TaskLabel label="이미지" divClass="relative">
           <label htmlFor="image" className={imageBg}>
-            <Image src={add} width={28} height={28} alt="add image"></Image>
+            <Image src={add} width={28} height={28} alt="add image" />
           </label>
           <input
             id="image"
@@ -212,7 +210,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
             hidden
             name="이미지 등록"
             onChange={handleImageChange}
-          ></input>
+          />
           {!!createData.imageUrl && (
             <Image
               src={createData.imageUrl}
@@ -220,7 +218,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
               height={76}
               alt="이미지"
               className="absolute rounded-6 w-76 h-76 opacity-70 top-1/2 -translate-y-1/4"
-            ></Image>
+            />
           )}
         </TaskLabel>
       </div>

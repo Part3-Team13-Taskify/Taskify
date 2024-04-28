@@ -1,25 +1,42 @@
 import Image from 'next/image';
-import TaskLabel from './TaskLabel';
-import Button from '../common/button';
-import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
-import Modal from '../common/modal';
-import { DateTimePicker } from '@mui/x-date-pickers';
-import { TaskData } from './TaskCard';
-import { CardData } from './CreateTask';
-import { Member } from './CreateTask';
-import { useTotalMembersStore } from '@/src/util/zustand';
-import { format } from 'date-fns';
-
-import add from '@/public/assets/icon/addViolet.svg';
-import close from '@/public/assets/icon/close.svg';
-import Chip from '../common/chip';
 import instance from '@/src/util/axios';
 import { twMerge } from 'tailwind-merge';
+import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
+import add from '@/public/assets/icon/addViolet.svg';
+import close from '@/public/assets/icon/close.svg';
+import { useTotalMembersStore } from '@/src/util/zustand';
+import { format } from 'date-fns';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import TaskLabel from './TaskLabel';
+import Button from '../common/button';
+import Modal from '../common/modal';
+import { CardData, Member } from './CreateTask';
+
+import Chip from '../common/chip';
 
 interface EditTaskModalProps {
   openModal: boolean;
   handleModalClose: () => void;
   cardData: TaskData;
+}
+
+export interface TaskData {
+  assignee?: {
+    id: number;
+    nickname: string;
+    profileImageUrl?: string;
+  };
+  columnId: number;
+  createdAt: string;
+  dashboardId: number;
+  description: string;
+  dueDate?: string;
+  id: number;
+  imageUrl?: string;
+  tags?: string[];
+  teamId: string;
+  title: string;
+  updatedAt: string;
 }
 
 const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, cardData }) => {
@@ -59,11 +76,11 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       return { ...prev, description: e.target.value };
     });
   };
-  const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    setEditData((prev) => {
-      return { ...prev };
-    });
-  };
+  // const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = () => {
+  //   setEditData((prev) => {
+  //     return { ...prev };
+  //   });
+  // };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setTagValue(tags);
@@ -72,18 +89,20 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     const tagInput = e.target as HTMLInputElement;
     const tag = tagInput.value.trim();
 
-    if ((e.key === 'Enter' || e.key === ' ') && tag !== '' && !editData.tags.includes(tag)) {
+    if ((e.key === ' ' || e.key === 'Enter') && tag !== '' && !editData.tags.includes(tag)) {
       editData.tags.push(tag);
       return setTagValue('');
     }
+    return null;
   };
   const handleImageChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0];
+    const formdata = new FormData();
     if (file) {
+      formdata.append('image', file);
       const reader = new FileReader();
-      reader.onload = async (event) => {
-        const imageDataUrl = event.target?.result as string;
-        const response = await instance.post(`columns/${editData.columnId}/card-image`, imageDataUrl);
+      reader.onload = async () => {
+        const response = await instance.post(`columns/${editData.columnId}/card-image`, formdata);
         if (response.status === 201) {
           setEditData((prev) => {
             return { ...prev, imageUrl: response.data.imageUrl };
@@ -93,6 +112,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       reader.readAsDataURL(file);
     }
   };
+
   const handleEditClick = async () => {
     const response = await instance.put(`cards/${cardData.id}`, editData);
     if (response.status === 200) {
@@ -106,7 +126,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       <div className="text-24 font-bold">할 일 수정</div>
       <form className="flex flex-col gap-32 overflow-y-auto">
         <div className="flex flex-row mobile:flex-col gap-16 mobile:gap-24">
-          <TaskLabel htmlFor="status" label="상태">
+          {/* <TaskLabel htmlFor="status" label="상태">
             <select
               id="status"
               value={status}
@@ -117,7 +137,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
               <option value="done">Done</option>
               <option value="on-progress">On Progress</option>
             </select>
-          </TaskLabel>
+          </TaskLabel> */}
           <TaskLabel htmlFor="assignee" label="담당자">
             <select
               id="assignee"
@@ -134,7 +154,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             </select>
           </TaskLabel>
         </div>
-        <TaskLabel htmlFor="title" label="제목" isRequired={true}>
+        <TaskLabel htmlFor="title" label="제목" isRequired>
           <input
             id="title"
             className="border-1 border-gray-9f rounded-6 focus:border-violet p-15"
@@ -142,9 +162,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             value={editData.title}
             required
             onChange={handleTitleChange}
-          ></input>
+          />
         </TaskLabel>
-        <TaskLabel htmlFor="description" label="설명" isRequired={true}>
+        <TaskLabel htmlFor="description" label="설명" isRequired>
           <textarea
             id="description"
             className="resize-none border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
@@ -152,7 +172,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             required
             value={editData.description}
             onChange={handleDescriptionChange}
-          ></textarea>
+          />
         </TaskLabel>
         <TaskLabel htmlFor="due-date" label="마감일">
           <DateTimePicker
@@ -167,7 +187,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
         </TaskLabel>
         <TaskLabel htmlFor="tag" label="태그">
           {!!editData.tags.length && (
-            <div className="flex flex-row gap-6">
+            <div className="flex flex-row gap-6 w-full flex-wrap">
               {editData.tags.map((tag) => {
                 return (
                   <Chip>
@@ -180,7 +200,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                         });
                       }}
                     >
-                      <Image src={close} width={14} height={14} alt="close"></Image>
+                      <Image src={close} width={14} height={14} alt="close" />
                     </button>
                   </Chip>
                 );
@@ -195,11 +215,11 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             className="border-1 border-gray-9f rounded-6 focus-within:border-violet p-15"
             onChange={handleTagChange}
             onKeyUp={handleTagEnter}
-          ></input>
+          />
         </TaskLabel>
         <TaskLabel label="이미지" divClass="relative">
           <label htmlFor="image" className={imageBg}>
-            <Image src={add} width={28} height={28} alt="add image"></Image>
+            <Image src={add} width={28} height={28} alt="add image" />
           </label>
           <input
             id="image"
@@ -209,7 +229,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
             hidden
             name="이미지 등록"
             onChange={handleImageChange}
-          ></input>
+          />
           {!!currentImage && (
             <Image
               src={currentImage}
@@ -217,7 +237,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
               height={76}
               alt="이미지"
               className="absolute rounded-6 w-76 h-76 opacity-70 top-1/2 -translate-y-1/4"
-            ></Image>
+            />
           )}
         </TaskLabel>
       </form>
