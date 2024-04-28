@@ -80,20 +80,17 @@ const Navigation = ({ title }: NavigationProps) => {
               {totalMembers.length > 1 && <Image src={vector} alt="vector" />}
             </>
           )}
-          <div
-            role="none"
-            onClick={toggle}
-            onKeyDown={toggle}
-            className="flex items-center gap-10 relative cursor-pointer"
-          >
+          <div className="flex items-center gap-10 relative ">
             {myProfile?.nickname && <MyProfile nickname={myProfile?.nickname} src={myProfile?.profileImageUrl} />}
-            {!dropDown ? (
-              <ChevronDownIcon className="w-20 h-20 text-gray-78" />
-            ) : (
-              <ChevronUpIcon className="w-20 h-20 text-gray-78" />
-            )}
+            <div role="none" onClick={toggle} onKeyDown={toggle} className="cursor-pointer">
+              {!dropDown ? (
+                <ChevronDownIcon className="w-20 h-20 text-gray-78" />
+              ) : (
+                <ChevronUpIcon className="w-20 h-20 text-gray-78" />
+              )}
 
-            {dropDown && <Dropdown setDropDown={setDropDown} />}
+              {dropDown && <Dropdown setDropDown={setDropDown} />}
+            </div>
           </div>
         </div>
       </div>
