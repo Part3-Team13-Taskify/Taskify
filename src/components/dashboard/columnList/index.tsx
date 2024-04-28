@@ -29,8 +29,6 @@ const ColumnsList: React.FC = () => {
 
   const { cardLists } = useCardListStore();
 
-  // Access the cardLists object
-
   // 컬럼리스트 불러오기
   const getColumnsList = async () => {
     try {
@@ -51,14 +49,14 @@ const ColumnsList: React.FC = () => {
     <div className="flex-1">
       <div
         ref={containerRef}
-        className="flex overflow-x-hidden min-h-[calc(100vh-7.8rem)] tablet:flex-col tablet:left-160 mobile:flex-col mobile:left-67 "
+        className="flex overflow-x-hidden min-h-[calc(100vh-7.8rem)] bg-gray-fa tablet:flex-col tablet:left-160 mobile:flex-col mobile:left-67 "
       >
         {/* {MOCK_DATA.map((dataGroup) =>
           dataGroup.dashboards.map((dashboard) => ( */}
         {columnsList?.map((column) => (
           <div
             key={column.id}
-            className="w-354 p-20 bg-gray-fa border-solid border-r-1 border-gray-ee tablet:w-full tablet:border-b-1 mobile:w-full"
+            className="w-354 p-20 border-solid border-r-1 border-gray-ee tablet:w-full tablet:border-b-1 mobile:w-full"
           >
             <div className=" flex justify-between mb-25 ">
               <div className="flex justify-center items-center ">
