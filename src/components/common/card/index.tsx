@@ -50,7 +50,7 @@ const Card = ({ id, src, title, date, profile, tags, onClick }: CardInfo) => {
   return (
     <button
       onClick={handleCardClick}
-      className="text-left tablet:max-w-full max-w-450 rounded-6 p-16 border-1 border-gray-d9 bg-white hover:border-violet"
+      className="text-left tablet:max-w-full max-w-450 rounded-6 p-16 border-1 border-gray-d9 bg-white hover:bg-violet-8%"
     >
       <div className="flex mobile:flex-col tablet:flex-row flex-col justify:start gap-12">
         <div className="aspect-video rounded-6 mobile:w-full tablet:w-90 w-full max-h-135 tablet:h-41 mobile:h-full mobile:max-h-none overflow-hidden">

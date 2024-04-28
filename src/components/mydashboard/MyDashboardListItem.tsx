@@ -15,7 +15,7 @@ const MyDashboardListItem = React.memo(({ data, handleClick, selectedDashboard }
   <Link href={`/dashboard/${data.id}`} key={data.id}>
     <div
       key={data.id}
-      className="flex justify-between px-20 items-center w-332 h-70 rounded-8 bg-white border-gray-d9 border-1 tablet:w-247 tablet:h-68 mobile:w-full mobile:h-58 "
+      className="flex justify-between px-20 items-center h-70 rounded-8 bg-white border-gray-d9 border-1  tablet:h-68 mobile:w-full mobile:h-58 "
       role="button"
       tabIndex={0}
       onClick={() => handleClick(data.id)}

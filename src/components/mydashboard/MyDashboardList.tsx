@@ -55,10 +55,10 @@ const DashboardList = () => {
   }, [updatePageInfo]);
 
   return (
-    <div className="flex-col mobile:w-full">
-      <div className="grid grid-cols-3 gap-12 my-16 tablet:grid-cols-2 tablet:gap-10 mobile:flex mobile:flex-col mobile:gap-8">
+    <div className="flex-col max-w-1022 mobile:w-full">
+      <div className="max-w-1022 grid grid-cols-3 gap-12 my-16 tablet:grid-cols-2 tablet:gap-10 mobile:flex mobile:flex-col mobile:gap-8">
         <Button
-          className="mobile:w-full"
+          className=""
           buttonType="dashboardAdd"
           bgColor="white"
           textColor="black"

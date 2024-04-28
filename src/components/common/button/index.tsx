@@ -51,7 +51,7 @@ const buttonClasses = {
     'flex justify-center items-center w-40 h-40 rounded-tl-0 rounded-tr-4 rounded-br-4 rounded-bl-0 mobile:w-36 mobile:h-36',
   // 대시보드추가 버튼 : width-332px
   dashboardAdd:
-    'flex justify-center items-center gap-12 w-332 h-70 rounded-8 text-16 font-semibold tablet:w-247 tablet:h-68 mobile:w-260 mobile:h-58 mobile:text-14 mobile:text-14',
+    'flex justify-center items-center gap-12 h-70 rounded-8 text-16 font-semibold  tablet:h-68  mobile:h-58 mobile:text-14 mobile:text-14',
   // 모달버튼1 : width-83px
   modal1: 'w-83 h-32 rounded-4 text-12 font-medium mobile:w-84 mobile:h-28',
   // 모달버튼2 : width-120px
