@@ -1,31 +1,49 @@
 import Link from 'next/link';
 import crown from '@/public/assets/icon/crown.svg';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import type { Dashboard } from '@/src/util/zustand';
-import React from 'react';
+import React, { useState } from 'react';
 import useDashboardList from '@/src/hooks/useDashboardList';
 import { useDashboardListStore } from '@/src/util/zustand';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import instance from '@/src/util/axios';
+import DashboardListPagination from './DashboardListPagination';
 
 const DashboardListItem = () => {
   const dashboardListData = useDashboardListStore((state) => state.dashboardListData);
-  const { selectedDashboard, handleClickDashboard, setDashboardListData } = useDashboardList();
+  const { selectedDashboard, handleClickDashboard, setDashboardListData, handleLoadDashboardList } = useDashboardList();
+  const [isDragging, setIsDragging] = useState(false);
+  const router = useRouter();
 
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) {
+  const handleDragEnd = async (result: DropResult) => {
+    const { source, destination } = result;
+    setIsDragging(false);
+
+    if (!destination) {
       return;
     }
 
-    const items = Array.from(dashboardListData);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    if (destination.droppableId === 'bin') {
+      const item = dashboardListData[source.index];
+      await instance.delete(`/dashboards/${item.id}`);
+      router.push('/my-dashboard');
+      handleLoadDashboardList();
+    } else {
+      const items = Array.from(dashboardListData);
+      const [reorderedItem] = items.splice(source.index, 1);
+      items.splice(destination.index, 0, reorderedItem);
+      setDashboardListData(items);
+    }
+  };
 
-    // Set the state with the new ordered list
-    setDashboardListData(items);
+  const handleDragStart = () => {
+    setIsDragging(true);
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+    <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <Droppable droppableId="dasboardList">
         {(droppableProvided) => (
           <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef} className="dasboardList">
@@ -63,6 +81,14 @@ const DashboardListItem = () => {
               </Draggable>
             ))}
             {droppableProvided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      <DashboardListPagination />
+      <Droppable droppableId="bin">
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps} className="flex justify-center p-10">
+            {isDragging && <TrashIcon className="w-30 h-30  hover:text-red" />}
           </div>
         )}
       </Droppable>

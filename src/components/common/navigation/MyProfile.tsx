@@ -10,7 +10,7 @@ const MyProfile = ({ nickname, src }: MyProfileProps) => {
   return (
     <div className="flex gap-12 items-center">
       {src ? (
-        <Image src={src} alt="last name initial" width={30} height={30} className="rounded-99" />
+        <Image src={src} alt="last name initial" width={30} height={30} className="rounded-99 border-2" />
       ) : (
         <InitialImage nickname={nickname} />
       )}
