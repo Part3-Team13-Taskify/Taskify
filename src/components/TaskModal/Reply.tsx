@@ -1,4 +1,4 @@
-import instance from '@/src/util/axios';
+import { deleteComment, putComment } from '@/src/util/comments';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
@@ -26,31 +26,11 @@ const Reply = ({ id, nickname: name, profile, date, content: replyContent }: Pro
   const handleReplyChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setReplyValue(e.target.value);
   };
-  const putComment = async (content: string) => {
-    const response = await instance.put(`comments/${id}`, { content: content });
-    if (response.status === 200) {
-      alert('성공적!');
-      setIsEditting(false);
-    } else if (response.status !== 500) {
-      alert(response.data.message);
-    } else {
-      alert('연결 상태가 좋지 않습니다');
-    }
-  };
-  const deleteComment = async () => {
-    const response = await instance.delete(`comments/${id}`);
-    if (response.status === 204) {
-      return alert('삭제 성공적');
-    }
-    if (response.status === 403) {
-      return alert(response.data.message);
-    }
-  };
   const handleEditSubmit: MouseEventHandler<HTMLButtonElement> = () => {
-    putComment(replyValue);
+    putComment(id, replyValue);
   };
   const handleCommentDelete: MouseEventHandler<HTMLButtonElement> = () => {
-    deleteComment();
+    deleteComment(id);
   };
 
   return (

@@ -1,6 +1,7 @@
-import instance from '@/src/util/axios';
 import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 import Reply from './Reply';
+import instance from '@/src/util/axios';
+import { postComment } from '@/src/util/comments';
 
 interface CommentData {
   id: number;
@@ -34,24 +35,22 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
     const response = await instance.get(`comments?cardId=${id}`);
     setCommentList(response.data);
   };
-  const postComment = async (card: number, column: number, dashboard: number) => {
-    const response = await instance.post(`comments`, {
-      content: replyValue,
-      cardId: card,
-      columnId: column,
-      dashboardId: dashboard,
-    });
-    if (response.status === 201) {
-      setReplyValue('');
-      getComments(cardId);
-    }
-  };
 
   const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setReplyValue(e.target.value);
   };
-  const handleReplyClick: MouseEventHandler<HTMLButtonElement> = () => {
-    postComment(cardId, columnId, dashboardId);
+  const handleReplyClick: MouseEventHandler<HTMLButtonElement> = async () => {
+    const commentData = {
+      content: replyValue,
+      cardId: cardId,
+      columnId: columnId,
+      dashboardId: dashboardId,
+    };
+    const response = await postComment(commentData);
+    if (response.status === 201) {
+      setReplyValue('');
+      await getComments(cardId);
+    }
   };
 
   useEffect(() => {
