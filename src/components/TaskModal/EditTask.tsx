@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import instance from '@/src/util/axios';
 import { twMerge } from 'tailwind-merge';
-import { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, KeyboardEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
 import { useTotalMembersStore } from '@/src/util/zustand';
 import { format } from 'date-fns';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import { getColumns } from '@/src/pages/api/columnsApi';
+import dropdownIcon from '@/public/assets/icon/arrowDropDown.svg';
 import TaskLabel from './TaskLabel';
 import Button from '../common/button';
 import Modal from '../common/modal';
@@ -39,6 +41,11 @@ export interface TaskData {
   updatedAt: string;
 }
 
+interface ColumnData {
+  id: number;
+  title: string;
+}
+
 const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, cardData }) => {
   if (!openModal) return null;
 
@@ -52,14 +59,29 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     tags: cardData.tags || [],
     imageUrl: cardData.imageUrl,
   });
+  const [columnList, setColumnList] = useState<ColumnData[]>([]);
+  const [currentColumn, setCurrentColumn] = useState<ColumnData | undefined>({ id: editData.columnId, title: '' });
+  const [isColumnSelectOpen, setIsColumnSelectOpen] = useState(false);
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+  const columnRef = useRef<HTMLDivElement>(null);
   const isRequiredFilled = editData.title && editData.description;
   const currentImage = editData.imageUrl || cardData.imageUrl;
   const imageBg = twMerge('z-10 p-24 w-fit rounded-6', currentImage ? '' : 'bg-gray-d9');
 
   useEffect(() => {
     setMemberData(totalMembers);
+    const result = getColumns(cardData.dashboardId);
+    result.then((data) => {
+      setColumnList(
+        data.data.map((column: any) => {
+          return { id: column.id, title: column.title };
+        }),
+      );
+    });
   }, []);
+  useEffect(() => {
+    setCurrentColumn(columnList.find((item) => item.id === editData.columnId));
+  }, [columnList]);
 
   const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setEditData((prev) => {
@@ -76,16 +98,16 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       return { ...prev, description: e.target.value };
     });
   };
-  // const handleStatusChange: ChangeEventHandler<HTMLSelectElement> = () => {
-  //   setEditData((prev) => {
-  //     return { ...prev };
-  //   });
-  // };
+  const handleColumnlistOpen: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    setIsColumnSelectOpen(!isColumnSelectOpen);
+  };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setTagValue(tags);
   };
   const handleTagEnter: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
     const tagInput = e.target as HTMLInputElement;
     const tag = tagInput.value.trim();
 
@@ -112,32 +134,67 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       reader.readAsDataURL(file);
     }
   };
-
   const handleEditClick = async () => {
     const response = await instance.put(`cards/${cardData.id}`, editData);
     if (response.status === 200) {
-      alert('수정 성공!');
       handleModalClose();
     }
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (columnRef.current && !columnRef.current.contains(e.target as Node)) {
+        setIsColumnSelectOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <Modal className="max-w-540 w-full max-h-910 h-svh" openModal={openModal} handleModalClose={handleModalClose}>
       <div className="text-24 font-bold">할 일 수정</div>
       <form className="flex flex-col gap-32 overflow-y-auto">
         <div className="flex flex-row mobile:flex-col gap-16 mobile:gap-24">
-          {/* <TaskLabel htmlFor="status" label="상태">
-            <select
-              id="status"
-              value={status}
-              onSelect={handleStatusChange}
-              className="max-w-217 w-full border-1 border-gray-9f rounded-6 focus:border-violet p-15 mobile:max-w-none"
-            >
-              <option value="to-do">To Do</option>
-              <option value="done">Done</option>
-              <option value="on-progress">On Progress</option>
-            </select>
-          </TaskLabel> */}
+          <TaskLabel htmlFor="status" label="상태">
+            <div className="max-w-217 w-full border-1 border-gray-9f rounded-6 relative focus:border-violet p-15 mobile:max-w-none">
+              <Chip dot size="large">
+                {currentColumn?.title}
+              </Chip>
+              <button onClick={handleColumnlistOpen}>
+                <Image
+                  src={dropdownIcon}
+                  alt="dropdown"
+                  className="absolute right-15 top-1/2 transform -translate-y-1/2"
+                />
+              </button>
+              {isColumnSelectOpen && (
+                <div className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-15">
+                  {columnList.map((column) => {
+                    return (
+                      <button
+                        className="text-left"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentColumn(columnList.find((item) => item.id === column.id));
+                          setIsColumnSelectOpen(false);
+                          setEditData((prev) => {
+                            return { ...prev, columnId: column.id };
+                          });
+                        }}
+                      >
+                        <Chip dot size="large">
+                          {column.title}
+                        </Chip>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </TaskLabel>
           <TaskLabel htmlFor="assignee" label="담당자">
             <select
               id="assignee"
