@@ -98,7 +98,7 @@ const Dashboard = () => {
           {Array.isArray(members) &&
             members.map((member) => (
               <TableList
-                key={member.userId}
+                key={member.id}
                 src={member.profileImageUrl}
                 text={member.nickname}
                 isOwner={member.isOwner}

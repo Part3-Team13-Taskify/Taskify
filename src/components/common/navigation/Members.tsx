@@ -15,7 +15,7 @@ const Members = () => {
   const setTotalMembersData = useTotalMembersStore((state) => state.setTotalMembersData);
   const visibleCount = width <= 1199 ? 2 : 4;
   const visibleMembers = totalMembers?.slice(0, visibleCount);
-  const remainingCount = Number(totalMembers?.length) - Number(visibleMembers?.length) - 1;
+  const remainingCount = Number(totalMembers?.length) - Number(visibleMembers?.length);
   const members = useMembersStore((state) => state.membersData);
 
   useEffect(() => {
