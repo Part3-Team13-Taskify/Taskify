@@ -55,7 +55,7 @@ const Card = ({ id, src, title, date, profile, tags, onClick }: CardInfo) => {
       <div className="flex mobile:flex-col tablet:flex-row flex-col justify:start items-center gap-12">
         {!!src && (
           <div className="max-h-135 rounded-6 mobile:w-full tablet:w-90 w-full tablet:h-full mobile:h-full mobile:max-h-none overflow-hidden">
-            <Image src={src} width={700} height={700} alt="Card Image" className="object-cover rounded-6" />
+            <Image src={src} width={700} height={700} alt="Card Image" className="object-cover rounded-6" priority />
           </div>
         )}
         <div className="w-full flex flex-col gap-10">
@@ -64,14 +64,16 @@ const Card = ({ id, src, title, date, profile, tags, onClick }: CardInfo) => {
             {formattedTags.length !== 0 && (
               <div className="flex flex-row w-full tablet:w-fit flex-wrap flex-none justify-start gap-6">
                 {formattedTags.map((tag) => {
-                  return <Chip>{tag}</Chip>;
+                  return <Chip key={tag}>{tag}</Chip>;
                 })}
               </div>
             )}
             <div className="flex flex-row justify-between content-center w-full">
               {!!formattedDate && (
                 <div className="flex flex-row gap-6">
-                  <Image src={calender} width={18} height={18} alt="date" className="inline-block" />
+                  <div className="w-18 h-18">
+                    <Image src={calender} width={18} height={18} alt="date" className="inline-block" />
+                  </div>
                   <span className="font-medium text-gray-78">{formattedDate}</span>
                 </div>
               )}
