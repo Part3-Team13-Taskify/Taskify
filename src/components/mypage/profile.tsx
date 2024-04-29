@@ -19,7 +19,7 @@ interface InputForm {
 }
 
 const Profile = () => {
-  const [temp, setTemp] = useState(''); // 이미지 url이 담김
+  const [temp, setTemp] = useState('');
   const setMyProfile = useMyProfileStore((state) => state.setMyProfile);
   const {
     register,
@@ -31,38 +31,31 @@ const Profile = () => {
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues: async () => {
-      // defaultValues : form의 기본값을 정해줄수있음 -> 이용해서 이메일, 닉네임 전달해주기
       const response = await getMyPageProfile();
-      setTemp(response.profileImageUrl); // 처음 서버에서 url을 받아서 브라우저 url에 넣어줌
-      return { email: response.email, text: response.nickname, file: temp }; // 가져온 사용자 정보 확인용
+      setTemp(response.profileImageUrl);
+      return { email: response.email, text: response.nickname, file: temp };
     },
   });
 
   const [open, setOpen] = useState(false);
 
   const handleModal = () => {
-    // open이 true일때 모달이 열림
     setOpen(!open);
   };
 
-  const imagefile = watch('file'); // watch를 통해서 input의 value를 가져옴 : 능동적으로 움직여야해서 getValue말고 watch를 씀
+  const imagefile = watch('file');
 
-  // 이미지 미리보기(브라우저에 임시 전달)
   useEffect(() => {
     if (imagefile && imagefile.length > 0) {
-      setTemp(URL.createObjectURL(new Blob([imagefile[0]], { type: 'image/png' }))); // file의 url을 서버까지 전송하지 않고 브라우저에 임시적으로 저장하기 위해 URL.createObjectURL()사용
-      // new Blob 첫 인자엔 쓸 값, 두번째 인자엔 타입(이미지 png를 쓸거)
+      setTemp(URL.createObjectURL(new Blob([imagefile[0]], { type: 'image/png' })));
     }
   }, [imagefile]);
 
-  // 버튼클릭시, 새 닉네임, 이미지 url 전달
   const onSubmit = async (data: InputForm) => {
     if (temp === null || temp === '') {
       handleModal();
     }
-    // 이미지 url전달(서버에 최종전달)
     if (data.file && data.file.length === 1) {
-      // data.file 키로 0, length가 있는데, 0은 url이므로 판별이 어려움
       const formdata = new FormData();
       formdata.append('image', data.file[0]);
       const response = await postMyPageProfile(formdata);
@@ -70,7 +63,7 @@ const Profile = () => {
       const updatedMyProfile = await putMyPageProfile(putdata);
       setMyProfile(updatedMyProfile);
     } else {
-      const putdata = { nickname: data.text, profileImageUrl: data.file ? data.file : '' }; // nickname만 필요하지만 put은 전체 데이터를 요구
+      const putdata = { nickname: data.text, profileImageUrl: data.file ? data.file : '' };
       const updatedMyProfile = await putMyPageProfile(putdata);
       setMyProfile(updatedMyProfile);
     }
@@ -81,7 +74,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-full">
+    <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-544 mobile:w-284">
       <p className="font-bold text-20">프로필</p>
 
       <form className="flex flex-row w-366 tablet:w-290 mobile:flex-col mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
