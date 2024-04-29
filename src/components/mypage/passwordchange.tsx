@@ -18,7 +18,7 @@ interface InputForm {
 const PasswordChange = () => {
   const {
     register,
-    handleSubmit, // handleSubmit 추가
+    handleSubmit,
     formState: { errors },
     clearErrors,
     reset,
@@ -53,7 +53,7 @@ const PasswordChange = () => {
   };
 
   return (
-    <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-full">
+    <div className="w-620 rounded-8 bg-white px-28 py-32 flex flex-col gap-37 mobile:gap-24 tablet:w-544 mobile:w-284">
       <p className="font-bold text-20">비밀번호 변경</p>
       <form className="flex flex-col w-564 tablet:w-488 mobile:w-244" onSubmit={handleSubmit(onSubmit)}>
         <PasswordInput
