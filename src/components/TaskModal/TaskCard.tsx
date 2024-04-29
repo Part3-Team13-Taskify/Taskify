@@ -154,10 +154,9 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                   <span className="text-12 font-semibold">담당자</span>
                   <div className="flex flex-row justify-start content-center gap-8">
                     <div className="w-34 h-34 overflow-hidden rounded-99">
-                      <Image
+                      <img
+                        className="w-34 h-34"
                         src={cardData?.assignee?.profileImageUrl || defaultProfile}
-                        width={34}
-                        height={34}
                         alt="profile"
                       />
                     </div>
