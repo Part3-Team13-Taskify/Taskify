@@ -134,13 +134,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
               {currentAssigneee ? (
                 <div className="flex flex-row justify-center gap-8">
                   {!!currentAssigneee?.profileImageUrl && (
-                    <Image
-                      src={currentAssigneee?.profileImageUrl}
-                      className="rounded-99"
-                      width={28}
-                      height={28}
-                      alt="profile"
-                    />
+                    <img src={currentAssigneee?.profileImageUrl} className="w-28 h-28 rounded-99" alt="profile" />
                   )}
                   <div>{currentAssigneee?.nickname}</div>
                 </div>
@@ -186,13 +180,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
                       }}
                     >
                       {!!member?.profileImageUrl && (
-                        <Image
-                          src={member?.profileImageUrl}
-                          className="rounded-99"
-                          width={28}
-                          height={28}
-                          alt="profile"
-                        />
+                        <img src={member?.profileImageUrl} className="w-28 h-28 rounded-99" alt="profile" />
                       )}
                       {member?.nickname}
                     </button>
