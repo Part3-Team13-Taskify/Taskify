@@ -7,25 +7,24 @@ import MyDashboardListItem from '@/src/components/mydashboard/MyDashboardListIte
 import Button from '@/src/components/common/button';
 import addLarge from '@/public/assets/chip/addLarge.svg';
 import AddDashboardModal from '@/src/components/dashboardModal/addDashboardModal';
+import useModal from '@/src/hooks/useModal';
+import ModalPortal from '@/src/components/common/modalPortal/';
 import Image from 'next/image';
 
 const DashboardList = () => {
   const [selectedDashboard, setSelectedDashboard] = useState(0);
   const dashboardList = useMyDashboardListStore((state) => state.myDashboardList);
   const setMyDashboardList = useMyDashboardListStore((state) => state.setMyDashboardList);
-  const [isAddDashboardModalVisible, setIsAddDashboardModalVisible] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [offset, setOffset] = useState(1);
   const itemsPerPage = 5;
   const maxOffset = Math.ceil(totalCount / itemsPerPage);
 
-  const showAddDashboardModal = () => {
-    setIsAddDashboardModalVisible(true);
-  };
-
-  const hideAddDashboardModal = () => {
-    setIsAddDashboardModalVisible(false);
-  };
+  const {
+    openModal: addDashboardModal,
+    handleModalClose: addDashboardModalClose,
+    handleModalOpen: addDashboardModalOpen,
+  } = useModal();
 
   const handleClick = useCallback((dashboardId: number) => {
     setSelectedDashboard(dashboardId);
@@ -63,14 +62,14 @@ const DashboardList = () => {
           bgColor="white"
           textColor="black"
           type="button"
-          onClick={showAddDashboardModal}
+          onClick={addDashboardModalOpen}
         >
           새로운 대시보드
           <Image src={addLarge} alt="addBox" className="w-22 h-22 p-3 rounded bg-violet-8%" />
         </Button>
-        {isAddDashboardModalVisible && (
-          <AddDashboardModal openModal={isAddDashboardModalVisible} handleModalClose={hideAddDashboardModal} />
-        )}
+        <ModalPortal>
+          <AddDashboardModal openModal={addDashboardModal} handleModalClose={addDashboardModalClose} />
+        </ModalPortal>
         {Array.isArray(dashboardList) &&
           dashboardList.map((data: Dashboard) => (
             <MyDashboardListItem
