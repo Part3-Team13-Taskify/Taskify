@@ -147,7 +147,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
               {!!cardData?.tags?.length && (
                 <div className="flex flex-row flex-wrap gap-6 border-l-1 overflow-auto border-gray-d9 pl-12">
                   {cardData.tags.map((tag) => {
-                    return <Chip>{tag}</Chip>;
+                    return <Chip key={tag}>{tag}</Chip>;
                   })}
                 </div>
               )}

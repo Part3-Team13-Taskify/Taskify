@@ -19,10 +19,10 @@ const SideBar = () => {
       <div className="px-20">
         <Link href="/my-dashboard">
           <div className="w-109 mb-60 mobile:hidden">
-            <Image src={logo} alt="logo" />
+            <Image src={logo} alt="logo" priority />
           </div>
           <div className="hidden tabelt:hidden mobile:block w-24 ">
-            <Image src={mobileLogo} alt="mobile logo" />
+            <Image src={mobileLogo} alt="mobile logo" priority />
           </div>
         </Link>
         <div className="flex justify-between">
