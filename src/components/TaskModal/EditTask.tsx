@@ -58,7 +58,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     description: cardData.description,
     tags: cardData.tags || [],
     imageUrl: cardData.imageUrl,
+    dueDate: cardData.dueDate,
   });
+  // console.log(new Date(editData.dueDate));
 
   const columnList = useColumnList((state) => state.columnList);
   const setColumnList = useColumnList((state) => state.setColumnList);
@@ -308,6 +310,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
           <DateTimePicker
             label="날짜를 입력해 주세요"
             className="max-w-450"
+            value={editData.dueDate ? new Date(editData.dueDate) : undefined}
             onChange={(date) => {
               setEditData((prev) => {
                 return { ...prev, dueDate: date ? format(date, 'yyyy-MM-dd HH:mm') : undefined };
