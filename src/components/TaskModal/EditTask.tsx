@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { ChangeEventHandler, KeyboardEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
-import { useColumnList, useTotalMembersStore } from '@/src/util/zustand';
+import { useColumnList, useIsCardFormatted, useTotalMembersStore } from '@/src/util/zustand';
 import { format } from 'date-fns';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { getColumns } from '@/src/pages/api/columnsApi';
@@ -67,6 +67,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
   const [isAssigneeOpen, setIsAssigneeOpen] = useState(false);
   const [currentAssigneee, setCurrentAssigneee] = useState<Member>(cardData.assignee);
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+  const setIsCardFormatted = useIsCardFormatted((state) => state.setIsCardFormatted);
   const columnRef = useRef<HTMLDivElement>(null);
   const assigneeRef = useRef<HTMLDivElement>(null);
   const isRequiredFilled = editData.title && editData.description;
@@ -139,6 +140,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     const response = await instance.put(`cards/${cardData.id}`, editData);
     if (response.status === 200) {
       handleModalClose();
+      setIsCardFormatted(true);
     }
   };
 

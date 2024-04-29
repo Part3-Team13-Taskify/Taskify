@@ -54,8 +54,6 @@ const ColumnsList: React.FC = () => {
         ref={containerRef}
         className="flex overflow-x-hidden min-h-[calc(100vh-7.8rem)] bg-gray-fa tablet:flex-col tablet:left-160 mobile:flex-col mobile:left-67 "
       >
-        {/* {MOCK_DATA.map((dataGroup) =>
-          dataGroup.dashboards.map((dashboard) => ( */}
         {columnsList?.map((column) => (
           <div
             key={column.id}
@@ -79,13 +77,11 @@ const ColumnsList: React.FC = () => {
             </div>
             <div className="flex flex-col gap-16">
               <CreateTaskButton dashboardId={dashboardId} columnId={column.id} />
-              <CardList columnId={column.id} title={column.title} />
+              <CardList columnId={column.id} />
             </div>
           </div>
         ))}
       </div>
-      {/* )),
-        )} */}
       <AddColumnButton dashboardId={dashboardId} setColumnsList={setColumnsList} columnsList={columnsList} />
       <ScrollButton containerRef={containerRef} />
     </div>

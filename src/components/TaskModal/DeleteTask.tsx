@@ -1,4 +1,6 @@
 import deleteTask from '@/src/pages/api/taskModalApi';
+
+import { useIsCardFormatted } from '@/src/util/zustand';
 import Button from '../common/button';
 import Modal from '../common/modal';
 
@@ -16,10 +18,13 @@ interface DeleteModal extends ModalProps {
 const DeleteTask = ({ openModal, handleModalClose, handleCardClose, cardTitle, cardId }: DeleteModal) => {
   if (!openModal) return null;
 
+  const setIsCardFormatted = useIsCardFormatted((state) => state.setIsCardFormatted);
+
   const handleDeleteClick = () => {
     deleteTask(cardId);
     handleModalClose();
     handleCardClose();
+    setIsCardFormatted(true);
   };
 
   return (

@@ -191,3 +191,15 @@ export const useColumnList = create<ColumnList>((set) => ({
     set({ columnList: columns });
   },
 }));
+
+type IsCardFormatted = {
+  isCardFormatted: boolean;
+  setIsCardFormatted: (isFormatted: boolean) => void;
+};
+
+export const useIsCardFormatted = create<IsCardFormatted>((set) => ({
+  isCardFormatted: false,
+  setIsCardFormatted: (isFormatted) => {
+    set({ isCardFormatted: isFormatted });
+  },
+}));

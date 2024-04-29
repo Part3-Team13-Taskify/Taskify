@@ -3,7 +3,7 @@ import { ChangeEventHandler, KeyboardEventHandler, useEffect, useRef, useState }
 import { DateTimePicker } from '@mui/x-date-pickers';
 import instance from '@/src/util/axios';
 import { format } from 'date-fns';
-import { useTotalMembersStore } from '@/src/util/zustand';
+import { useIsCardFormatted, useTotalMembersStore } from '@/src/util/zustand';
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
 import dropdownIcon from '@/public/assets/icon/arrowDropDown.svg';
@@ -55,6 +55,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
   });
 
   const totalMembers = useTotalMembersStore((state) => state.totalMembersData);
+  const setIsCardFormatted = useIsCardFormatted((state) => state.setIsCardFormatted);
   const assigneeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,11 +75,6 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
       return { ...prev, description: e.target.value.trim() };
     });
   };
-  // const handleAssigneeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-  //   setCreateData((prev) => {
-  //     return { ...prev, assigneeUserId: Number(e.target.value) };
-  //   });
-  // };
   const handleTagChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const tags = e.target.value.trim();
     setTagValue(tags);
@@ -116,6 +112,7 @@ const CreateTask: React.FC<CreateTaskModalProps> = ({ openModal, handleModalClos
     if (postTaskData.status === 201) {
       alert('생성 성공!');
       handleModalClose();
+      setIsCardFormatted(true);
     }
   };
 
