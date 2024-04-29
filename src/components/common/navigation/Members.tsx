@@ -1,5 +1,4 @@
 import { useTotalMembersStore, useMembersStore } from '@/src/util/zustand';
-import Image from 'next/image';
 import useWindowSize from '@/src/hooks/useWindowSize';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -32,13 +31,7 @@ const Members = () => {
           <div key={member.id}>
             {member.profileImageUrl ? (
               <div className="overflow-hidden w-30 h-30 rounded-99 -ml-8">
-                <Image
-                  src={member.profileImageUrl}
-                  alt="profile"
-                  width={30}
-                  height={30}
-                  className="border-2 rounded-99 "
-                />
+                <img src={member.profileImageUrl} alt="profile" className="border-2 rounded-99 w-30 h-30 " />
               </div>
             ) : (
               <InitialImage nickname={member.nickname} className="-ml-8" />

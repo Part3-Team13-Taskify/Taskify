@@ -185,7 +185,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
               {isColumnSelectOpen && (
                 <div
                   ref={columnRef}
-                  className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-15 mt-3"
+                  className="flex flex-col gap-4 align-top absolute top-45 -left-1 border-1 bg-white border-gray-9f rounded-6 w-full p-15 mt-3 z-10"
                 >
                   {columnList.map((column) => {
                     return (
@@ -220,15 +220,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                 }}
               >
                 {currentAssigneee ? (
-                  <div className="flex flex-row gap-8 px-16 py-10">
+                  <div className="flex flex-row items-center gap-8 px-16 py-10">
                     {!!currentAssigneee?.profileImageUrl && (
-                      <Image
-                        src={currentAssigneee?.profileImageUrl}
-                        className="rounded-99"
-                        width={28}
-                        height={28}
-                        alt="profile"
-                      />
+                      <img src={currentAssigneee?.profileImageUrl} className="w-28 h-28 rounded-99" alt="profile" />
                     )}
                     <div>{currentAssigneee?.nickname}</div>
                   </div>
@@ -263,7 +257,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                     return (
                       <button
                         key={member?.userId}
-                        className="flex flex-row gap-8 rounded-6 hover:bg-gray-ee p-8"
+                        className="flex flex-row items-center gap-8 rounded-6 hover:bg-gray-ee p-8"
                         onClick={(e) => {
                           e.preventDefault();
                           setCurrentAssigneee(totalMembers.find((item) => item.userId === member?.userId));
@@ -274,13 +268,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
                         }}
                       >
                         {!!member?.profileImageUrl && (
-                          <Image
-                            src={member?.profileImageUrl}
-                            className="rounded-99"
-                            width={28}
-                            height={28}
-                            alt="profile"
-                          />
+                          <img src={member?.profileImageUrl} className="w-28 h-28 rounded-99" alt="profile" />
                         )}
                         {member?.nickname}
                       </button>
