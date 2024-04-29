@@ -34,7 +34,6 @@ const Signin = () => {
   const [error, setError] = useState('');
 
   const handleModal = () => {
-    // open이 true일때 모달이 열림
     setOpen(!open);
   };
 
@@ -42,13 +41,11 @@ const Signin = () => {
     const body = { email: data.email, password: data.password };
     const response = await postUser('auth/login', body);
     if (response && response.status === 201) {
-      // 로그인 성공, mydashboard 이동 + 토큰
       window.localStorage.setItem('accessToken', response.data.accessToken);
       router.push('/my-dashboard');
     } else {
-      // 로그인 실패, 오류메세지를 품은 모달창
       setError(response ? response.data.message : '');
-      handleModal(); // 오픈일때 오류가 보이게
+      handleModal();
     }
   };
 

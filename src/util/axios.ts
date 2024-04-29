@@ -5,7 +5,6 @@ const instance = axios.create({
 });
 
 const getToken = () => {
-  // 브라우저(윈도우객체)가 있을때만 실행
   if (typeof window !== undefined) {
     const token = window.localStorage.getItem('accessToken');
     return token;
