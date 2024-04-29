@@ -29,6 +29,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
   const [cursorId, setCursorId] = useState<number | null>(null);
   const isReplyWritten = replyValue.trim() !== '';
   const lastCommentRef = useRef<HTMLDivElement>(null);
+  const [currentEditing, setCurrentEditing] = useState(0);
 
   const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setReplyValue(e.target.value);
@@ -68,6 +69,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
       setCommentList(res.data.comments);
       setCursorId(res.data.cursorId);
     });
+    setCurrentEditing(0);
   }, []);
 
   useEffect(() => {
@@ -118,6 +120,8 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
             profile={comment.author.profileImageUrl}
             date={comment.createdAt}
             content={comment.content}
+            currentEditing={currentEditing}
+            setCurrentEditing={setCurrentEditing}
           />
         ))}
       </div>
