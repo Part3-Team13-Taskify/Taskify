@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { ChangeEventHandler, KeyboardEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import add from '@/public/assets/icon/addViolet.svg';
 import close from '@/public/assets/icon/close.svg';
-import { useTotalMembersStore } from '@/src/util/zustand';
+import { useColumnList, useTotalMembersStore } from '@/src/util/zustand';
 import { format } from 'date-fns';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { getColumns } from '@/src/pages/api/columnsApi';
@@ -59,7 +59,9 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
     tags: cardData.tags || [],
     imageUrl: cardData.imageUrl,
   });
-  const [columnList, setColumnList] = useState<ColumnData[]>([]);
+
+  const columnList = useColumnList((state) => state.columnList);
+  const setColumnList = useColumnList((state) => state.setColumnList);
   const [currentColumn, setCurrentColumn] = useState<ColumnData | undefined>({ id: editData.columnId, title: '' });
   const [isColumnSelectOpen, setIsColumnSelectOpen] = useState(false);
   const [isAssigneeOpen, setIsAssigneeOpen] = useState(false);
@@ -82,6 +84,7 @@ const EditTask: React.FC<EditTaskModalProps> = ({ openModal, handleModalClose, c
       );
     });
   }, []);
+
   useEffect(() => {
     setCurrentColumn(columnList.find((item) => item.id === editData.columnId));
   }, [columnList]);

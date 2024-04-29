@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { getColumns } from '@/src/pages/api/columnsApi';
 import Image from 'next/image';
-import { useCardListStore } from '@/src/util/zustand';
+import { useCardListStore, useColumnList } from '@/src/util/zustand';
 import Violet from '@/public/assets/chip/ellipseVioletSmall.svg';
 import ScrollButton from '../scrollButton';
 import AddColumnButton from '../addColumnButton';
@@ -29,11 +29,14 @@ const ColumnsList: React.FC = () => {
 
   const { cardLists } = useCardListStore();
 
+  const setColumnList = useColumnList((state) => state.setColumnList);
+
   // 컬럼리스트 불러오기
   const getColumnsList = async () => {
     try {
       const columnsData = await getColumns(dashboardId);
       setColumnsList(columnsData.data);
+      setColumnList(columnsData.data);
     } catch (error) {
       console.error('Error fetching columns list:', error);
     }

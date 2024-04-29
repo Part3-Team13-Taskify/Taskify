@@ -6,6 +6,7 @@ import useModal from '@/src/hooks/useModal';
 import more from '@/public/assets/icon/moreVert.svg';
 import exit from '@/public/assets/icon/close.svg';
 import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
+import { useColumnList, Column } from '@/src/util/zustand';
 import Modal from '../common/modal';
 import Chip from '../common/chip';
 import ModalPortal from '../common/modalPortal';
@@ -19,7 +20,6 @@ interface ModalProps {
 
 interface TaskModalProps extends ModalProps {
   cardId: number;
-  columnName: string;
 }
 
 export interface TaskData {
@@ -41,7 +41,7 @@ export interface TaskData {
   updatedAt: string;
 }
 
-export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: TaskModalProps) => {
+export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps) => {
   if (!openModal) {
     return null;
   }
@@ -55,12 +55,15 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [cardData, setCardData] = useState<TaskData>();
   const [isPending, setIsPending] = useState(true);
+  const [currentColumn, setCurrentColumn] = useState<Column>();
+  const columnList = useColumnList((state) => state.columnList);
 
   useEffect(() => {
     const getTaskData = async () => {
       try {
         const response = await instance.get(`cards/${cardId}`);
         setCardData(response.data);
+        setCurrentColumn(columnList.find((item) => item.id === response.data.columnId));
       } catch {
         console.log('error');
       } finally {
@@ -127,7 +130,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
           <div className="flex flex-col gap-16 max-w-450 w-full mt-12">
             <div className="flex flex-row flex-wrap gap-12">
               <div className="h-26">
-                <Chip dot>{columnName}</Chip>
+                <Chip dot>{currentColumn?.title}</Chip>
               </div>
               {!!cardData?.tags?.length && (
                 <div className="flex flex-row flex-wrap gap-6 border-l-1 overflow-auto border-gray-d9 pl-12">
