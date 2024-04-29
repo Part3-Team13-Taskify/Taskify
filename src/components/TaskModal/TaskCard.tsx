@@ -12,6 +12,7 @@ import Chip from '../common/chip';
 import ModalPortal from '../common/modalPortal';
 import EditTask from './EditTask';
 import Comments from './Comments';
+import DeleteTask from './DeleteTask';
 
 interface ModalProps {
   openModal: boolean;
@@ -51,6 +52,11 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
     handleModalClose: editTaskModalClose,
     handleModalOpen: editTaskModalOpen,
   } = useModal();
+  const {
+    openModal: deleteTaskModal,
+    handleModalClose: deleteTaskModalClose,
+    handleModalOpen: deleteTaskModalOpen,
+  } = useModal();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [cardData, setCardData] = useState<TaskData>();
@@ -81,6 +87,10 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
     editTaskModalOpen();
     setIsDropdownOpen(false);
   };
+  const handleDeleteClick: MouseEventHandler<HTMLButtonElement> = () => {
+    deleteTaskModalOpen();
+    setIsDropdownOpen(false);
+  };
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -104,9 +114,6 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
         <div className="flex flex-row mobile:flex-col-reverse justify-between">
           <div className="text-24 font-semibold">{cardData?.title}</div>
           <div className="flex justify-end gap-24">
-            <ModalPortal>
-              <EditTask cardData={cardData} openModal={editTaskModal} handleModalClose={editTaskModalClose} />
-            </ModalPortal>
             {isDropdownOpen && (
               <div
                 className="flex flex-col absolute border-1 rounded-6 p-6 text-14 font-normal bg-white top-65 right-95"
@@ -115,7 +122,12 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
                 <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%" onClick={handleEditClick}>
                   수정
                 </button>
-                <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%">삭제</button>
+                <button
+                  className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%"
+                  onClick={handleDeleteClick}
+                >
+                  삭제
+                </button>
               </div>
             )}
             <button onClick={handleDropdownOpen}>
@@ -176,6 +188,18 @@ export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps
             </div>
           )}
         </div>
+        <ModalPortal>
+          <EditTask cardData={cardData} openModal={editTaskModal} handleModalClose={editTaskModalClose} />
+        </ModalPortal>
+        <ModalPortal>
+          <DeleteTask
+            openModal={deleteTaskModal}
+            handleModalClose={deleteTaskModalClose}
+            handleCardClose={handleModalClose}
+            cardTitle={cardData.title}
+            cardId={cardData.id}
+          />
+        </ModalPortal>
       </Modal>
     );
   return null;
