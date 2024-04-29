@@ -11,19 +11,26 @@ interface Props {
   content: string;
   currentEditing: number;
   setCurrentEditing: Dispatch<SetStateAction<number>>;
+  setIsCommentFormatted: Dispatch<SetStateAction<boolean>>;
 }
 
-const Reply = ({ id, nickname: name, profile, date, content, currentEditing, setCurrentEditing }: Props) => {
+const Reply = ({
+  id,
+  nickname: name,
+  profile,
+  date,
+  content,
+  currentEditing,
+  setCurrentEditing,
+  setIsCommentFormatted,
+}: Props) => {
   const formattedDate = format(new Date(date), 'yyyy.MM.dd HH:mm');
-  // const [isEditting, setIsEditting] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>(content);
 
   const handleEditCommentClick = () => {
-    // setIsEditting(true);
     setCurrentEditing(id);
   };
   const handleEditCancel = () => {
-    // setIsEditting(false);
     setCurrentEditing(0);
     setReplyValue(content);
   };
@@ -32,11 +39,12 @@ const Reply = ({ id, nickname: name, profile, date, content, currentEditing, set
   };
   const handleEditSubmit: MouseEventHandler<HTMLButtonElement> = () => {
     putComment(id, replyValue);
-    // setIsEditting(false);
     setCurrentEditing(0);
+    setIsCommentFormatted(true);
   };
   const handleCommentDelete: MouseEventHandler<HTMLButtonElement> = () => {
     deleteComment(id);
+    setIsCommentFormatted(true);
   };
 
   return (

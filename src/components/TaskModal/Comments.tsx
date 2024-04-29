@@ -30,6 +30,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
   const isReplyWritten = replyValue.trim() !== '';
   const lastCommentRef = useRef<HTMLDivElement>(null);
   const [currentEditing, setCurrentEditing] = useState(0);
+  const [isCommentFormatted, setIsCommentFormatted] = useState(false);
 
   const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setReplyValue(e.target.value);
@@ -70,7 +71,8 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
       setCursorId(res.data.cursorId);
     });
     setCurrentEditing(0);
-  }, []);
+    setIsCommentFormatted(false);
+  }, [isCommentFormatted]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
@@ -122,6 +124,7 @@ const Comments = ({ cardId, columnId, dashboardId }: IdData) => {
             content={comment.content}
             currentEditing={currentEditing}
             setCurrentEditing={setCurrentEditing}
+            setIsCommentFormatted={setIsCommentFormatted}
           />
         ))}
       </div>
