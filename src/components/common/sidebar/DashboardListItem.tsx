@@ -36,6 +36,7 @@ const DashboardListItem = () => {
 
     if (destination.droppableId === 'bin') {
       const item = dashboardListData[source.index];
+      if (!item.createdByMe) return;
       await instance.delete(`/dashboards/${item.id}`);
       router.push('/my-dashboard');
       handleLoadDashboardList();

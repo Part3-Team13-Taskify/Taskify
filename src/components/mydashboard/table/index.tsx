@@ -3,6 +3,9 @@ import fetchInvitations from '@/src/pages/api/getInvitationApi';
 import putInvitation from '@/src/pages/api/putInvitationApi';
 import InvitationList from '@/src/components/mydashboard/table/InvitaionList';
 import Button from '@/src/components/common/button';
+import instance from '@/src/util/axios';
+import { useMyDashboardListStore } from '@/src/util/zustand';
+import useDashboardList from '@/src/hooks/useDashboardList';
 
 interface Inviter {
   nickname: string;
@@ -31,13 +34,18 @@ const InvitationTable: React.FC<InvitationTableProps> = ({ invitations, setInvit
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement>(null);
-
+  const setMyDashboardList = useMyDashboardListStore((state) => state.setMyDashboardList);
+  const { handleLoadDashboardList } = useDashboardList();
   const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
     try {
       setLoading(true);
       await putInvitation(invitationId, accept);
 
       setInvitations((currentInvitations) => currentInvitations.filter((invite) => invite.id !== invitationId));
+      const res = await instance.get('/dashboards?navigationMethod=pagination&page=1&size=5');
+      console.log(res.data);
+      setMyDashboardList(res.data.dashboards);
+      handleLoadDashboardList(1);
     } catch (error) {
       console.error(error);
     } finally {

@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Button from '../common/button';
 import Modal from '../common/modal';
 import Input, { InputForm } from '../common/input';
+import InitialImage from '../common/navigation/InitialImage';
 
 interface InviteModalProps {
   openModal: boolean;
@@ -44,10 +45,14 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
 
   useEffect(() => {
     const fetchMemberOptions = async () => {
-      const res = await instance.get(`/members?page=1&size=99&dashboardId=6074`);
-      const members = res.data.members.slice(1);
-      setMemberOptions(members);
-      setFilteredOptions(members);
+      try {
+        const res = await instance.get(`/members?page=1&size=99&dashboardId=6074`);
+        const members = res.data.members.slice(1);
+        setMemberOptions(members);
+        setFilteredOptions(members);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchMemberOptions();
   }, []);
@@ -117,7 +122,11 @@ const InviteModal: React.FC<InviteModalProps> = ({ openModal, handleModalClose }
               onClick={() => handleClickOption(member.email)}
             >
               <div className="rounded-99 w-30 h-30 overflow-hidden">
-                <Image src={member.profileImageUrl} width={30} height={30} alt="profile image" />
+                {member.profileImageUrl ? (
+                  <Image src={member.profileImageUrl} width={30} height={30} alt="profile image" />
+                ) : (
+                  <InitialImage nickname={member.nickname} />
+                )}
               </div>
               {member.nickname}
             </div>
