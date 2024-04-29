@@ -1,6 +1,5 @@
 import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from 'react';
-// import instance from '@/src/util/axios';
-import { getAdditionalComments, getInitialComments, postComment } from '@/src/util/comments';
+import { getAdditionalComments, getInitialComments, postComment } from '@/src/pages/api/comments';
 import Reply from './Reply';
 
 interface CommentData {

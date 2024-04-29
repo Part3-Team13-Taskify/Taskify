@@ -1,4 +1,4 @@
-import { deleteComment, putComment } from '@/src/util/comments';
+import { deleteComment, putComment } from '@/src/pages/api/comments';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
