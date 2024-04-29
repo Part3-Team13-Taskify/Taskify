@@ -6,11 +6,13 @@ import useModal from '@/src/hooks/useModal';
 import more from '@/public/assets/icon/moreVert.svg';
 import exit from '@/public/assets/icon/close.svg';
 import defaultProfile from '@/public/assets/chip/ellipseDefault.svg';
+import { useColumnList, Column } from '@/src/util/zustand';
 import Modal from '../common/modal';
 import Chip from '../common/chip';
 import ModalPortal from '../common/modalPortal';
 import EditTask from './EditTask';
 import Comments from './Comments';
+import DeleteTask from './DeleteTask';
 
 interface ModalProps {
   openModal: boolean;
@@ -19,7 +21,6 @@ interface ModalProps {
 
 interface TaskModalProps extends ModalProps {
   cardId: number;
-  columnName: string;
 }
 
 export interface TaskData {
@@ -41,7 +42,7 @@ export interface TaskData {
   updatedAt: string;
 }
 
-export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: TaskModalProps) => {
+export const TaskCard = ({ openModal, handleModalClose, cardId }: TaskModalProps) => {
   if (!openModal) {
     return null;
   }
@@ -51,16 +52,24 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
     handleModalClose: editTaskModalClose,
     handleModalOpen: editTaskModalOpen,
   } = useModal();
+  const {
+    openModal: deleteTaskModal,
+    handleModalClose: deleteTaskModalClose,
+    handleModalOpen: deleteTaskModalOpen,
+  } = useModal();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [cardData, setCardData] = useState<TaskData>();
   const [isPending, setIsPending] = useState(true);
+  const [currentColumn, setCurrentColumn] = useState<Column>();
+  const columnList = useColumnList((state) => state.columnList);
 
   useEffect(() => {
     const getTaskData = async () => {
       try {
         const response = await instance.get(`cards/${cardId}`);
         setCardData(response.data);
+        setCurrentColumn(columnList.find((item) => item.id === response.data.columnId));
       } catch {
         console.log('error');
       } finally {
@@ -76,6 +85,10 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
   const handleDropdownOpen: MouseEventHandler<HTMLButtonElement> = () => setIsDropdownOpen(true);
   const handleEditClick: MouseEventHandler<HTMLButtonElement> = () => {
     editTaskModalOpen();
+    setIsDropdownOpen(false);
+  };
+  const handleDeleteClick: MouseEventHandler<HTMLButtonElement> = () => {
+    deleteTaskModalOpen();
     setIsDropdownOpen(false);
   };
 
@@ -101,9 +114,6 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
         <div className="flex flex-row mobile:flex-col-reverse justify-between">
           <div className="text-24 font-semibold">{cardData?.title}</div>
           <div className="flex justify-end gap-24">
-            <ModalPortal>
-              <EditTask cardData={cardData} openModal={editTaskModal} handleModalClose={editTaskModalClose} />
-            </ModalPortal>
             {isDropdownOpen && (
               <div
                 className="flex flex-col absolute border-1 rounded-6 p-6 text-14 font-normal bg-white top-65 right-95"
@@ -112,7 +122,12 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
                 <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%" onClick={handleEditClick}>
                   수정
                 </button>
-                <button className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%">삭제</button>
+                <button
+                  className="px-16 py-4 rounded-6 hover:text-violet hover:bg-violet-8%"
+                  onClick={handleDeleteClick}
+                >
+                  삭제
+                </button>
               </div>
             )}
             <button onClick={handleDropdownOpen}>
@@ -127,7 +142,7 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
           <div className="flex flex-col gap-16 max-w-450 w-full mt-12">
             <div className="flex flex-row flex-wrap gap-12">
               <div className="h-26">
-                <Chip dot>{columnName}</Chip>
+                <Chip dot>{currentColumn?.title}</Chip>
               </div>
               {!!cardData?.tags?.length && (
                 <div className="flex flex-row flex-wrap gap-6 border-l-1 overflow-auto border-gray-d9 pl-12">
@@ -173,6 +188,18 @@ export const TaskCard = ({ openModal, handleModalClose, cardId, columnName }: Ta
             </div>
           )}
         </div>
+        <ModalPortal>
+          <EditTask cardData={cardData} openModal={editTaskModal} handleModalClose={editTaskModalClose} />
+        </ModalPortal>
+        <ModalPortal>
+          <DeleteTask
+            openModal={deleteTaskModal}
+            handleModalClose={deleteTaskModalClose}
+            handleCardClose={handleModalClose}
+            cardTitle={cardData.title}
+            cardId={cardData.id}
+          />
+        </ModalPortal>
       </Modal>
     );
   return null;

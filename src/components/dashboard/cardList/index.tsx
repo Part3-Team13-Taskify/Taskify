@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { useCardId, useCardListStore } from '@/src/util/zustand';
+import { useCardId, useCardListStore, useIsCardFormatted } from '@/src/util/zustand';
 import useModal from '@/src/hooks/useModal';
 import { getCardList, getCardListAdditional } from '@/src/pages/api/cardListApi';
 import Card from '../../common/card';
 import ModalPortal from '../../common/modalPortal';
 import { TaskCard } from '../../TaskModal/TaskCard';
 
-const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
+const CardList = ({ columnId }: { columnId: number }) => {
   const [hasMoreItems, setHasMoreItems] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { openModal: taskModal, handleModalClose: TaskModalClose, handleModalOpen: TaskModalOpen } = useModal();
   const cardId = useCardId((state) => state.cardId);
   const { cardLists, setCardList } = useCardListStore();
+  const isCardFormatted = useIsCardFormatted((state) => state.isCardFormatted);
+  const setIsCardFormatted = useIsCardFormatted((state) => state.setIsCardFormatted);
   const cardList = cardLists[columnId] || { cards: [], totalCount: 0, cursorId: null };
 
   // 카드리스트 불러오기
@@ -22,7 +24,7 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
       const cardsData = response.cards;
 
       const newCardList = {
-        cards: [...cardList.cards, ...cardsData],
+        cards: [...cardsData],
         totalCount: response.totalCount,
         cursorId: response.cursorId,
       };
@@ -55,10 +57,9 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
   };
 
   useEffect(() => {
-    if (!cardList.cards.length) {
-      getCards();
-    }
-  }, []);
+    getCards();
+    setIsCardFormatted(false);
+  }, [isCardFormatted]);
 
   // 무한스크롤
   useEffect(() => {
@@ -91,7 +92,7 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
   return (
     <>
       <ModalPortal>
-        <TaskCard cardId={cardId} columnName={title} openModal={taskModal} handleModalClose={TaskModalClose} />
+        <TaskCard cardId={cardId} openModal={taskModal} handleModalClose={TaskModalClose} />
       </ModalPortal>
       {cardList?.cards.map((card) => {
         return (
@@ -100,7 +101,7 @@ const CardList = ({ columnId, title }: { columnId: number; title: string }) => {
             id={card.id}
             src={card.imageUrl}
             profile={card.assignee?.profileImageUrl}
-            title={title}
+            title={card.title}
             date={card.dueDate}
             tags={card.tags}
             onClick={TaskModalOpen}

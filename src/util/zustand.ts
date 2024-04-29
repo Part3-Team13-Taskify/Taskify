@@ -171,3 +171,35 @@ export const useMyDashboardListStore = create<MyDashboardListStore>((set) => ({
   myDashboardList: [],
   setMyDashboardList: (dashboards) => set({ myDashboardList: dashboards }),
 }));
+
+export type Column = {
+  id: number;
+  dashboardId: number;
+  teamId: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+type ColumnList = {
+  columnList: Column[];
+  setColumnList: (columnList: Column[]) => void;
+};
+
+export const useColumnList = create<ColumnList>((set) => ({
+  columnList: [],
+  setColumnList: (columns: Column[]) => {
+    set({ columnList: columns });
+  },
+}));
+
+type IsCardFormatted = {
+  isCardFormatted: boolean;
+  setIsCardFormatted: (isFormatted: boolean) => void;
+};
+
+export const useIsCardFormatted = create<IsCardFormatted>((set) => ({
+  isCardFormatted: false,
+  setIsCardFormatted: (isFormatted) => {
+    set({ isCardFormatted: isFormatted });
+  },
+}));

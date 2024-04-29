@@ -1,4 +1,4 @@
-import instance from './axios';
+import instance from '../../util/axios';
 
 export const putComment = async (id: number, content: string) => {
   const response = await instance.put(`comments/${id}`, { content: content });
